@@ -78,12 +78,13 @@
                 </svg>
             </div>
 
-            <h1 class="left-title">
+            <!-- <h1 class="left-title">
                 SKIN
                 <span>& CO.</span>
-            </h1>
+            </h1> -->
+            <img src="{{ asset('sko.jpeg') }}" alt="Skin & Co. Logo" class="left-title" style="height:200px">
             <div class="left-divider"></div>
-            <p class="left-subtitle">Aesthetic Clinic Management</p>
+            <!-- <p class="left-subtitle">Aesthetic Clinic Management</p> -->
             <p class="left-tagline">"Where beauty meets precision"</p>
         </div>
     </div>
