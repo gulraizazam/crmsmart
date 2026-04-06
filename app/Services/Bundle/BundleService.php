@@ -496,10 +496,11 @@ class BundleService
         DB::beginTransaction();
 
         try {
-            $bundle->delete();
+           
 
             // Delete bundle services
             BundleHasServices::where('bundle_id', $id)->delete();
+             $bundle->delete();
 
             // Log audit trail
             AuditTrails::deleteEventLogger(self::$_table, 'delete', self::$_fillable, $id);
