@@ -94,11 +94,7 @@ class DashboardHelper
             return self::$cache['user_centres'];
         }
 
-        if (auth()->id() == 1) {
-            self::$cache['user_centres'] = [];
-        } else {
-            self::$cache['user_centres'] = ACL::getUserCentres();
-        }
+        self::$cache['user_centres'] = ACL::getUserCentres();
 
         return self::$cache['user_centres'];
     }
