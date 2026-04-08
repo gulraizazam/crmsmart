@@ -213,7 +213,8 @@ function setAllocateData(response) {
         // Group services by location_id + type + amount + slug (same allocation settings)
         let grouped = {};
         Object.values(discount_locations).forEach(function(value, index) {
-            let location_name = value.location.city.name + "-" + value.location.name;
+            if (!value.location) return;
+            let location_name = (value.location.city ? value.location.city.name : '') + "-" + value.location.name;
             let display_type = value.type || '-';
             let display_amount = value.amount !== null ? value.amount : '-';
             let display_slug = value.slug || 'default';
