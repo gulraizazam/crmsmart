@@ -107,7 +107,7 @@
 
 
     @push('datatable-js')
-        <script src="{{asset('assets/js/pages/admin_settings/discounts.js')}}"></script>
+        <script src="{{asset('assets/js/pages/admin_settings/discounts.js')}}?v={{time()}}"></script>
     @endpush
 
     @push('js')
