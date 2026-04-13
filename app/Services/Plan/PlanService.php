@@ -2981,6 +2981,8 @@ class PlanService
 
             // Calculate cash amounts (consolidated query)
             $cashSummary = PackageAdvances::where('package_id', $packageId)
+                ->where('is_cancel', '0')
+                ->where('is_adjustment', '0')
                 ->selectRaw("
                     SUM(CASE WHEN cash_flow = 'in' THEN cash_amount ELSE 0 END) as cash_in,
                     SUM(CASE WHEN cash_flow = 'out' THEN cash_amount ELSE 0 END) as cash_out
@@ -3141,7 +3143,9 @@ class PlanService
 
             $hasPackageAdvances = DB::table('package_advances')
                 ->where('package_id', $packageId)
-                ->where('deleted_at',null)
+                ->where('deleted_at', null)
+                ->where('is_cancel', '0')
+                ->where('is_adjustment', '0')
                 ->exists();
 
             if ($hasInvoiceDetails || $hasPackageAdvances) {
