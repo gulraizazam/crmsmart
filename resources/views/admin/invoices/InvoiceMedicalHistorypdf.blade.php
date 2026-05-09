@@ -20,6 +20,10 @@
         $faceChartSrc = is_readable($_facePath)
             ? 'data:image/png;base64,' . base64_encode((string) file_get_contents($_facePath))
             : asset('images/consultation-face-chart.png');
+        $_logoPath = public_path('images/consultation-logo.png');
+        $logoSrc = is_readable($_logoPath)
+            ? 'data:image/png;base64,' . base64_encode((string) file_get_contents($_logoPath))
+            : asset('images/consultation-logo.png');
     @endphp
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,24 +38,13 @@
         }
         .cf-page { max-width: 210mm; margin: 0 auto; padding: 10mm 12mm 8mm; }
 
-        .cf-logo {
-            text-align: center;
-            letter-spacing: 0.28em;
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-family: Arial, Helvetica, sans-serif;
-            margin-bottom: 2px;
-        }
-        .cf-sub {
-            text-align: center;
-            letter-spacing: 0.18em;
-            font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #333;
-            font-family: Arial, Helvetica, sans-serif;
-            margin-bottom: 10px;
+        .cf-brand-wrap { text-align: center; margin: 0 0 4px; }
+        .cf-brand-logo {
+            max-width: 380px;
+            width: 82%;
+            height: auto;
+            display: block;
+            margin: 0 auto 8px;
         }
         .cf-title {
             text-align: center;
@@ -60,7 +53,7 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             font-family: Arial, Helvetica, sans-serif;
-            margin: 12px 0 14px;
+            margin: 8px 0 14px;
         }
 
         .cf-heading-serif {
@@ -223,8 +216,9 @@
 </head>
 <body>
 <div class="cf-page">
-    <div class="cf-logo">Skin &amp; Co.</div>
-    <div class="cf-sub">Aesthetic &amp; Wellness Clinic</div>
+    <div class="cf-brand-wrap">
+        <img class="cf-brand-logo" src="{{ $logoSrc }}" alt="Skin &amp; Co. Aesthetic &amp; Wellness Clinic" />
+    </div>
     <div class="cf-title">Consultation Form</div>
 
     <div class="cf-client-block">
