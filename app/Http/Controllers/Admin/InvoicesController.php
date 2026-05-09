@@ -430,7 +430,7 @@ class InvoicesController extends Controller
 
             $setting_info = Settings::where('slug', '=', 'sys-consultancy-invoice-medical-operator')->first();
 
-            if ($setting_info->data = 1) {
+            if ($setting_info && (int) $setting_info->data === 1) {
 
                 if ($download) {
 
