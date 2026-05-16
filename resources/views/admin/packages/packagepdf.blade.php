@@ -328,21 +328,37 @@
             @foreach($packagebundles as $packagebundles)
                 <tr>
                     <td><?php
-                        if ($packagebundles->source_type === 'service' && $packagebundles->service) {
-                            echo $packagebundles->service->name;
-                        } elseif ($packagebundles->source_type === 'bundle' && $packagebundles->bundle) {
-                            echo $packagebundles->bundle->name;
-                        } elseif ($packagebundles->source_type === 'membership' && $packagebundles->membershipType) {
-                            echo $packagebundles->membershipType->name;
-                        } elseif ($packagebundles->service && $packagebundles->service->name) {
-                            echo $packagebundles->service->name;
-                        } elseif ($packagebundles->bundle && $packagebundles->bundle->name) {
-                            echo $packagebundles->bundle->name;
-                        } elseif ($packagebundles->membershipType && $packagebundles->membershipType->name) {
-                            echo $packagebundles->membershipType->name;
-                        } else {
-                            echo '-';
+                        $ptype = $package->plan_type ?? 'plan';
+                        $st = $packagebundles->source_type ?? null;
+                        $nameShown = '-';
+
+                        if ($st === 'service' && $packagebundles->service) {
+                            $nameShown = $packagebundles->service->name;
+                        } elseif ($st === 'bundle' && $packagebundles->bundle) {
+                            $nameShown = $packagebundles->bundle->name;
+                        } elseif ($st === 'membership' && $packagebundles->membershipType) {
+                            $nameShown = $packagebundles->membershipType->name;
+                        } elseif ($ptype === 'bundle') {
+                            if ($packagebundles->bundle) {
+                                $nameShown = $packagebundles->bundle->name;
+                            }
+                        } elseif ($ptype === 'plan') {
+                            if ($packagebundles->service) {
+                                $nameShown = $packagebundles->service->name;
+                            } elseif ($packagebundles->bundle) {
+                                $nameShown = $packagebundles->bundle->name;
+                            }
+                        } elseif ($ptype === 'membership' && $packagebundles->membershipType) {
+                            $nameShown = $packagebundles->membershipType->name;
+                        } elseif ($packagebundles->bundle) {
+                            $nameShown = $packagebundles->bundle->name;
+                        } elseif ($ptype !== 'bundle' && $packagebundles->service) {
+                            $nameShown = $packagebundles->service->name;
+                        } elseif ($packagebundles->membershipType) {
+                            $nameShown = $packagebundles->membershipType->name;
                         }
+
+                        echo $nameShown ?: '-';
                     ?></td>
                     <td>{{number_format($packagebundles->service_price)}}</td>
                     <td>

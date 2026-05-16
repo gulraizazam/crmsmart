@@ -2912,6 +2912,44 @@ class PlanService
     }
 
     /**
+     * Align package_bundle row relations with packages.plan_type so display JSON and print PDF
+     * resolve the correct name: plan → bundle_id is service ID; bundle → bundle_id is bundle ID.
+     */
+    public function normalizePackageBundlesForPlanDisplay(Packages $package, $packageBundles): void
+    {
+        $planType = $package->plan_type ?? 'plan';
+
+        $packageBundles->each(function ($pb) use ($planType) {
+            if ($planType === 'plan') {
+                if (!$pb->membership_type_id && $pb->relationLoaded('service') && $pb->service) {
+                    $pb->setRelation('bundle', $pb->service);
+                }
+
+                return;
+            }
+
+            if ($planType === 'bundle') {
+                $pb->setRelation('service', null);
+
+                return;
+            }
+
+            if ($planType === 'membership') {
+                return;
+            }
+
+            if ($pb->source_type === 'service' && $pb->service) {
+                $pb->setRelation('bundle', $pb->service);
+            } elseif (!$pb->source_type && $pb->service && !$pb->membership_type_id && $pb->relationLoaded('packageservice')) {
+                $children = $pb->packageservice;
+                if ($children && $children->count() === 1 && $children->first()->service_id == $pb->bundle_id) {
+                    $pb->setRelation('bundle', $pb->service);
+                }
+            }
+        });
+    }
+
+    /**
      * Get display data for package (optimized)
      * 
      * @param int $packageId
@@ -2935,21 +2973,7 @@ class PlanService
                 ->where('package_id', $packageId)
                 ->get();
 
-            // Normalize bundle relationship based on source_type so frontend
-            // can always use packagebundle.bundle.name regardless of source_type
-            $packageBundles->each(function ($pb) {
-                if ($pb->source_type === 'service' && $pb->service) {
-                    $pb->setRelation('bundle', $pb->service);
-                } elseif (!$pb->source_type && $pb->service && !$pb->membership_type_id) {
-                    // Fallback for rows where source_type is NULL:
-                    // Check if child package_services has exactly 1 row with service_id == bundle_id
-                    // If so, bundle_id actually holds a service_id
-                    $children = $pb->packageservice;
-                    if ($children && $children->count() === 1 && $children->first()->service_id == $pb->bundle_id) {
-                        $pb->setRelation('bundle', $pb->service);
-                    }
-                }
-            });
+            $this->normalizePackageBundlesForPlanDisplay($package, $packageBundles);
 
             // Fetch package services with relationships
             $packageServices = PackageService::with('service', 'soldBy')
