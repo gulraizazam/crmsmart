@@ -33,7 +33,8 @@ class Voucher extends Model
     public static function updateVoucher($data, $id)
     {
 
-        $old_data = (Voucher::find($id))->toArray();
+        $existing = Voucher::find($id);
+        $old_data = $existing ? $existing->toArray() : '0';
 
         $record = Voucher::findOrFail($id);
 

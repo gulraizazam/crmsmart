@@ -285,12 +285,16 @@ class Discounts extends BaseModal
             }
 
             $discount = Discounts::find($id);
-            
+
+            if (! $discount) {
+                throw new \RuntimeException('Discount record not found for id ' . $id);
+            }
+
             // Sync roles if provided
             if (isset($data['roles'])) {
                 $discount->roles()->sync($data['roles']);
             }
-            
+
             AuditTrails::EditEventLogger(self::$_table, 'edit', $data, self::$_fillable, $discount->toArray(), $id);
 
             return $discount;
@@ -326,7 +330,8 @@ class Discounts extends BaseModal
     public static function updateDiscount($data, $id)
     {
 
-        $old_data = (Discounts::find($id))->toArray();
+        $existing = Discounts::find($id);
+        $old_data = $existing ? $existing->toArray() : '0';
 
         $record = Discounts::findOrFail($id);
 
@@ -334,7 +339,7 @@ class Discounts extends BaseModal
         if(isset($data['roles'])){
             $record->roles()->sync($data['roles']);
         }
-       
+
         AuditTrails::EditEventLogger(self::$_table, 'edit', $data, self::$_fillable, $old_data, $id);
 
         return $record;
