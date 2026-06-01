@@ -70,7 +70,18 @@ class NodesTree
                 $where['active'] = 1;
             }
 
-            $group = Services::where($where)->first()->toArray();
+            $groupModel = Services::where($where)->first();
+
+            if (! $groupModel) {
+                // Row was filtered out (e.g. inactive) – skip this branch instead of crashing
+                $this->id = $id;
+                $this->name = '';
+                $this->active = 0;
+
+                return;
+            }
+
+            $group = $groupModel->toArray();
 
             $this->id = $group['id'];
             $this->name = $group['name'];
