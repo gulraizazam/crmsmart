@@ -173,9 +173,9 @@
             let content = '';
             if (appointmentType === 'Plan') {
                 const actionText = action === 'refunded' ? 'to' : 'from';
-                content = `<span style="color: #5C6B4F; font-weight:600;">${createdBy}</span> ${action} <strong>Rs. ${amount}</strong> ${actionText} <span style="color: #5C6B4F; font-weight:600;"> ${patient}</span> for <span style="color: #C4A265; font-weight:600;">Plan Id: <a href="/admin/packages/view/${planId}">${planId}</a></span> at ${centreName} Centre.`;
+                content = `<span style="color: #007bff; font-weight:600;">${createdBy}</span> ${action} <strong>Rs. ${amount}</strong> ${actionText} <span style="color: #007bff; font-weight:600;"> ${patient}</span> for <span style="color: #C4A265; font-weight:600;">Plan Id: <a href="/admin/packages/view/${planId}">${planId}</a></span> at ${centreName} Centre.`;
             } else {
-                content = `<span style="color: #5C6B4F; font-weight:600;">${createdBy}</span> ${action} <strong>Rs. ${amount}</strong> from <span style="color: #5C6B4F; font-weight:600;"> ${patient}</span> for <span style="color: #C4A265; font-weight:600;">${appointmentType}</span> at ${centreName} Centre.`;
+                content = `<span style="color: #007bff; font-weight:600;">${createdBy}</span> ${action} <strong>Rs. ${amount}</strong> from <span style="color: #007bff; font-weight:600;"> ${patient}</span> for <span style="color: #C4A265; font-weight:600;">${appointmentType}</span> at ${centreName} Centre.`;
             }
             
             html += `

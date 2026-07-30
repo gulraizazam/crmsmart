@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Skin & Co. - Invoice #{{$Invoiceinfo->id}}</title>
-    <meta content="Skin & Co. Medical Spa" name="description" />
+    <title>DEMO - Invoice #{{$Invoiceinfo->id}}</title>
+    <meta content="DEMO Medical Spa" name="description" />
     <meta content="Red Signal" name="author"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <style>
@@ -14,14 +14,14 @@
         .invoice-pdf { max-width: 700px; margin: 0 auto; padding: 0; }
 
         /* Header */
-        .inv-header { background: linear-gradient(135deg, #3D4A35 0%, #5C6B4F 50%, #7A8B6A 100%); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .inv-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
         .inv-brand { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: #fff; letter-spacing: 1.5px; }
         .inv-brand .amp { color: #C4A265; }
         .inv-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 8px 24px; border-radius: 6px; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
 
         /* Contact bar */
         .inv-contact { background: #F4F7F2; padding: 14px 32px; border-bottom: 1px solid #E0E6DC; }
-        .inv-address { font-size: 12px; color: #5C6B4F; font-weight: 500; margin-bottom: 3px; }
+        .inv-address { font-size: 12px; color: #007bff; font-weight: 500; margin-bottom: 3px; }
         .inv-details { font-size: 10.5px; color: #8A9580; line-height: 1.6; }
 
         /* Meta section */
@@ -30,12 +30,12 @@
         .inv-meta-label { font-size: 10px; color: #8A9580; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .inv-meta-value { font-size: 14px; color: #3D4A35; font-weight: 600; }
         .inv-meta-right { text-align: right; display: flex; flex-direction: column; gap: 4px; }
-        .inv-invoice-num { font-size: 20px; color: #5C6B4F; font-weight: 700; }
+        .inv-invoice-num { font-size: 20px; color: #007bff; font-weight: 700; }
 
         /* Table */
         .inv-table-wrap { padding: 20px 32px 16px; }
         table.inv-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        table.inv-table th { background: #5C6B4F; color: #fff; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; text-align: left; }
+        table.inv-table th { background: #007bff; color: #fff; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; text-align: left; }
         table.inv-table th:first-child { border-radius: 6px 0 0 0; }
         table.inv-table th:last-child { border-radius: 0 6px 0 0; }
         table.inv-table td { padding: 11px 12px; border-bottom: 1px solid #E8EDE5; color: #4A5540; font-size: 12px; }
@@ -50,7 +50,7 @@
         .inv-feedback-title { font-size: 14px; font-weight: 600; color: #3D4A35; margin-bottom: 14px; }
         .inv-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
         .inv-rating-label { font-size: 12px; color: #8A9580; font-weight: 500; }
-        .inv-rating-circle { width: 34px; height: 34px; border: 1.5px solid #C4A265; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5C6B4F; font-weight: 500; }
+        .inv-rating-circle { width: 34px; height: 34px; border: 1.5px solid #C4A265; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #007bff; font-weight: 500; }
         .inv-feedback-lines { padding: 0 32px 10px; }
         .inv-feedback-lines-title { font-size: 14px; font-weight: 600; color: #3D4A35; margin-bottom: 16px; }
         .inv-feedback-line { border-bottom: 1px dotted #C4A265; height: 28px; margin-bottom: 4px; }
@@ -59,7 +59,7 @@
         .inv-signatures { padding: 50px 32px 28px; display: flex; justify-content: space-between; }
         .inv-sig-block { width: 200px; }
         .inv-sig-line { border-top: 1.5px solid #3D4A35; padding-top: 10px; }
-        .inv-sig-title { font-size: 12px; font-weight: 600; color: #5C6B4F; }
+        .inv-sig-title { font-size: 12px; font-weight: 600; color: #007bff; }
         .inv-sig-name { font-size: 11px; font-weight: 700; color: #3D4A35; margin-top: 2px; }
 
         /* Footer accent */
@@ -87,14 +87,14 @@
 
     <!-- Header -->
     <div class="inv-header">
-        <div class="inv-brand">Skin <span class="amp">&</span> Co.</div>
+        <div class="inv-brand">DEMO</div>
         <div class="inv-badge">Invoice</div>
     </div>
 
     <!-- Contact bar -->
     <div class="inv-contact">
         <div class="inv-address">{{$location_info->address}}</div>
-        <div class="inv-details">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; www.skinandco.com &nbsp;|&nbsp; NTN. {{$location_info->ntn}} &nbsp;|&nbsp; STN. {{$location_info->stn}}</div>
+        <div class="inv-details">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; www.demo.com &nbsp;|&nbsp; NTN. {{$location_info->ntn}} &nbsp;|&nbsp; STN. {{$location_info->stn}}</div>
     </div>
 
     <!-- Meta -->

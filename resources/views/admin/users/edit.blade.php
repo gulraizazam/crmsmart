@@ -55,8 +55,7 @@
 
                 <div class="form-group">
                     <div class="row">
-
-                        <div class="fv-row col-md-6">
+                        <div class="fv-row col-md-12">
                             <label class="required fw-bold fs-6 mb-2 pl-0">Gender <span class="text text-danger">*</span></label>
                             <select id="edit_user_gender" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="gender">
                                 <option value="">Select</option>
@@ -64,19 +63,6 @@
                                 <option value="2">Female</option>
                             </select>
                         </div>
-
-                        <div class="fv-row col-md-6">
-                            <label class="required fw-bold fs-6 mb-2 pl-0">Commission <span class="text text-danger">*</span></label>
-                            <div class="input-group">
-                                <input id="edit_user_commission" type="number" min="0" maxlength="100" value="{{$user->commission ?? ''}}" name="commission" class="form-control commission-field form-control-lg form-control-solid mb-2"/>
-                                <div class="input-group-append popup-percentage">
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-
                     </div>
                 </div>
 
@@ -89,16 +75,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mt-10">
-                        <div class="fv-row col-md-12">
-                            <label class="required fw-bold fs-6 mb-2 pl-0">Warehouse </label>
-                            <select id="edit_user_warehouse" class="form-control form-control-solid mb-3 mb-lg-0 select2" multiple="multiple" name="warehouse[]">
-
-                            </select>
-                        </div>
-                    </div>
-
-
                     <div class="row mt-10">
                         <div class="fv-row col-md-12">
                             <label class="required fw-bold fs-6 mb-2 pl-0">Roles <span class="text text-danger">*</span></label>

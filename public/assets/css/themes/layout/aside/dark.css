@@ -78,7 +78,7 @@
 }
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-heading,
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-link {
-  /*background-color: #5C6B4F;*/
+  /*background-color: #007bff;*/
 }
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-link .menu-text {
@@ -156,7 +156,7 @@
 }
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading,
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link {
-  background-color: #5C6B4F;
+  background-color: #007bff;
 }
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link .menu-text {
@@ -229,7 +229,7 @@
   color: #ffffff;
 }
 .aside-menu .menu-nav > .menu-item > .menu-arrow {
-  color: #5C6B4F;
+  color: #007bff;
 }
 .aside-menu .menu-nav > .menu-section .menu-text {
   color: #4c4e6f;
@@ -351,7 +351,7 @@
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-heading,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-link {
-  background-color: #5C6B4F;
+  background-color: #007bff;
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-link .menu-text {
@@ -730,7 +730,7 @@
   }
 }
 .aside-menu .menu-nav .menu-item > .menu-heading:hover, .aside-menu .menu-nav .menu-item > .menu-link:hover{
-    background-color: #5C6B4F !important;
+    background-color: #007bff !important;
     color: white;
 }
 

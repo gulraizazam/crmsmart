@@ -88,7 +88,7 @@
                     <div class="row">
 
                         <div class="col-md-6">
-                            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">Skin <span style="color: #C4A265;">&amp;</span> Co.</div>
+                            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
                             <div class="mt-15">
                                 <h1>Patient Detail</h1>
                                <p> <strong>Patient Name: </strong> {{$custom_form->patient?$custom_form->patient->name : "Null"}}</p>

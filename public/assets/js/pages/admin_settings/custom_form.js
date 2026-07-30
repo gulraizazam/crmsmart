@@ -1,14 +1,6 @@
 var table_url = route('admin.custom_forms.datatable');
 
 var table_columns = [{
-    field: 'id',
-    sortable: false,
-    width: 25,
-    title: renderCheckbox(),
-    template: function(data) {
-        return childCheckbox(data);
-    }
-}, {
     field: 'name',
     title: 'Name',
     sortable: false,

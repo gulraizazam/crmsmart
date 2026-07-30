@@ -3,14 +3,6 @@ var table_url = route('admin.centre_targets.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    }, {
         field: 'year',
         title: 'Year',
         sortable: false,

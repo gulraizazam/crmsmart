@@ -3,15 +3,6 @@ var table_url = route('admin.lead_sources.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    },
-    {
         field: 'name',
         title: 'Name',
         width: 'auto',

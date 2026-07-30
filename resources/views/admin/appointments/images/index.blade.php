@@ -152,16 +152,6 @@
                                 <div class="row">
                                 {{--Start of datatable body--}}
                                     <div class="col-md-9"></div>
-                                @if(Gate::allows('appointments_image_destroy'))
-                                    <div class="col-md-3">
-                                        <div class="delete-records d-none">
-                                            <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                            <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                                <i class="fa fa-trash-alt"></i>Delete
-                                            </a>
-                                        </div>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                @endif
                                 </div>
                             </div>
 

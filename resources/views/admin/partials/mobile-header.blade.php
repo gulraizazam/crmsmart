@@ -3,7 +3,7 @@
 <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
     <!--begin::Logo-->
     <a href="{{route('admin.home')}}">
-        <span style="font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #3D4A35; letter-spacing: 1.5px; line-height: 1.2;">Skin <span style="color: #C4A265;">&</span> Co.</span>
+        <span style="font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: 3px; line-height: 1.2;">DEMO</span>
     </a>
     <!--end::Logo-->
     <!--begin::Toolbar-->

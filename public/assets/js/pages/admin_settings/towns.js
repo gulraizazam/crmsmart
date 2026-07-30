@@ -3,16 +3,6 @@ var table_url = route('admin.towns.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            let id = data.id;
-            return childCheckbox(data);
-        }
-    },
-     {
         field: 'name',
         title: 'Name',
         width: 'auto',

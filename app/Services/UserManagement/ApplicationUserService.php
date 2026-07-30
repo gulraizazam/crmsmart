@@ -104,10 +104,7 @@ class ApplicationUserService
         
         // Gender filter
         $where = $this->addFilter($where, $params, 'gender', 'users.gender', '=', $userId, $applyFilter);
-        
-        // Commission filter
-        $where = $this->addFilter($where, $params, 'commission', 'users.commission', '=', $userId, $applyFilter);
-        
+
         // Location filter
         $where = $this->addFilter($where, $params, 'location_id', 'user_has_locations.location_id', '=', $userId, $applyFilter);
         

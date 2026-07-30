@@ -111,7 +111,7 @@
             <div class="sn-table-head">
                 <div class="row">
                     <div class="col-md-2">
-                        <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">Skin <span style="color: #C4A265;">&amp;</span> Co.</div>
+                        <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
                     </div>
                     <div class="col-md-6">&nbsp;</div>
                     <div class="col-md-4">

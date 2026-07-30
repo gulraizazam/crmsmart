@@ -1,7 +1,7 @@
 <!--begin::Modal content-->
 <style>
     .ep-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .ep-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #5C6B4F 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
+    .ep-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
     .ep-modal-header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
     .ep-modal-header-top { display: flex; align-items: center; justify-content: space-between; }
     .ep-modal-title { color: #fff; font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: 0.3px; }
@@ -13,8 +13,8 @@
     .ep-modal-body .alert-success { background: #F0FDF4; color: #166534; }
     .ep-section { background: #F8F6F1; border: 1px solid #E8EDE5; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     .ep-section-title { font-size: 13px; font-weight: 700; color: #3D4A35; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .ep-section-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #5C6B4F, #C4A265); border-radius: 2px; }
-    .ep-modal-body label { font-size: 12px; font-weight: 600; color: #5C6B4F; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
+    .ep-section-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #007bff, #C4A265); border-radius: 2px; }
+    .ep-modal-body label { font-size: 12px; font-weight: 600; color: #007bff; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
     .ep-modal-body .form-control, .ep-modal-body .form-control-solid { border: 1px solid #D5DDD0; border-radius: 8px; font-size: 13px; padding: 9px 14px; transition: border-color 0.2s, box-shadow 0.2s; background: #fff; }
     .ep-modal-body .form-control:focus, .ep-modal-body .form-control-solid:focus { border-color: #7A8B6A; box-shadow: 0 0 0 3px rgba(122,139,106,0.12); outline: none; }
     .ep-modal-body .select2-container--default .select2-selection--single { border: 1px solid #D5DDD0; border-radius: 8px; height: 38px; }
@@ -23,19 +23,19 @@
     .ep-btn-add { background: linear-gradient(135deg, #C4A265, #D4B87A); border: none; border-radius: 8px; padding: 9px 24px; font-weight: 600; font-size: 13px; color: #3D4A35; transition: all 0.3s; cursor: pointer; }
     .ep-btn-add:hover { background: linear-gradient(135deg, #B8954F, #C4A265); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(196,162,101,0.3); color: #3D4A35; }
     .ep-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #E8EDE5; border-radius: 10px; overflow: hidden; }
-    .ep-table thead th { background: #F4F7F2; color: #5C6B4F; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
+    .ep-table thead th { background: #F4F7F2; color: #007bff; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
     .ep-table tbody td { padding: 10px 14px; font-size: 13px; color: #3D4A35; border-bottom: 1px solid #E8EDE5; }
     .ep-table tbody tr:last-child td { border-bottom: none; }
     .ep-table tbody tr:hover { background: #FAFDF8; }
     .ep-summary { background: linear-gradient(135deg, #F8F6F1 0%, #F4F7F2 100%); border: 1px solid #E8EDE5; border-radius: 12px; padding: 20px; margin-top: 20px; }
     .ep-history { margin-top: 24px; }
     .ep-history-title { font-size: 14px; font-weight: 700; color: #3D4A35; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .ep-history-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #5C6B4F); border-radius: 2px; }
+    .ep-history-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #007bff); border-radius: 2px; }
     .ep-footer { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 20px; margin-top: 8px; border-top: 2px solid #E8EDE5; }
-    .ep-btn-cancel { background: #fff; border: 1px solid #D5DDD0; border-radius: 8px; padding: 10px 28px; font-weight: 600; font-size: 13px; color: #5C6B4F; transition: all 0.2s; cursor: pointer; }
+    .ep-btn-cancel { background: #fff; border: 1px solid #D5DDD0; border-radius: 8px; padding: 10px 28px; font-weight: 600; font-size: 13px; color: #007bff; transition: all 0.2s; cursor: pointer; }
     .ep-btn-cancel:hover { background: #F8F6F1; border-color: #7A8B6A; }
-    .ep-btn-save { background: linear-gradient(135deg, #5C6B4F, #7A8B6A); border: none; border-radius: 8px; padding: 10px 32px; font-weight: 600; font-size: 13px; color: #fff; transition: all 0.3s; cursor: pointer; }
-    .ep-btn-save:hover { background: linear-gradient(135deg, #4A5540, #5C6B4F); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); color: #fff; }
+    .ep-btn-save { background: linear-gradient(135deg, #007bff, #7A8B6A); border: none; border-radius: 8px; padding: 10px 32px; font-weight: 600; font-size: 13px; color: #fff; transition: all 0.3s; cursor: pointer; }
+    .ep-btn-save:hover { background: linear-gradient(135deg, #4A5540, #007bff); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); color: #fff; }
 </style>
 <div class="modal-content ep-modal">
     <div class="ep-modal-header" id="kt_modal_password_header">

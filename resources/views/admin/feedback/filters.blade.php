@@ -24,13 +24,13 @@
             <label>Centre:</label>
             <select class="form-control filter-field select2" id="search_location_id">
                 <option value="">Select</option>
-                <option value="2">Skin & Co. DHA Karachi</option>
-                <option value="3">Skin & Co. Bahadurabad Karachi</option>
-                <option value="46">Skin & Co. Johar Town, Lahore</option>
-                <option value="47">Skin & Co. Gulshan/Johar Karachi</option>
-                <option value="48">Skin & Co. DHA Lahore</option>
-                <option value="49">Skin & Co. Gulberg Lahore</option>
-                <option value="50">Skin & Co. Faisalabad</option>
+                <option value="2">DEMO DHA Karachi</option>
+                <option value="3">DEMO Bahadurabad Karachi</option>
+                <option value="46">DEMO Johar Town, Lahore</option>
+                <option value="47">DEMO Gulshan/Johar Karachi</option>
+                <option value="48">DEMO DHA Lahore</option>
+                <option value="49">DEMO Gulberg Lahore</option>
+                <option value="50">DEMO Faisalabad</option>
                 
             </select>
         </div>

@@ -60,7 +60,7 @@
                 text-align: center;
                 font-weight: 600;
                 border-right: 1px solid #e4e6ef;
-                background: #5C6B4F;
+                background: #007bff;
                 color: #fff;
                 word-wrap: break-word;
                 overflow: hidden;
@@ -308,15 +308,6 @@
                         </div>
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if (Gate::allows('appointments_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);"
-                                        class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
                             @if (Gate::allows('appointments_export_today'))
                                 <div class="export-appointments">
                                     <a id="today_consultancies"

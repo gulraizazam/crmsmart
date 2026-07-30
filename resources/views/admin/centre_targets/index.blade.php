@@ -36,15 +36,6 @@
 
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if(Gate::allows('centre_targets_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
-
                             @if(Gate::allows('centre_targets_create'))
                                 <a href="javascript:void(0);" onclick="createCentreTarget('{{ route('admin.centre_targets.create') }}');" class="btn btn-primary" data-toggle="modal" data-target="#modal_add_centre_targets">
                                     <i class="la la-plus"></i>

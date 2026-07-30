@@ -41,15 +41,6 @@
                         </div>
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if(Gate::allows('product_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
-
                             @if (Gate::allows('product_create'))
                                 <a href="javascript:void(0);" id='add_products_m' class="btn btn-primary"
                                     data-toggle="modal" data-target="#modal_add_products">

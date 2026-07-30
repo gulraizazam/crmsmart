@@ -3,14 +3,6 @@ var table_url = route('admin.custom_form_feedbacks.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 80,
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    }, {
         field: 'patient_id',
         title: 'Patient ID',
         sortable: false,

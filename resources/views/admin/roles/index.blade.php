@@ -34,16 +34,6 @@
                             <h3 class="card-label">Roles</h3>
                         </div>
                         <div class="card-toolbar">
-                            <!--begin::Dropdown-->
-                            @if(Gate::allows('roles_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
-
                             @if(Gate::allows('roles_create'))
                                 <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->

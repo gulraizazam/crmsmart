@@ -1,7 +1,7 @@
 <!--begin::Modal content-->
 <style>
     .ti-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .ti-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #5C6B4F 50%, #7A8B6A 100%); padding: 22px 28px; position: relative; overflow: hidden; }
+    .ti-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 22px 28px; position: relative; overflow: hidden; }
     .ti-modal-header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
     .ti-modal-header-top { display: flex; align-items: center; justify-content: space-between; }
     .ti-modal-title { color: #fff; font-size: 1.1rem; font-weight: 600; margin: 0; }
@@ -18,10 +18,10 @@
     .ti-body .table tbody tr.HR_555 td { padding: 12px 14px; }
     .ti-body .form-control, .ti-body .select2-container .select2-selection--single { border: 1px solid #D5DDD0; border-radius: 8px; font-size: 13px; padding: 8px 12px; transition: border-color 0.2s; }
     .ti-body .form-control:focus { border-color: #7A8B6A; box-shadow: 0 0 0 3px rgba(122,139,106,0.12); }
-    .ti-body .btn-primary { background: linear-gradient(135deg, #5C6B4F, #7A8B6A); border: none; border-radius: 10px; padding: 10px 22px; font-weight: 600; font-size: 13px; letter-spacing: 0.3px; transition: all 0.3s; }
-    .ti-body .btn-primary:hover { background: linear-gradient(135deg, #4A5540, #5C6B4F); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); }
+    .ti-body .btn-primary { background: linear-gradient(135deg, #007bff, #7A8B6A); border: none; border-radius: 10px; padding: 10px 22px; font-weight: 600; font-size: 13px; letter-spacing: 0.3px; transition: all 0.3s; }
+    .ti-body .btn-primary:hover { background: linear-gradient(135deg, #4A5540, #007bff); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); }
     .ti-body label strong, .ti-body .col-md-10 strong { color: #3D4A35; font-size: 13px; }
-    .ti-body .col-md-10 .float-right { color: #5C6B4F; }
+    .ti-body .col-md-10 .float-right { color: #007bff; }
     .ti-body .alert { border-radius: 8px; font-size: 13px; }
     .ti-paid-badge { text-align: center; padding: 40px 20px; }
     .ti-paid-badge h2 { color: #7A8B6A; font-weight: 700; font-size: 1.3rem; }

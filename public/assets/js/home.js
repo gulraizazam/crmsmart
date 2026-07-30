@@ -453,11 +453,11 @@ function initCentreWiseArrival(period, centreID, time = '') {
                 total_t += total;
                 var centre_name = barLenght[i].replace(/\bSkin & Co\. \b/gi, '');
                 if (total != 0 && !isNaN(total)) {
-                    TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + centre_name + "</td><td>" + arrived + "/" + total + "</td><td>" + walkin + "</td><td>" + ((arrived / total) * 100).toFixed(2) + "%</td></tr>";
+                    TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + centre_name + "</td><td>" + arrived + "/" + total + "</td><td>" + walkin + "</td><td>" + ((arrived / total) * 100).toFixed(2) + "%</td></tr>";
                 }
             }
             var percentage = ((arrived_t / total_t) * 100).toFixed(2);
-            TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>Total</td><td>" + (isNaN(arrived_t) ? 0 : arrived_t) + "/" + (isNaN(total_t) ? 0 : total_t) + "</td><td>" + (isNaN(walkin_t) ? 0 : walkin_t) + "</td><td>" + (isNaN(percentage) ? 0 : percentage) + "%</td></tr>";
+            TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>Total</td><td>" + (isNaN(arrived_t) ? 0 : arrived_t) + "/" + (isNaN(total_t) ? 0 : total_t) + "</td><td>" + (isNaN(walkin_t) ? 0 : walkin_t) + "</td><td>" + (isNaN(percentage) ? 0 : percentage) + "%</td></tr>";
             jQuery('#table-body').append(TABLE_HTML);
             ConsultanciesByStatus(response);
         },
@@ -505,11 +505,11 @@ function initUserWiseArrival(period, userID, time = '') {
                     var arrVal = response.data?.arrived?.[i] || 0;
                     var totVal = response.data?.total?.[i] || 0;
                     var pct = totVal > 0 ? ((arrVal / totVal) * 100).toFixed(2) : 0;
-                    TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + barLenght[i] + "</td><td>" + arrVal + "/" + totVal + "</td><td>" + pct + "%</td></tr>";
+                    TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + barLenght[i] + "</td><td>" + arrVal + "/" + totVal + "</td><td>" + pct + "%</td></tr>";
                 }
             }
             if (total != 0) {
-                TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + csr_name + "</td><td>" + arrived + "/" + total + "</td><td>" + ((arrived / total) * 100).toFixed(2) + "%</td></tr>";
+                TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + csr_name + "</td><td>" + arrived + "/" + total + "</td><td>" + ((arrived / total) * 100).toFixed(2) + "%</td></tr>";
             }
             jQuery('#table-body').append(TABLE_HTML);
             ConsultanciesByStatus(response);
@@ -680,12 +680,12 @@ function initDoctorWiseConversion(period, centre_id, time = '', nochangeDr = tru
                 arrived += category.total_arrival || 0;
                 converted += category.total_conversion || 0;
                 var pct = category.total_arrival > 0 ? ((category.total_conversion / category.total_arrival) * 100).toFixed(2) : 0;
-                TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
+                TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
             });
             
             var avg = arrived > 0 ? ((converted / arrived) * 100).toFixed(2) : 0;
             var avgValue = converted > 0 ? ((response.data?.sum_val || 0) / converted).toFixed(2) : 0;
-            TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + avg + "%</td><td>" + avgValue + "</td></tr>";
+            TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + avg + "%</td><td>" + avgValue + "</td></tr>";
 
             jQuery('#categories-table-body').html(TABLE_HTML);
             DoctorWiseConversion(response);
@@ -760,11 +760,11 @@ function GetDoctors(centre_id, time = '') {
                 converted += category.total_conversion || 0;
                 avg_sum += category.avg || 0;
                 var pct = category.total_arrival > 0 ? ((category.total_conversion / category.total_arrival) * 100).toFixed(2) : 0;
-                TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
+                TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
             });
             var avg = arrived > 0 ? ((converted / arrived) * 100).toFixed(2) : 0;
             var avgValue = converted > 0 ? ((response.data?.sum_val || 0) / converted).toFixed(2) : 0;
-            TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + (avg == "NaN" ? 0 : avg) + "%</td><td>" + (avgValue == "NaN" ? 0 : avgValue) + "</td></tr>";
+            TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + (avg == "NaN" ? 0 : avg) + "%</td><td>" + (avgValue == "NaN" ? 0 : avgValue) + "</td></tr>";
             jQuery('#categories-table-body').append(TABLE_HTML);
             if (centre_id == 'all') {
                 AllDoctorWiseConversion(response);
@@ -830,11 +830,11 @@ function LoadDocWiseConversion(doc_id, time = '') {
                 converted += category.total_conversion || 0;
                 avg_sum += category.avg || 0;
                 var pct = category.total_arrival > 0 ? ((category.total_conversion / category.total_arrival) * 100).toFixed(2) : 0;
-                TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
+                TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>" + category.service + "</td><td>" + category.total_conversion + "/" + category.total_arrival + "</td><td>" + pct + "%</td><td>" + (category.avg || 0).toFixed(2) + "</td></tr>";
             });
             var avg = arrived > 0 ? ((converted / arrived) * 100).toFixed(2) : 0;
             var avgValue = converted > 0 ? ((response.data?.sum_val || 0) / converted).toFixed(2) : 0;
-            TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + (avg == "NaN" ? 0 : avg) + "%</td><td>" + (avgValue == "NaN" ? 0 : avgValue) + "</td></tr>";
+            TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'>Total</td><td>" + converted + "/" + arrived + "</td><td>" + (avg == "NaN" ? 0 : avg) + "%</td><td>" + (avgValue == "NaN" ? 0 : avgValue) + "</td></tr>";
 
             jQuery('#categories-table-body').append(TABLE_HTML);
             DoctorWiseConversion(response);
@@ -1210,7 +1210,7 @@ function initPatientFollowUp(period, centre_id, arrived, reset = true) {
                 for (let i = 0; i < patientData.length; i++) {
                     let patient = patientData[i];
                     let routeValue = route('admin.reports.follow_up', { patient_id: patient.patient_id, report_type: 'weekly' });
-                    TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'><a href='" + routeValue + "'>" + patient.patient_id + "</a></td><td>" + patient.name + "</td><td>" + ((patient.is_treatment == 0) ? 'Not Booked' : 'No Show') + "</td><td>PKR: " + (patient.balance || 0).toFixed(2) + "</td><td>" + formatDate(patient.created_at, 'MMM, DD yyyy ') + "</td></tr>";
+                    TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'><a href='" + routeValue + "'>" + patient.patient_id + "</a></td><td>" + patient.name + "</td><td>" + ((patient.is_treatment == 0) ? 'Not Booked' : 'No Show') + "</td><td>PKR: " + (patient.balance || 0).toFixed(2) + "</td><td>" + formatDate(patient.created_at, 'MMM, DD yyyy ') + "</td></tr>";
                 }
                 $('#patient-follow-up').append(TABLE_HTML);
                 unattendedPaymentsState.page++;
@@ -1273,7 +1273,7 @@ function initPatientFollowUpOneMonth(reset = true) {
                 for (let i = 0; i < patientData.length; i++) {
                     let patient = patientData[i];
                     let routeValue = route('admin.reports.follow_up', { patient_id: patient.patient_id, report_type: 'monthly' });
-                    TABLE_HTML += "<tr><td style='color: #5C6B4F;font-weight: bold;'><a href='" + routeValue + "'>" + patient.patient_id + "</a></td><td>" + patient.name + "</td><td>PKR: " + (patient.balance || 0).toFixed(2) + "</td><td>" + patient.scheduled_date + "</td></tr>";
+                    TABLE_HTML += "<tr><td style='color: #007bff;font-weight: bold;'><a href='" + routeValue + "'>" + patient.patient_id + "</a></td><td>" + patient.name + "</td><td>PKR: " + (patient.balance || 0).toFixed(2) + "</td><td>" + patient.scheduled_date + "</td></tr>";
                 }
                 $('#patient-follow-up-one-month').append(TABLE_HTML);
                 overdueTreatmentsState.page++;

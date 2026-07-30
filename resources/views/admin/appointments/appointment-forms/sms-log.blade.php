@@ -1,7 +1,7 @@
 <!--begin::Modal content-->
 <style>
     .sl-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .sl-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #5C6B4F 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
+    .sl-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
     .sl-modal-header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
     .sl-modal-header-top { display: flex; align-items: center; justify-content: space-between; }
     .sl-modal-title { color: #fff; font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: 0.3px; }
@@ -9,7 +9,7 @@
     .sl-modal-close:hover { background: rgba(255,255,255,0.25); }
     .sl-modal-body { padding: 24px 28px; background: #fff; }
     .sl-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #E8EDE5; border-radius: 10px; overflow: hidden; }
-    .sl-table thead th { background: #F4F7F2; color: #5C6B4F; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
+    .sl-table thead th { background: #F4F7F2; color: #007bff; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
     .sl-table tbody td { padding: 10px 14px; font-size: 13px; color: #3D4A35; border-bottom: 1px solid #E8EDE5; }
     .sl-table tbody tr:last-child td { border-bottom: none; }
     .sl-table tbody tr:hover { background: #FAFDF8; }

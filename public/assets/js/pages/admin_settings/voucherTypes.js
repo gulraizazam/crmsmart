@@ -3,14 +3,6 @@ var table_url = route('admin.voucherTypes.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 30,
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    }, {
         field: 'name',
         title: 'Name',
         sortable: false,

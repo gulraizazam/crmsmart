@@ -35,14 +35,6 @@
                         </div>
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                                @if(Gate::allows('warehouse_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                                @endif
                                 @if(Gate::allows('warehouse_create'))
                                     <a href="javascript:void(0);" onclick="createWarehouse('{{ route('admin.warehouse.create') }}');" class="btn btn-primary" data-toggle="modal" data-target="#modal_add_warehouse">
                                         <i class="la la-plus"></i>

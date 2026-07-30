@@ -161,9 +161,9 @@
     <table>
         <tr>
             <td style="float:left">
-                <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; margin-bottom: 10px;">Skin <span style="color: #C4A265;">&amp;</span> Co.</div>
+                <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; margin-bottom: 10px;">DEMO</div>
                 <p class="logo_caption">{{$location_info->address}}.</p>
-                <p class="logo_caption logo_caption2">Phone. {{$location_info->fdo_phone}} &nbsp;| &nbsp; Email. {{$account_info->email}}  &nbsp; | &nbsp;  www.skinandco.com  &nbsp; | &nbsp; NTN. {{$location_info->ntn}} &nbsp; | &nbsp; STN. {{$location_info->stn}}</p>
+                <p class="logo_caption logo_caption2">Phone. {{$location_info->fdo_phone}} &nbsp;| &nbsp; Email. {{$account_info->email}}  &nbsp; | &nbsp;  www.demo.com  &nbsp; | &nbsp; NTN. {{$location_info->ntn}} &nbsp; | &nbsp; STN. {{$location_info->stn}}</p>
             </td>
             <td style="padding:0px !important; float:right; width:120px; text-align:right;">
                 <div class="invoice_btn" style="width:120px; float:right; text-align:right;">
@@ -447,7 +447,7 @@
     </table>
     <table class="grand-tax" style="margin-top: 18px;">
         <tr>
-            <td style="font-size:15px;">Thank you for your business with Skin & Co..</td>
+            <td style="font-size:15px;">Thank you for your business with DEMO.</td>
         </tr>
 
         <tr>
@@ -457,7 +457,7 @@
             <td style="font-size:15px;">
                 <strong>Note: </strong>For Privacy, Cancellation,
                 Late and Refund policies, please visit
-                <a href="https://skinandco.com/" target="_blank">www.skinandco.com</a>
+                <a href="https://demo.example/" target="_blank">www.demo.com</a>
             </td>
         </tr>
 

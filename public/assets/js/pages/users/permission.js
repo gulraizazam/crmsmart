@@ -36,15 +36,6 @@ function loadParentPermissions() {
 
 var table_columns = [
     {
-    field: 'id',
-    sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            let id = data.id;
-            return childCheckbox(data);
-        }
-    }, {
         field: 'title',
         title: 'Title',
         width: 'auto',

@@ -36,16 +36,7 @@
 
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if(Gate::allows('custom_form_feedbacks_manage'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
-
-                        <!--end::Button-->
+                            <!--end::Button-->
                         </div>
 
                     </div>

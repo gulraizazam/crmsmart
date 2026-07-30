@@ -1,16 +1,6 @@
 var table_url = route('admin.locations.datatable');
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 30,
-        title: renderCheckbox(),
-        template: function (data) {
-            let id = data.id;
-            return childCheckbox(data);
-        }
-    },
-     {
         field: 'name',
         title: 'Name',
          sortable: false,

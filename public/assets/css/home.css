@@ -1,27 +1,37 @@
 /* ============================================
-   SKIN & CO. DASHBOARD THEME
-   Aesthetic Olive Green Color Palette
+   DASHBOARD — AdminLTE-inspired dark theme
+   Matches admin dark-overrides.css palette
    ============================================ */
 
 /* --- CSS Variables --- */
 :root {
-    --dash-primary: #7A8B6A;
-    --dash-primary-dark: #5C6B4F;
-    --dash-primary-darker: #4A5540;
-    --dash-primary-darkest: #3D4A35;
-    --dash-accent-gold: #C4A265;
-    --dash-accent-blue: #7B9BAD;
-    --dash-accent-terracotta: #D4956A;
-    --dash-accent-sage: #A8B89A;
-    --dash-cream: #F2E8D5;
-    --dash-bg: #F8F6F1;
-    --dash-card-bg: #FFFFFF;
-    --dash-text: #3D4A35;
-    --dash-text-muted: #8A9580;
-    --dash-border: #E8EDE5;
-    --dash-shadow: 0 2px 12px rgba(74, 85, 64, 0.08);
-    --dash-shadow-hover: 0 4px 20px rgba(74, 85, 64, 0.14);
-    --dash-radius: 14px;
+    --dash-primary: #007bff;
+    --dash-primary-dark: #0069d9;
+    --dash-primary-darker: #0062cc;
+    --dash-primary-darkest: #004a99;
+
+    --dash-accent-blue:       #17a2b8;
+    --dash-accent-green:      #28a745;
+    --dash-accent-yellow:     #ffc107;
+    --dash-accent-red:        #dc3545;
+    --dash-accent-purple:     #6f42c1;
+
+    --dash-bg:         #f4f6f9;
+    --dash-card-bg:    #ffffff;
+    --dash-card-header:#ffffff;
+    --dash-hover-row:  #f8f9fa;
+
+    --dash-text:       #212529;
+    --dash-text-body:  #495057;
+    --dash-text-muted: #6c757d;
+
+    --dash-border:     #dee2e6;
+    --dash-input-bg:   #ffffff;
+    --dash-input-border: #ced4da;
+
+    --dash-shadow:       0 1px 3px rgba(0, 0, 0, 0.06);
+    --dash-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --dash-radius: 6px;
 }
 
 /* --- Global Dashboard Background --- */
@@ -31,88 +41,73 @@
 
 /* --- Card Overrides --- */
 .card.card-custom {
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius);
-    box-shadow: var(--dash-shadow);
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    background-color: var(--dash-card-bg) !important;
+    border: 1px solid var(--dash-border) !important;
+    border-radius: var(--dash-radius) !important;
+    box-shadow: var(--dash-shadow) !important;
+    color: var(--dash-text-body);
+    transition: box-shadow 0.2s ease;
     overflow: hidden;
 }
 
 .card.card-custom:hover {
-    box-shadow: var(--dash-shadow-hover);
+    box-shadow: var(--dash-shadow-hover) !important;
 }
 
-/* --- Stats Banner (Full Width) --- */
+/* --- Stats Banner (dark container for the small-box tiles) --- */
 .stats-banner {
-    background: linear-gradient(135deg, var(--dash-primary-darkest) 0%, var(--dash-primary-dark) 50%, var(--dash-primary) 100%);
+    background: var(--dash-card-bg);
+    border: 1px solid var(--dash-border);
     border-radius: var(--dash-radius);
     padding: 0;
-    box-shadow: 0 4px 24px rgba(61, 74, 53, 0.18);
+    box-shadow: var(--dash-shadow);
     overflow: hidden;
     position: relative;
 }
 
-.stats-banner::before {
-    content: '';
-    position: absolute;
-    top: -60%;
-    right: -10%;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.03);
-    pointer-events: none;
-}
-
+.stats-banner::before,
 .stats-banner::after {
-    content: '';
-    position: absolute;
-    bottom: -40%;
-    left: -5%;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.025);
-    pointer-events: none;
+    content: none;
 }
 
 .stats-banner-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 28px 0;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--dash-border);
+    background: var(--dash-card-bg);
     position: relative;
     z-index: 2;
 }
 
 .stats-banner-title {
-    color: #fff;
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    color: var(--dash-text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
     margin: 0;
 }
 
 .stats-filter-select {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 7px 14px;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: all 0.3s ease;
+    background: var(--dash-input-bg);
+    border: 1px solid var(--dash-input-border);
+    color: var(--dash-text);
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 400;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
     cursor: pointer;
     outline: none;
     appearance: auto;
+    min-width: 140px;
 }
 
 .stats-filter-select:hover,
 .stats-filter-select:focus {
-    background: rgba(255,255,255,0.22);
-    border-color: rgba(255,255,255,0.4);
+    border-color: var(--dash-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .stats-filter-select option {
@@ -125,88 +120,77 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
-    padding: 22px 28px 26px;
+    padding: 22px 24px;
     position: relative;
     z-index: 2;
 }
 
-/* --- Individual Stat Cards --- */
+/* --- Individual Stat Cards (AdminLTE small-box style) --- */
 .stats-card {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 22px 20px 18px;
+    border-radius: var(--dash-radius);
+    padding: 18px 20px;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-    min-height: 130px;
+    min-height: 118px;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .stats-card:hover {
-    background: rgba(255,255,255,0.17);
-    border-color: rgba(255,255,255,0.25);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Solid colored small-box backgrounds (AdminLTE .small-box) */
+.stats-card--sales   { background: #007bff; }
+.stats-card--revenue { background: #28a745; }
+.stats-card--consult { background: #17a2b8; }
+.stats-card--treat   { background: #ffc107; color: #212529; }
+
+/* Bottom accent (darker shade of card color) */
 .stats-card__accent {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     height: 3px;
-    border-radius: 0 0 12px 12px;
-    transition: height 0.3s ease;
+    background: rgba(0, 0, 0, 0.15);
+    transition: height 0.2s ease;
 }
 
 .stats-card:hover .stats-card__accent {
-    height: 4px;
+    height: 5px;
 }
 
-.stats-card--sales .stats-card__accent { background: linear-gradient(90deg, var(--dash-accent-sage), var(--dash-primary)); }
-.stats-card--revenue .stats-card__accent { background: linear-gradient(90deg, var(--dash-accent-gold), #E0C080); }
-.stats-card--consult .stats-card__accent { background: linear-gradient(90deg, var(--dash-accent-blue), #9DB8C8); }
-.stats-card--treat .stats-card__accent { background: linear-gradient(90deg, var(--dash-accent-terracotta), #E0B090); }
-
+/* Icon tile — semi-transparent white sitting on colored bg */
 .stats-card__icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--dash-radius);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 14px;
-    font-size: 24px;
-    transition: transform 0.3s ease;
+    margin-bottom: 10px;
+    font-size: 22px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.stats-card--treat .stats-card__icon {
+    background: rgba(0, 0, 0, 0.15);
+    color: #212529;
 }
 
 .stats-card:hover .stats-card__icon {
-    transform: scale(1.08);
-}
-
-.stats-card--sales .stats-card__icon {
-    background: rgba(168, 184, 154, 0.2);
-    color: var(--dash-accent-sage);
-}
-.stats-card--revenue .stats-card__icon {
-    background: rgba(196, 162, 101, 0.2);
-    color: var(--dash-accent-gold);
-}
-.stats-card--consult .stats-card__icon {
-    background: rgba(123, 155, 173, 0.2);
-    color: var(--dash-accent-blue);
-}
-.stats-card--treat .stats-card__icon {
-    background: rgba(212, 149, 106, 0.2);
-    color: var(--dash-accent-terracotta);
+    transform: scale(1.06);
 }
 
 .stats-card__icon i {
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .stats-card__body {
@@ -217,9 +201,9 @@
 }
 
 .stats-card__value {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #fff;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: inherit;
     display: block;
     line-height: 1.2;
     letter-spacing: -0.3px;
@@ -230,29 +214,35 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: rgba(255,255,255,0.6);
-    margin-top: 6px;
+    color: inherit;
+    opacity: 0.9;
+    margin-top: 4px;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .stats-card:hover .stats-card__label {
-    color: rgba(255,255,255,0.85);
+    opacity: 1;
+    color: inherit;
 }
 
 .stats-card .skeleton-loader {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.25);
     color: transparent;
-    border-radius: 6px;
+    border-radius: 4px;
     display: inline-block;
     min-width: 60px;
     font-size: 0.8rem;
     animation: skeletonPulse 1.5s ease-in-out infinite;
 }
 
+.stats-card--treat .skeleton-loader {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 @keyframes skeletonPulse {
     0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+    50%      { opacity: 1; }
 }
 
 /* --- Responsive Stats Grid --- */
@@ -260,10 +250,10 @@
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
-        padding: 18px 20px 22px;
+        padding: 18px 20px;
     }
     .stats-banner-header {
-        padding: 16px 20px 0;
+        padding: 14px 20px;
     }
 }
 
@@ -300,7 +290,7 @@
     display: table;
 }
 
-.nav-tabs>li {
+.nav-tabs > li {
     margin: 0;
     padding: 0;
     background: transparent;
@@ -309,34 +299,38 @@
     position: relative;
 }
 
-.nav-tabs>li>a {
+.nav-tabs > li > a {
     margin: 0;
-    padding: 12px 13px 13px;
+    padding: 10px 13px;
     font-size: 13px;
     color: var(--dash-text-muted);
     border: 0;
     background: transparent;
-    transition: all 0.3s ease;
+    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.nav-tabs>li a.active {
+.nav-tabs > li > a:hover {
+    color: var(--dash-text);
+}
+
+.nav-tabs > li a.active {
     background: transparent;
     border-bottom: 3px solid var(--dash-primary);
-    color: var(--dash-primary-dark);
+    color: var(--dash-text);
     position: relative;
 }
 
 .hover-effect {
     border-color: var(--dash-primary) !important;
-    color: #FFF !important;
+    color: #ffffff !important;
     background-color: var(--dash-primary) !important;
-    border-radius: 25px !important;
+    border-radius: 4px !important;
     overflow: hidden;
 }
 
 /* --- Dropdown Menus --- */
 .dropdown-menu {
-    box-shadow: 0 8px 24px rgba(61, 74, 53, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     left: 0;
     min-width: 175px;
     position: absolute;
@@ -346,22 +340,23 @@
     list-style: none;
     text-shadow: none;
     padding: 6px 0;
-    background-color: #fff;
-    margin: 10px 0 0;
+    background-color: var(--dash-card-bg);
+    margin: 8px 0 0;
     border: 1px solid var(--dash-border);
     font-family: 'Poppins', sans-serif;
-    border-radius: 10px;
+    border-radius: var(--dash-radius);
+    color: var(--dash-text-body);
 }
 
-.btn-group>.dropdown-menu,
-.dropdown-toggle>.dropdown-menu,
-.dropdown>.dropdown-menu {
-    margin-top: 10px;
+.btn-group > .dropdown-menu,
+.dropdown-toggle > .dropdown-menu,
+.dropdown > .dropdown-menu {
+    margin-top: 8px;
 }
 
-.btn-group>.dropdown-menu:before,
-.dropdown-toggle>.dropdown-menu:before,
-.dropdown>.dropdown-menu:before {
+.btn-group > .dropdown-menu:before,
+.dropdown-toggle > .dropdown-menu:before,
+.dropdown > .dropdown-menu:before {
     position: absolute;
     top: -8px;
     left: 9px;
@@ -372,16 +367,16 @@
     content: '';
 }
 
-.btn-group>.dropdown-menu.dropdown-menu-right:before,
-.dropdown-toggle>.dropdown-menu.dropdown-menu-right:before,
-.dropdown>.dropdown-menu.dropdown-menu-right:before {
+.btn-group > .dropdown-menu.dropdown-menu-right:before,
+.dropdown-toggle > .dropdown-menu.dropdown-menu-right:before,
+.dropdown > .dropdown-menu.dropdown-menu-right:before {
     left: auto;
     right: 9px;
 }
 
-.dropdown-menu>li>a {
+.dropdown-menu > li > a {
     padding: 8px 16px;
-    color: var(--dash-text);
+    color: var(--dash-text-body);
     text-decoration: none;
     display: block;
     clear: both;
@@ -390,14 +385,15 @@
     line-height: 18px;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 6px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    border-radius: 4px;
     margin: 0 6px;
 }
 
 .centre-name {
     font-size: 14px;
-    color: var(--dash-primary-dark);
+    color: var(--dash-text);
+    font-weight: 500;
 }
 
 .table-cols {
@@ -410,37 +406,38 @@
 
 .dropdown-menu li a:hover,
 .wise_arrival_ul .dropdown-menu li a:hover {
-    background: rgba(122, 139, 106, 0.08);
-    color: var(--dash-primary-dark);
+    background: var(--dash-hover-row);
+    color: var(--dash-text);
 }
 
 /* --- Select Controls --- */
 select.form-control {
     height: 36px;
-    border: 1px solid var(--dash-border);
-    border-radius: 8px;
+    border: 1px solid var(--dash-input-border);
+    border-radius: 4px;
     color: var(--dash-text);
     font-size: 12.5px;
-    transition: border-color 0.3s ease;
-    background-color: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    background-color: var(--dash-input-bg);
 }
 
 select.form-control:focus {
     border-color: var(--dash-primary);
-    box-shadow: 0 0 0 3px rgba(122, 139, 106, 0.12);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /* --- Section Headers --- */
 .dashboard-counter.text-uppercase {
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 1px;
-    color: var(--dash-primary-darker);
+    color: var(--dash-text);
 }
 
 .card-spacer2 {
-    padding: 18px 22px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--dash-border);
+    background: var(--dash-card-header);
 }
 
 /* --- Doctor Lists --- */
@@ -453,10 +450,11 @@ select.form-control:focus {
     justify-content: flex-start;
     padding: 5px 10px;
     text-align: left;
+    color: var(--dash-text-body);
 }
 
 .appenddoctorlist .nav.nav-pills.nav-fill .nav-item a.active {
-    color: var(--dash-primary-dark);
+    color: var(--dash-text);
     background-color: transparent;
     position: relative;
     display: flex;
@@ -482,30 +480,34 @@ select.form-control:focus {
 .btn.btndropdown i {
     position: absolute;
     right: 5px;
-    color: var(--dash-text);
+    color: var(--dash-text-body);
 }
 
 a.btn.form-control.btndropdown.btn_Report {
-    border: 1px solid var(--dash-border);
-    border-radius: 8px;
+    border: 1px solid var(--dash-input-border);
+    border-radius: 4px;
     font-size: 12.5px;
-    color: var(--dash-text);
-    transition: all 0.2s ease;
+    color: var(--dash-text-body);
+    background: var(--dash-input-bg);
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 
 a.btn.form-control.btndropdown.btn_Report:hover {
-    background: rgba(122, 139, 106, 0.06);
+    background: var(--dash-hover-row);
     border-color: var(--dash-primary);
+    color: var(--dash-text);
 }
 
 .custom_hover_effect li a {
-    transition: all ease .3s;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: var(--dash-text-body);
 }
 
 .custom_hover_effect li a.active,
 .custom_hover_effect li a:hover {
     border-bottom: 0;
-    background: rgba(122, 139, 106, 0.06);
+    background: var(--dash-hover-row);
+    color: var(--dash-text);
 }
 
 /* --- Loaders --- */
@@ -536,7 +538,7 @@ img.loader-imgs {
 #attended_payments .wrap_unattended_payment {
     position: sticky;
     z-index: 1;
-    background: #fff;
+    background: var(--dash-card-bg);
     top: 0;
 }
 
@@ -547,9 +549,9 @@ img.loader-imgs {
 
 /* --- Tables --- */
 .table thead th {
-    background: rgba(122, 139, 106, 0.06);
+    background: var(--dash-card-header);
     border-bottom: 2px solid var(--dash-border);
-    color: var(--dash-primary-darker);
+    color: var(--dash-text);
     font-weight: 600;
     font-size: 11.5px;
     text-transform: uppercase;
@@ -558,29 +560,30 @@ img.loader-imgs {
 }
 
 .table tbody tr {
-    transition: background-color 0.2s ease;
+    transition: background-color 0.15s ease;
 }
 
 .table tbody tr:hover {
-    background-color: rgba(122, 139, 106, 0.04);
+    background-color: var(--dash-hover-row);
 }
 
 .table tbody td {
     padding: 10px 14px;
     font-size: 13px;
-    color: var(--dash-text);
-    border-bottom: 1px solid rgba(122, 139, 106, 0.08);
+    color: var(--dash-text-body);
+    border-bottom: 1px solid var(--dash-border);
 }
 
 .table tfoot tr {
-    background: rgba(122, 139, 106, 0.06);
+    background: var(--dash-card-header);
+    color: var(--dash-text);
 }
 
-/* --- Select2 Overrides --- */
+/* --- Select2 Overrides (dashboard-specific arrow) --- */
 .select2-container--default .select2-selection--single .select2-selection__arrow:after,
 .select2-container--default .select2-selection--multiple .select2-selection__arrow:after {
     font-size: 9px;
-    color: var(--dash-text);
+    color: var(--dash-text-muted);
     font-weight: 900;
 }
 
@@ -599,15 +602,18 @@ img.loader-imgs {
 /* --- Activities Panel --- */
 #activities-container {
     border-radius: var(--dash-radius);
+    background: var(--dash-card-bg);
+    border: 1px solid var(--dash-border);
 }
 
 #activities-container .card-header {
     border-bottom: 1px solid var(--dash-border);
-    padding: 18px 22px;
+    padding: 16px 20px;
+    background: var(--dash-card-header);
 }
 
 #activities-container .card-title .font-weight-bolder {
-    color: var(--dash-primary-darker);
+    color: var(--dash-text);
     font-size: 1rem;
 }
 
@@ -626,22 +632,26 @@ img.loader-imgs {
 
 .timeline-6 .timeline-item .timeline-content {
     font-size: 13px;
-    color: var(--dash-text);
+    color: var(--dash-text-body);
+}
+
+.timeline-6::before {
+    background-color: var(--dash-border) !important;
 }
 
 /* --- Skeleton Loader Animation --- */
 .skeleton-loader {
     display: inline-block;
-    background: linear-gradient(90deg, rgba(122,139,106,0.08) 25%, rgba(122,139,106,0.15) 50%, rgba(122,139,106,0.08) 75%);
+    background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.12) 50%, rgba(0,0,0,0.06) 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
-    border-radius: 6px;
+    border-radius: 4px;
     min-width: 80px;
     color: transparent;
 }
 
 @keyframes skeleton-loading {
-    0% { background-position: 200% 0; }
+    0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
 
@@ -663,18 +673,18 @@ img.loader-imgs {
         margin-top: 50px;
         display: block;
     }
-    
+
     img.loader-imgs {
         margin-left: auto;
         margin-right: auto;
         margin-top: 60px;
         display: block;
     }
-    
+
     .card-stretch-half {
         min-height: auto !important;
     }
-    
+
     #doc_wise_conversion,
     #doc_wise_feedback_data,
     #doctor_upselling_chart,
@@ -683,27 +693,27 @@ img.loader-imgs {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     #doctor_upselling_section .col-7,
     #doctor_upselling_section .col-5 {
         flex: 0 0 100%;
         max-width: 100%;
     }
-    
+
     .nav-tabs {
         float: none;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-end;
     }
-    
+
     .card-spacer2 {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center !important;
         gap: 5px;
     }
-    
+
     .card-spacer2 .nav-tabs {
         flex-shrink: 0;
     }
@@ -716,63 +726,63 @@ img.loader-imgs {
         justify-content: space-between !important;
         align-items: center !important;
     }
-    
+
     .card-spacer2 .dashboard-counter {
         font-size: 12px;
         white-space: nowrap;
     }
-    
+
     .card-spacer2 .nav-tabs {
         margin-left: auto;
     }
-    
+
     .card-spacer2 select.form-control {
         font-size: 11px;
         padding: 4px 6px;
         height: auto;
         min-width: 80px;
     }
-    
+
     .loader-img,
     .loader-img-unattended,
     .loader-img-attended {
         margin-top: 30px;
         height: 40px;
     }
-    
+
     img.loader-imgs {
         margin-left: auto;
         margin-right: auto;
         margin-top: 40px;
         height: 60px;
     }
-    
+
     #centre_wise_arrival,
     #doc_wise_conversion,
     #doctor_upselling_chart {
         display: none !important;
     }
-    
+
     .centre_wise_arrival_wrap,
     .appenddoctorlist {
         flex: 0 0 100% !important;
         max-width: 100% !important;
         padding: 0 10px !important;
     }
-    
+
     .card-spacer2 {
         flex-wrap: wrap !important;
     }
-    
+
     .card-spacer2 .nav-tabs {
         flex-wrap: wrap;
         gap: 5px;
     }
-    
+
     .card-spacer2 .nav-tabs > li {
         margin-bottom: 5px;
     }
-    
+
     .card-spacer2 select.form-control,
     .nav-tabs select.form-control {
         font-size: 11px;
@@ -781,72 +791,72 @@ img.loader-imgs {
         max-width: 95px;
         height: 30px;
     }
-    
+
     .nav-tabs > li {
         margin-right: 3px !important;
     }
-    
+
     .card-spacer2 .nav-tabs {
         gap: 3px;
     }
-    
+
     .centre_wise_arrival_wrap .table-responsive,
     .appenddoctorlist .table-responsive {
         max-width: 100%;
         overflow-x: auto;
         padding: 0 5px;
     }
-    
+
     .centre_wise_arrival_wrap .table,
     .appenddoctorlist .table {
         margin: 0;
     }
-    
+
     .centre_wise_arrival_wrap .table td,
     .centre_wise_arrival_wrap .table th,
     .appenddoctorlist .table td,
     .appenddoctorlist .table th {
         padding: 8px 10px;
     }
-    
+
     #doctor_upselling_section .col-7 {
         display: none !important;
     }
-    
+
     #doctor_upselling_section .col-5 {
         flex: 0 0 100% !important;
         max-width: 100% !important;
         padding: 0 !important;
     }
-    
+
     .nav-tabs > li {
         margin-right: 8px;
     }
-    
+
     .nav-tabs > li:last-child {
         margin-right: 0;
     }
-    
+
     .actions.date_action_dropdown,
     .actions.action-style {
         margin-right: 5px;
     }
-    
+
     .btn-group {
         margin-left: 5px;
     }
-    
+
     .card-spacer,
     .card-spacer2 {
         padding: 1rem !important;
     }
-    
+
     .card-spacer .row {
         display: flex !important;
         flex-wrap: wrap !important;
         gap: 10px;
     }
-    
+
     .card-spacer .row .col {
         flex: 0 0 calc(50% - 10px) !important;
         max-width: calc(50% - 10px) !important;
@@ -854,25 +864,25 @@ img.loader-imgs {
         margin-left: 0 !important;
         margin-bottom: 10px !important;
     }
-    
+
     .dashboard-counter {
         font-size: 14px;
     }
-    
+
     select.form-control {
         font-size: 12px;
         padding: 5px 8px;
     }
-    
+
     .table-responsive {
         font-size: 12px;
     }
-    
+
     #activities-container {
         height: auto !important;
         max-height: 400px;
     }
-    
+
     #patient-followup-section,
     #patient-followup-onemonth-section {
         height: auto !important;
@@ -885,18 +895,18 @@ img.loader-imgs {
         flex-wrap: wrap !important;
         gap: 8px;
     }
-    
+
     .card-spacer .row .col {
         flex: 0 0 calc(50% - 4px) !important;
         max-width: calc(50% - 4px) !important;
         margin: 0 !important;
         padding: 8px !important;
     }
-    
+
     .dashboard-counter {
         font-size: 11px;
     }
-    
+
     .btn_Report {
         font-size: 11px;
         padding: 5px 10px !important;

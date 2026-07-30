@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Skin &amp; Co. — Consultation Form</title>
+    <title>DEMO — Consultation Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     @php
         $patientAge = '';
@@ -16,14 +16,6 @@
         $isFemale = isset($patient->gender) && (int) $patient->gender === 2;
         $isMale = isset($patient->gender) && (int) $patient->gender === 1;
         $consultantName = $appointment_info ? (optional($appointment_info->doctor)->name ?? '') : '';
-        $_facePath = public_path('images/consultation-face-chart.png');
-        $faceChartSrc = is_readable($_facePath)
-            ? 'data:image/png;base64,' . base64_encode((string) file_get_contents($_facePath))
-            : asset('images/consultation-face-chart.png');
-        $_logoPath = public_path('images/consultation-logo.png');
-        $logoSrc = is_readable($_logoPath)
-            ? 'data:image/png;base64,' . base64_encode((string) file_get_contents($_logoPath))
-            : asset('images/consultation-logo.png');
     @endphp
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -217,7 +209,7 @@
 <body>
 <div class="cf-page">
     <div class="cf-brand-wrap">
-        <img class="cf-brand-logo" src="{{ $logoSrc }}" alt="Skin &amp; Co. Aesthetic &amp; Wellness Clinic" />
+        <div style="text-align: center; font-family: Arial, sans-serif; font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #343a40; padding-left: 8px; margin: 8px 0;">DEMO</div>
     </div>
     <div class="cf-title">Consultation Form</div>
 
@@ -247,52 +239,6 @@
             </tr>
         </table>
     </div>
-
-    <table class="cf-skin-face" role="presentation">
-        <tr>
-            <td class="cf-skin-col">
-                <div class="cf-skin-panel">
-                    <div class="cf-heading-serif">Skin Analysis</div>
-
-                    <div class="cf-skin-group">
-                        <span class="cf-skin-group-label">Fitzpatrick Skin Type</span>
-                        <div class="cf-opts-row">
-                            <span><span class="cf-box"></span> I</span>
-                            <span><span class="cf-box"></span> II</span>
-                            <span><span class="cf-box"></span> III</span>
-                            <span><span class="cf-box"></span> IV</span>
-                            <span><span class="cf-box"></span> V</span>
-                            <span><span class="cf-box"></span> VI</span>
-                        </div>
-                    </div>
-
-                    <div class="cf-skin-group">
-                        <span class="cf-skin-group-label">Skin Type</span>
-                        <div class="cf-opts-row">
-                            <span><span class="cf-box"></span> Oily</span>
-                            <span><span class="cf-box"></span> Dry</span>
-                            <span><span class="cf-box"></span> Sensitive</span>
-                            <span><span class="cf-box"></span> Combination</span>
-                            <span><span class="cf-box"></span> Acne-Prone</span>
-                        </div>
-                    </div>
-
-                    <div class="cf-skin-group">
-                        <span class="cf-skin-group-label">Skin Sensitivity</span>
-                        <div class="cf-opts-row">
-                            <span><span class="cf-box"></span> No Sensitivity</span>
-                            <span><span class="cf-box"></span> Low</span>
-                            <span><span class="cf-box"></span> High</span>
-                            <span><span class="cf-box"></span> Moderate</span>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td class="cf-face-col">
-                <img class="cf-face-chart" src="{{ $faceChartSrc }}" alt="" />
-            </td>
-        </tr>
-    </table>
 
     <div class="cf-heading-serif">Medical Information</div>
     <p class="cf-med-intro">Please check any of the following that apply to you:</p>
@@ -345,7 +291,7 @@
     </div>
 
     <div class="cf-footer-contact">
-        www.skinandco.pk &nbsp;&nbsp; Info.skinandco@gmail.com &nbsp;&nbsp; +92 333 314 3669
+        www.demo.com &nbsp;&nbsp; info@demo.com &nbsp;&nbsp; +92 333 314 3669
     </div>
 
     <div class="cf-sig-wrap">

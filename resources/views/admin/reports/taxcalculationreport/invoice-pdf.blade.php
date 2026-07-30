@@ -78,10 +78,10 @@
         <tr>
             <td>
                 <div style="font-size:22px; font-weight:bold; letter-spacing:3px;">
-                    <span style="font-weight:lighter;">SKIN</span> & CO.
+                    DEMO
                 </div>
                 <p class="logo_caption">{{ $location->address }}.</p>
-                <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; Email. care@skinandco.com &nbsp; | &nbsp; www.skinandco.com &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
+                <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; Email. care@demo.com &nbsp; | &nbsp; www.demo.com &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
             </td>
             <td style="padding:0px !important; float:right; width:120px; text-align:right;">
                 <div class="invoice_btn" style="width:120px; float:right; text-align:right;">
@@ -121,6 +121,6 @@
         </tr>
     </table>
 
-    <p style="text-align:center; font-size:12px; margin-top:20px; font-style:italic;">Thank you for your business with Skin & Co..</p>
+    <p style="text-align:center; font-size:12px; margin-top:20px; font-style:italic;">Thank you for your business with DEMO.</p>
 </body>
 </html>

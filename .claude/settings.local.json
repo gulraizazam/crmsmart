@@ -1,18 +1,10 @@
 {
   "permissions": {
     "allow": [
-<<<<<<< HEAD
-      "Read(/C:\\laragon\\www\\cutera-upgradation1\\resources\\views\\admin/**)",
-      "Read(/C:\\laragon\\www\\cutera-upgradation1\\public\\assets\\js/**)"
-=======
-      "Bash(php artisan:*)"
->>>>>>> test
+      "Bash(php artisan:*)",
+      "Bash(grep -o -E \"skinandco[^\\\\\"']*|Skin[^\\\\\"']{0,20}Co\\\\.?\" C:/laragon/www/portal/resources/js/ziggy.js)"
     ],
     "deny": [],
     "ask": []
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> test

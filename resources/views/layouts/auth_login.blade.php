@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Skin & Co. | @yield('title')</title>
+    <title>DEMO | @yield('title')</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Skin & Co. Aesthetic Clinic Management" />
+    <meta name="description" content="DEMO Management System" />
     <meta name="keywords" content="Aesthetic Clinic" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="{{asset('favicon.svg')}}" />

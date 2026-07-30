@@ -60,6 +60,6 @@
     @endif
 
     <hr style="border:none;border-top:1px solid #eee;margin:20px 0;">
-    <p style="color:#aaa;font-size:12px;">This is an automated digest from Skin & Co. CRM Cash Flow Module.</p>
+    <p style="color:#aaa;font-size:12px;">This is an automated digest from DEMO CRM Cash Flow Module.</p>
 </body>
 </html>

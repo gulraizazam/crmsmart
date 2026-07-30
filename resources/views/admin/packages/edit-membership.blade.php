@@ -1,7 +1,7 @@
 <!--begin::Modal content-->
 <style>
     .em-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .em-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #5C6B4F 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
+    .em-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 20px 28px; position: relative; overflow: hidden; }
     .em-modal-header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
     .em-modal-header-top { display: flex; align-items: center; justify-content: space-between; }
     .em-modal-title { color: #fff; font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: 0.3px; }
@@ -13,8 +13,8 @@
     .em-modal-body .alert-success { background: #F0FDF4; color: #166534; }
     .em-section { background: #F8F6F1; border: 1px solid #E8EDE5; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     .em-section-title { font-size: 13px; font-weight: 700; color: #3D4A35; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .em-section-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #5C6B4F, #C4A265); border-radius: 2px; }
-    .em-modal-body label { font-size: 12px; font-weight: 600; color: #5C6B4F; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
+    .em-section-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #007bff, #C4A265); border-radius: 2px; }
+    .em-modal-body label { font-size: 12px; font-weight: 600; color: #007bff; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
     .em-modal-body .form-control, .em-modal-body .form-control-solid { border: 1px solid #D5DDD0; border-radius: 8px; font-size: 13px; padding: 9px 14px; transition: border-color 0.2s, box-shadow 0.2s; background: #fff; }
     .em-modal-body .form-control:focus, .em-modal-body .form-control-solid:focus { border-color: #7A8B6A; box-shadow: 0 0 0 3px rgba(122,139,106,0.12); outline: none; }
     .em-modal-body .select2-container--default .select2-selection--single { border: 1px solid #D5DDD0; border-radius: 8px; height: 38px; }
@@ -22,23 +22,23 @@
     .em-modal-body .select2-container--default .select2-selection--single .select2-selection__arrow { height: 38px; }
     .em-btn-add-disabled { background: #E8EDE5; border: none; border-radius: 8px; padding: 9px 24px; font-weight: 600; font-size: 13px; color: #9CA896; cursor: not-allowed; }
     .em-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #E8EDE5; border-radius: 10px; overflow: hidden; }
-    .em-table thead th { background: #F4F7F2; color: #5C6B4F; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
+    .em-table thead th { background: #F4F7F2; color: #007bff; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #E8EDE5; white-space: nowrap; }
     .em-table tbody td { padding: 10px 14px; font-size: 13px; color: #3D4A35; border-bottom: 1px solid #E8EDE5; }
     .em-table tbody tr:last-child td { border-bottom: none; }
     .em-table tbody tr:hover { background: #FAFDF8; }
     .em-summary { background: linear-gradient(135deg, #F8F6F1 0%, #F4F7F2 100%); border: 1px solid #E8EDE5; border-radius: 12px; padding: 20px; margin-top: 20px; }
     .em-docs { background: #F8F6F1; border: 1px solid #E8EDE5; border-radius: 12px; padding: 20px; margin-top: 16px; }
     .em-docs-title { font-size: 13px; font-weight: 700; color: #3D4A35; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .em-docs-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #5C6B4F); border-radius: 2px; }
-    .em-docs-info { background: #EDF2EA; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #5C6B4F; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .em-docs-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #007bff); border-radius: 2px; }
+    .em-docs-info { background: #EDF2EA; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #007bff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     .em-history { margin-top: 24px; }
     .em-history-title { font-size: 14px; font-weight: 700; color: #3D4A35; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .em-history-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #5C6B4F); border-radius: 2px; }
+    .em-history-title::before { content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #C4A265, #007bff); border-radius: 2px; }
     .em-footer { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 20px; margin-top: 8px; border-top: 2px solid #E8EDE5; }
-    .em-btn-cancel { background: #fff; border: 1px solid #D5DDD0; border-radius: 8px; padding: 10px 28px; font-weight: 600; font-size: 13px; color: #5C6B4F; transition: all 0.2s; cursor: pointer; }
+    .em-btn-cancel { background: #fff; border: 1px solid #D5DDD0; border-radius: 8px; padding: 10px 28px; font-weight: 600; font-size: 13px; color: #007bff; transition: all 0.2s; cursor: pointer; }
     .em-btn-cancel:hover { background: #F8F6F1; border-color: #7A8B6A; }
-    .em-btn-save { background: linear-gradient(135deg, #5C6B4F, #7A8B6A); border: none; border-radius: 8px; padding: 10px 32px; font-weight: 600; font-size: 13px; color: #fff; transition: all 0.3s; cursor: pointer; }
-    .em-btn-save:hover { background: linear-gradient(135deg, #4A5540, #5C6B4F); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); color: #fff; }
+    .em-btn-save { background: linear-gradient(135deg, #007bff, #7A8B6A); border: none; border-radius: 8px; padding: 10px 32px; font-weight: 600; font-size: 13px; color: #fff; transition: all 0.3s; cursor: pointer; }
+    .em-btn-save:hover { background: linear-gradient(135deg, #4A5540, #007bff); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); color: #fff; }
 </style>
 <div class="modal-content em-modal">
     <div class="em-modal-header" id="kt_modal_edit_membership_header">
@@ -183,7 +183,7 @@
                     <input type="hidden" id="edit_is_student_membership" value="0">
                     
                     <div class="em-docs-title">
-                        <i class="la la-file-image" style="color: #5C6B4F;"></i>
+                        <i class="la la-file-image" style="color: #007bff;"></i>
                         Student Verification Documents
                     </div>
                     <div class="em-docs-info">

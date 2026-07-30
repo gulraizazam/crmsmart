@@ -4,7 +4,7 @@
     <div class="brand flex-column-auto" id="kt_brand">
         <!--begin::Logo-->
         <a href="{{ route('admin.home') }}" class="brand-logo">
-            <span style="margin-left:25px; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Skin <span style="color: #C4A265;">&</span> Co.</span>
+            <span style="margin-left:25px; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">DEMO</span>
         </a>
         <!--end::Logo-->
         <!--begin::Toggle-->
@@ -32,7 +32,7 @@
             <div class="flex-column-auto d-lg-none pt-4 pb-7" id="kt_brand" style="border-bottom: 1px solid #4A5540;">
                 <!--begin::Logo-->
                 <a class="brand-logo">
-                    <span style="margin-left:25px; display:block; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Skin <span style="color: #C4A265;">&</span> Co.</span>
+                    <span style="margin-left:25px; display:block; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">DEMO</span>
                 </a>
                 <!--end::Logo-->
             </div>

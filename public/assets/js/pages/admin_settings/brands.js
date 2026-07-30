@@ -3,15 +3,6 @@ var table_url = route('admin.brands.datatable');
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: '40',
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    },
-    {
         field: 'name',
         title: 'Name',
         width: 'auto',

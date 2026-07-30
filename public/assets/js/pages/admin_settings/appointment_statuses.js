@@ -4,15 +4,6 @@ var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 if (width > 1280) {
     var table_columns = [
         {
-            field: 'id',
-            sortable: false,
-            width: 30,
-            title: renderCheckbox(),
-            template: function (data) {
-                return childCheckbox(data);
-            }
-        },
-        {
             field: 'name',
             title: 'Name',
             width: 90,
@@ -80,15 +71,6 @@ if (width > 1280) {
         }];
 } else {
     var table_columns = [
-        {
-            field: 'id',
-            sortable: false,
-            width: 30,
-            title: renderCheckbox(),
-            template: function (data) {
-                return childCheckbox(data);
-            }
-        },
         {
             field: 'name',
             title: 'Name',

@@ -15,7 +15,7 @@
 <div class="invoice-pdf">
     <div class="sn-table-head">
         <div class="print-logo">
-            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">Skin <span style="color: #C4A265;">&amp;</span> Co.</div>
+            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
         </div>
         <div class="print-time">
             <table class="dark-th-table table table-bordered">

@@ -2,15 +2,6 @@ var table_url = route('admin.appointmentsmeasurement.datatable', {id: appointmen
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    },
-    {
         field: 'name',
         title: 'Name',
         width: 'auto',

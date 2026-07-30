@@ -36,15 +36,6 @@
 
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if(Gate::allows('vouchers_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
-
                             @if(Gate::allows('vouchers_create'))
                                 <a href="javascript:void(0);" onclick="assignNewVoucher();" class="btn btn-primary" data-toggle="modal" data-target="#modal_assign_voucher">
                                     <i class="la la-plus"></i>

@@ -36,16 +36,8 @@
 
                         <div class="card-toolbar">
                             <!--begin::Dropdown-->
-                            @if(Gate::allows('towns_destroy'))
-                                <div class="delete-records d-none">
-                                    <span>Selected Rows: <span class="checkbox-count"></span></span>
-                                    <a id="delete-table-rows" href="javascript:void(0);" class="btn btn-danger font-weight-bolder">
-                                        <i class="fa fa-trash-alt"></i>Delete
-                                    </a>
-                                </div>&nbsp;&nbsp;&nbsp;
-                            @endif
                             {{--@can('towns_sort')
-                                <a id="delete-table-rows" href="{{route('admin.towns.sort')}}" class="btn btn-info">
+                                <a id="sort-action" href="{{route('admin.towns.sort')}}" class="btn btn-info">
                                     <i class="fa fa-sort-amount-up"></i> Sort
                                 </a>&nbsp;&nbsp;
                             @endcan--}}

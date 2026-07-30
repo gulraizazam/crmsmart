@@ -2,15 +2,6 @@ var table_url = route('admin.appointmentsimage.datatable', {id: appointment_id})
 
 var table_columns = [
     {
-        field: 'id',
-        sortable: false,
-        width: 'auto',
-        title: renderCheckbox(),
-        template: function (data) {
-            return childCheckbox(data);
-        }
-    },
-    {
         field: 'image_id',
         title: 'ID',
         width: 'auto',

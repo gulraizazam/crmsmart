@@ -3,10 +3,10 @@
 <!--begin::Head-->
 <head>
     <meta charset="utf-8" />
-    <title>Skin & Co. | @yield('title')
+    <title>DEMO | @yield('title')
     </title>
     <meta
-        content="Skin & Co. Management System"
+        content="DEMO Management System"
         name="description" />
     <meta content="Red Signal" name="author" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -28,6 +28,7 @@
     <link href="{{ asset('assets/css/themes/layout/aside/dark.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/dark-overrides.css') }}" rel="stylesheet" type="text/css" />
     @stack('css')
 </head>
 <!--end::Head-->

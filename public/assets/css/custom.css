@@ -742,12 +742,12 @@ select2-container--default .select2-selection--single .select2-selection__render
 }
 
 .horizontal-nav-bar-li a:hover {
-    background-color: #5C6B4F;
+    background-color: #007bff;
     color: #fff;
 }
 
 .nav-bar-active {
-    background-color: #5C6B4F;
+    background-color: #343a40;
     color: #fff !important;
 }
 
@@ -1001,7 +1001,7 @@ select2-container--default .select2-selection--single .select2-selection__render
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    background-color: #5C6B4F;
+    background-color: #007bff;
     padding: 10px 5px 10px 10px;
     width: 90%;
     border-radius: 5px;
