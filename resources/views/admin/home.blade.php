@@ -766,7 +766,7 @@
 <script src="{{ asset('assets/js/pages/dashboard/datatable.js') }}"></script>
 <script src="{{ asset('assets/js/jsapi.js') }}"></script>
 <script src="{{ asset('assets/js/pie.js') }}"></script>
-<script src="{{ asset('assets/js/home.js') }}"></script>
+<script src="{{ asset('assets/js/home.js') }}?v={{ @filemtime(public_path('assets/js/home.js')) }}"></script>
 <script>
 // Dashboard configuration for lazy loading and routes
 window.dashboardConfig = {
@@ -782,7 +782,7 @@ window.dashboardConfig = {
     }
 };
 </script>
-<script src="{{ asset('assets/js/dashboard.js') }}"></script>
-<script src="{{ asset('assets/js/dashboard-charts.js') }}"></script>
+<script src="{{ asset('assets/js/dashboard.js') }}?v={{ @filemtime(public_path('assets/js/dashboard.js')) }}"></script>
+<script src="{{ asset('assets/js/dashboard-charts.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-charts.js')) }}"></script>
 @endpush
 @endsection
