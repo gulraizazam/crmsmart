@@ -30,7 +30,8 @@
         <!--begin::Topbar-->
         <div style="float: right" class="topbar">
 
-            <!--begin::Cashflow Notifications-->
+            {{-- Cashflow Notifications bell hidden --}}
+            {{--
             @can('cashflow_manage')
             <div class="topbar-item mr-3 position-relative" id="cashflow-notification-bell">
                 <div class="btn btn-icon btn-clean btn-lg position-relative" id="cashflow_notification_toggle">
@@ -48,7 +49,7 @@
                 </div>
             </div>
             @endcan
-            <!--end::Cashflow Notifications-->
+            --}}
 
             <!--begin::User-->
             <div class="topbar-item user-setting">
