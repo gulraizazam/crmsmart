@@ -475,6 +475,7 @@
                                             <select id="initCentreWiseArrival" class="form-control" name="type">
 
 
+                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today</option>
                                                 <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
                                                 <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
                                                 <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This

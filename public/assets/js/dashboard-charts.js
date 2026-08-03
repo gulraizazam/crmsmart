@@ -173,8 +173,10 @@
             xaxis: {
                 categories: doctorNames,
                 labels: {
-                    rotate: -45,
-                    rotateAlways: true,
+                    rotate: 0,
+                    rotateAlways: false,
+                    trim: true,
+                    hideOverlappingLabels: true,
                     style: { fontSize: '11px' },
                     trim: true,
                     maxHeight: 100
@@ -468,8 +470,10 @@
             xaxis: {
                 categories: modifiedLocations,
                 labels: {
-                    rotate: -45,
-                    rotateAlways: true,
+                    rotate: 0,
+                    rotateAlways: false,
+                    trim: true,
+                    hideOverlappingLabels: true,
                     style: { fontSize: '11px' }
                 }
             },

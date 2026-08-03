@@ -14,10 +14,11 @@
         .invoice-pdf { max-width: 700px; margin: 0 auto; padding: 0; }
 
         /* Header */
-        .inv-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; }
-        .inv-brand { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: #fff; letter-spacing: 1.5px; }
+        .inv-header { background: #ffffff; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #E8EDE5; }
+        .inv-brand { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; line-height: 1; }
+        .inv-brand img { height: 90px; max-width: 320px; width: auto; display: block; }
         .inv-brand .amp { color: #C4A265; }
-        .inv-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 8px 24px; border-radius: 6px; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
+        .inv-badge { background: #3D4A35; border: 1px solid #3D4A35; color: #fff; padding: 10px 26px; border-radius: 6px; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
 
         /* Contact bar */
         .inv-contact { background: #F4F7F2; padding: 14px 32px; border-bottom: 1px solid #E0E6DC; }
@@ -87,7 +88,7 @@
 
     <!-- Header -->
     <div class="inv-header">
-        <div class="inv-brand">DEMO</div>
+        <div class="inv-brand"><img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic"></div>
         <div class="inv-badge">Invoice</div>
     </div>
 

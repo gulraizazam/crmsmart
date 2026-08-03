@@ -77,9 +77,7 @@
     <table>
         <tr>
             <td>
-                <div style="font-size:22px; font-weight:bold; letter-spacing:3px;">
-                    DEMO
-                </div>
+                <div><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Clarity Aesthetic" style="height: 70px; max-width: 260px; width: auto; display: block;"></div>
                 <p class="logo_caption">{{ $location->address }}.</p>
                 <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; Email. care@demo.com &nbsp; | &nbsp; www.demo.com &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
             </td>
@@ -121,6 +119,6 @@
         </tr>
     </table>
 
-    <p style="text-align:center; font-size:12px; margin-top:20px; font-style:italic;">Thank you for your business with DEMO.</p>
+    <p style="text-align:center; font-size:12px; margin-top:20px; font-style:italic;">Thank you for your business with Clarity Aesthetic.</p>
 </body>
 </html>

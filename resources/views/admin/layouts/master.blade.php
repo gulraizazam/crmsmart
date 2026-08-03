@@ -3,10 +3,10 @@
 <!--begin::Head-->
 <head>
     <meta charset="utf-8" />
-    <title>DEMO | @yield('title')
+    <title>Clarity Aesthetic | @yield('title')
     </title>
     <meta
-        content="DEMO Management System"
+        content="Clarity Aesthetic Management System"
         name="description" />
     <meta content="Red Signal" name="author" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" />
-    <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=2" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=2" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2" />
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v=2" />
     <!--begin::Global Theme Styles(used by all pages)-->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/plugins/custom/prismjs/prismjs.bundle.css') }}" rel="stylesheet" type="text/css" />

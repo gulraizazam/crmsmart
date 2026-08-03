@@ -581,8 +581,10 @@ function ConsultanciesByStatus(bar) {
         xaxis: {
             categories: modifiedData,
             labels: {
-                rotate: -45,
-                rotateAlways: true,
+                rotate: 0,
+                rotateAlways: false,
+                trim: true,
+                hideOverlappingLabels: true,
                 style: {
                     fontSize: '10px'
                 }
@@ -916,8 +918,10 @@ function DoctorWiseConversion(bar) {
         xaxis: {
             categories: labels,
             labels: {
-                rotate: -45,
-                rotateAlways: true,
+                rotate: 0,
+                rotateAlways: false,
+                trim: true,
+                hideOverlappingLabels: true,
                 style: {
                     fontSize: '10px'
                 },
@@ -1013,8 +1017,10 @@ function DoctorWiseFeedback(bar) {
         xaxis: {
             categories: labels,
             labels: {
-                rotate: -45,
-                rotateAlways: true,
+                rotate: 0,
+                rotateAlways: false,
+                trim: true,
+                hideOverlappingLabels: true,
                 style: {
                     fontSize: '11px'
                 },
@@ -1142,8 +1148,10 @@ function AllDoctorWiseConversion(bar) {
         xaxis: {
             categories: modifiedData,
             labels: {
-                rotate: -45,
-                rotateAlways: true,
+                rotate: 0,
+                rotateAlways: false,
+                trim: true,
+                hideOverlappingLabels: true,
                 style: {
                     fontSize: '10px'
                 },

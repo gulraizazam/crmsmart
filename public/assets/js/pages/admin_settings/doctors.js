@@ -370,7 +370,6 @@ function setEditData(response) {
     $("#edit_user_name").val(user.name);
     $("#edit_user_email").val(user.email);
     $("#edit_user_gender").val(user.gender);
-    $("#edit_user_commission").val(user.commission);
     $('#edit_user_roles').val(user_roles).change();
     
     // Toggle checkbox visibility based on role, then set checkbox value

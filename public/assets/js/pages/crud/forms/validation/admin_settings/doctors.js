@@ -59,13 +59,6 @@ var AddUserValidation = function () {
                             }
                         }
                     },
-                    commission: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The commission field is required'
-                            }
-                        }
-                    },
                 },
 
                 plugins: {
@@ -159,13 +152,6 @@ var EditUserValidation = function () {
                         validators: {
                             notEmpty: {
                                 message: 'The roles field is required'
-                            }
-                        }
-                    },
-                    commission: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The commission field is required'
                             }
                         }
                     },

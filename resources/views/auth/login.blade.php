@@ -6,7 +6,7 @@
     <div class="login-card">
 
         <div class="brand-mark">
-            <span class="brand-demo">DEMO</span>
+            <span class="brand-demo">Clarity Aesthetic</span>
         </div>
 
         <div class="form-header">
@@ -52,7 +52,7 @@
         </form>
 
         <div class="login-footer">
-            <p>&copy; {{ date('Y') }} DEMO. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Clarity Aesthetic. All rights reserved.</p>
         </div>
 
     </div>

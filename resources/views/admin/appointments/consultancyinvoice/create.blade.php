@@ -52,7 +52,7 @@
         @if($invoice_status != true)
         <div class="ci-invoice-brand">
             <div class="ci-brand-left">
-                <div class="ci-brand-logo">DEMO</div>
+                <div class="ci-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=1" alt="Clarity Aesthetic" style="height: 50px; width: auto; max-width: 220px; display: inline-block; vertical-align: middle;"></div>
                 <div class="ci-brand-address">{{$location_info->address ?? ''}}</div>
                 <div class="ci-brand-contact">Phone. {{$location_info->fdo_phone ?? ''}} &nbsp;|&nbsp; Email. {{$account->email ?? ''}} &nbsp;|&nbsp; www.demo.com &nbsp;|&nbsp; NTN. {{$location_info->ntn ?? ''}} &nbsp;|&nbsp; STN. {{$location_info->stn ?? ''}}</div>
             </div>

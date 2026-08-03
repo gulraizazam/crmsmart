@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>DEMO — Consultation Form</title>
+    <title>Clarity Aesthetic — Consultation Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     @php
         $patientAge = '';
@@ -209,7 +209,7 @@
 <body>
 <div class="cf-page">
     <div class="cf-brand-wrap">
-        <div style="text-align: center; font-family: Arial, sans-serif; font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #343a40; padding-left: 8px; margin: 8px 0;">DEMO</div>
+        <div style="text-align: center; margin: 8px 0;"><img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height: 90px; max-width: 320px; width: auto;"></div>
     </div>
     <div class="cf-title">Consultation Form</div>
 

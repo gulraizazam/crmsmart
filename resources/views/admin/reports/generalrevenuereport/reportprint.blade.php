@@ -15,7 +15,7 @@
 <div class="invoice-pdf">
     <div class="sn-table-head">
         <div class="print-logo">
-            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
+            <div style="font-family: Georgia, serif;"><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Clarity Aesthetic" style="height: 70px; max-width: 260px; width: auto; display: inline-block;"></div>
         </div>
         <div class="print-time">
             <table class="dark-th-table table table-bordered">

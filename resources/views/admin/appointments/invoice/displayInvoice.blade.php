@@ -48,7 +48,7 @@
     <div class="scroll-y" style="max-height: 75vh;">
         <div class="di-invoice-brand">
             <div class="di-brand-left">
-                <div class="di-brand-logo">DEMO</div>
+                <div class="di-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=1" alt="Clarity Aesthetic" style="height: 50px; width: auto; max-width: 220px; display: inline-block; vertical-align: middle;"></div>
                 <div class="di-brand-address">{{$location_info->address}}</div>
                 <div class="di-brand-contact">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; www.demo.com &nbsp;|&nbsp; NTN. {{$location_info->ntn}} &nbsp;|&nbsp; STN. {{$location_info->stn}}</div>
             </div>

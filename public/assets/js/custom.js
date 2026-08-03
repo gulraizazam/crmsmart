@@ -97,20 +97,8 @@ $(document).ready(function () {
     });
 
     $('#initCentreWiseArrival').on('change', function () {
-        var currentVal = $(this).val();
-        if (currentVal == 'lastmonth') {
-            initCentreWiseArrival('lastmonth', 'centre');
-        } else if (currentVal == 'thismonth') {
-            initCentreWiseArrival('thismonth', 'centre');
-        } else if (currentVal == 'yesterday') {
-            initCentreWiseArrival('yesterday', 'centre');
-        } else if (currentVal == 'last7days') {
-            initCentreWiseArrival('last7days', 'centre');
-        } else if (currentVal == 'week') {
-            initCentreWiseArrival('week', 'centre');
-        } else {
-            initCentreWiseArrival('yesterday', 'centre');
-        }
+        var currentVal = $(this).val() || 'today';
+        initCentreWiseArrival(currentVal, 'centre');
     });
 
     $('#dr_wise_con').on('change', function () {

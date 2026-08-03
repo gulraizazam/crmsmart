@@ -518,7 +518,7 @@
             }
         } else {
             if (typeof initCentreWiseArrival === 'function') {
-                initCentreWiseArrival('yesterday', '', 'firsttime');
+                initCentreWiseArrival('today', '', 'firsttime');
             }
             if (!window.dashboardConfig.isCSR && typeof initDoctorWiseConversion === 'function') {
                 initDoctorWiseConversion('thismonth', centreId, 'firsttime');

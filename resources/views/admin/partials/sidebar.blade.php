@@ -4,7 +4,7 @@
     <div class="brand flex-column-auto" id="kt_brand">
         <!--begin::Logo-->
         <a href="{{ route('admin.home') }}" class="brand-logo">
-            <span style="margin-left:25px; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">DEMO</span>
+            <span style="margin-left:25px; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Clarity Aesthetic</span>
         </a>
         <!--end::Logo-->
         <!--begin::Toggle-->
@@ -32,7 +32,7 @@
             <div class="flex-column-auto d-lg-none pt-4 pb-7" id="kt_brand" style="border-bottom: 1px solid #4A5540;">
                 <!--begin::Logo-->
                 <a class="brand-logo">
-                    <span style="margin-left:25px; display:block; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">DEMO</span>
+                    <span style="margin-left:25px; display:block; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Clarity Aesthetic</span>
                 </a>
                 <!--end::Logo-->
             </div>
@@ -383,6 +383,8 @@
                 </li>
                 @endif -->
 
+                {{-- Memberships menu hidden --}}
+                {{--
                 @if (Gate::allows('memberships_manage') || Gate::allows('membershiptypes_manage'))
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.membershiptypes.index', 'admin.memberships.index']) }} " aria-haspopup="true" data-menu-toggle="hover">
 
@@ -425,6 +427,7 @@
 
                 </li>
                 @endif
+                --}}
                 @if (Gate::allows('feedbacks_manage'))
                 <li class="menu-item {{ activeMenu('admin.feedbacks.index') }} " aria-haspopup="true">
                     <a href="{{ route('admin.feedbacks.index') }}" class="menu-link">
@@ -798,6 +801,8 @@
                     
                 </li>
                 @endif
+                {{-- Inventory menu hidden --}}
+                {{--
                 <!-- Inventory menu -->
                 @if (Gate::allows('inventory_manage'))
                 @can('inventory_manage')
@@ -909,7 +914,7 @@
                 </li>
                 @endcan -->
                 @endif
-
+                --}}
                 <!-- End Inventory menu -->
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.reports.finance_reports', 'admin.reports.operations_report', 'admin.reports.inventory_report']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
@@ -1129,6 +1134,8 @@
                         </ul>
                     </div>
                     @endcan
+                    {{-- Inventory Report hidden --}}
+                    {{--
                     @can('inventory_report_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
@@ -1144,6 +1151,7 @@
                         </ul>
                     </div>
                     @endcan
+                    --}}
                     @can('feedbacks_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>

@@ -2,13 +2,15 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <title>DEMO | @yield('title')</title>
+    <title>Clarity Aesthetic | @yield('title')</title>
     <meta charset="utf-8" />
     <meta name="description" content="Smart Aesthetic" />
     <meta name="keywords" content="Smart Aesthetic" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="{{asset('favicon.svg')}}" />
-    <link rel="shortcut icon" href="{{asset('favicon.svg')}}" />
+    <link rel="icon" type="image/svg+xml" href="{{asset('favicon.svg')}}?v=2" />
+    <link rel="icon" type="image/x-icon" href="{{asset('favicon.ico')}}?v=2" />
+    <link rel="shortcut icon" href="{{asset('favicon.ico')}}?v=2" />
+    <link rel="apple-touch-icon" href="{{asset('apple-touch-icon.png')}}?v=2" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
