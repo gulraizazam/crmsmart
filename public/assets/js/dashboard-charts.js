@@ -471,10 +471,15 @@
                 categories: modifiedLocations,
                 labels: {
                     rotate: 0,
-                    rotateAlways: false,
-                    trim: true,
-                    hideOverlappingLabels: true,
-                    style: { fontSize: '11px' }
+                    rotateAlways: true,
+                    trim: false,
+                    hideOverlappingLabels: false,
+                    maxHeight: 80,
+                    style: { fontSize: '11px' },
+                    formatter: function (val) {
+                        if (!val) return '';
+                        return val.length > 14 ? val.substring(0, 13) + '…' : val;
+                    }
                 }
             },
             colors: [primary, success, warning],

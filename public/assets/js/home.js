@@ -582,11 +582,16 @@ function ConsultanciesByStatus(bar) {
             categories: modifiedData,
             labels: {
                 rotate: 0,
-                rotateAlways: false,
-                trim: true,
-                hideOverlappingLabels: true,
+                rotateAlways: true,
+                trim: false,
+                hideOverlappingLabels: false,
+                maxHeight: 80,
                 style: {
                     fontSize: '10px'
+                },
+                formatter: function (val) {
+                    if (!val) return '';
+                    return val.length > 14 ? val.substring(0, 13) + '…' : val;
                 }
             }
         },
