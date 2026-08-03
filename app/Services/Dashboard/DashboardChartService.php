@@ -713,16 +713,16 @@ class DashboardChartService
             ->get()
             ->keyBy('appointment_status_id');
 
-        // Get converted count to add to arrived
-        $convertedCount = $records->get($convertedStatusId)->total ?? 0;
+        // Get converted count to roll into arrived
+        $convertedCount = (int) ($records->get($convertedStatusId)->total ?? 0);
 
         foreach ($appointmentStatuses as $statusId => $status) {
             $record = $records->get($statusId);
-            if ($record) {
-                $statusTotal = $record->total;
-                if ($statusId == $arrivedStatusId) {
-                    $statusTotal += $convertedCount;
-                }
+            $statusTotal = $record ? (int) $record->total : 0;
+            if ($statusId == $arrivedStatusId) {
+                $statusTotal += $convertedCount;
+            }
+            if ($statusTotal > 0) {
                 $chartData[] = [$status->name, $statusTotal];
             }
         }
