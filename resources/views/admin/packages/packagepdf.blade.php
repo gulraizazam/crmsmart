@@ -1,467 +1,495 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
+    <title>Clarity Aesthetic — Plan Statement {{ $package->name ?? '' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif;
+            color: #1B2233;
+            background: #EDEEF2;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
-        .invoice_btn{
-            float:right;
+
+        .pinv-shell {
+            max-width: 780px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            position: relative;
         }
-        .invoice_btn span {
-            text-align: center;
-            font-size:18px;
-            font-weight:lighter;
-            background:#1d1d1b;
-            padding:6px 26px;
-            color:#fff;
+
+        /* Top ornamental band */
+        .pinv-topband {
+            height: 12px;
+            background: linear-gradient(90deg, #1B2233 0%, #1B2233 50%, #C8A650 50%, #C8A650 100%);
+        }
+
+        /* Header */
+        .pinv-head {
+            padding: 34px 44px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #EDEEF2;
+        }
+        .pinv-brand img { height: 78px; width: auto; max-width: 260px; display: block; }
+        .pinv-brand-tag {
+            margin-top: 10px;
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #C8A650;
+        }
+        .pinv-doc-head { text-align: right; }
+        .pinv-doc-head .pinv-monogram {
             display: inline-block;
-            vertical-align:middle;
-            text-transform:capitalize;
-            letter-spacing:3.5px;
+            padding: 4px 14px;
+            border: 1px solid #1B2233;
+            color: #1B2233;
+            font-size: 9.5px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
-        .main_heading{
-            text-align: left;
-            font-size:17px;
-            padding:5px 0px;
-            letter-spacing:.7px;
+        .pinv-doc-head h1 {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-weight: 300;
+            font-size: 30px;
+            color: #1B2233;
+            margin-top: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
-        .main_heading  strong{
-            font-size:16px;
-        }
-        .main_heading span{
-            font-size:12px;
-            text-transform:capitalize;
-        }
-        .logo {
-            text-align: left;
-            margin-left:-6px;
-            margin-bottom:-5px;
-            width:320px;
-        }
-
-        .table th {
-            border: 1px solid #ddd;
-            text-align: left;
-            padding: 8px;
+        .pinv-doc-head h1 strong { font-weight: 700; color: #C8A650; }
+        .pinv-doc-head .pinv-doc-ref {
+            font-size: 11px;
+            color: #6C7284;
+            margin-top: 4px;
+            letter-spacing: 1px;
         }
 
-        td, th {
-            text-align: left;
-            padding: 8px;
+        /* Meta strip - 3 columns */
+        .pinv-meta-strip {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            background: #1B2233;
+            color: #FFFFFF;
+        }
+        .pinv-meta-cell {
+            display: table-cell;
+            padding: 18px 20px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+        .pinv-meta-cell:last-child { border-right: none; }
+        .pinv-meta-cell .k {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #C8A650;
+            margin-bottom: 6px;
+        }
+        .pinv-meta-cell .v {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .pinv-meta-cell .vs {
+            font-size: 11px;
+            color: #B0B8CC;
+            margin-top: 3px;
+        }
+
+        /* Body */
+        .pinv-body { padding: 26px 44px 14px; }
+
+        .pinv-section-head {
+            border-left: 4px solid #C8A650;
+            padding-left: 12px;
+            margin: 6px 0 14px;
+        }
+        .pinv-section-head h3 {
+            font-size: 13px;
+            color: #1B2233;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .pinv-section-head p {
+            font-size: 11px;
+            color: #7C8397;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        /* Services table */
+        table.pinv-services {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 12px;
         }
-
-        .table td, .table th {
+        table.pinv-services thead th {
+            background: #F5F3EC;
+            color: #1B2233;
+            padding: 12px 10px;
             text-align: left;
-            padding: 8px;
+            font-size: 10px;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 2px solid #C8A650;
+        }
+        table.pinv-services tbody td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #ECEDF0;
+            color: #2B3245;
+            vertical-align: top;
+        }
+        table.pinv-services tbody tr:nth-child(even) td { background: #FBFAF6; }
+        table.pinv-services tbody tr:hover td { background: #F5F3EC; }
+        table.pinv-services td.money { text-align: right; font-variant-numeric: tabular-nums; }
+        table.pinv-services td.name { font-weight: 700; color: #1B2233; }
+
+        /* Grand total block */
+        .pinv-grand-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 18px;
+        }
+        .pinv-grand-box {
+            min-width: 320px;
+            border: 2px solid #1B2233;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .pinv-grand-box .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 18px;
             font-size: 12px;
+            color: #4A5065;
+        }
+        .pinv-grand-box .row.total {
+            background: #1B2233;
+            color: #FFFFFF;
+            padding: 16px 18px;
+        }
+        .pinv-grand-box .row.total .label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #C8A650;
+        }
+        .pinv-grand-box .row.total .amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFFFFF;
         }
 
-        .table tr:nth-child(even) {
-            background-color: #f7f7f7;
+        /* Payments table */
+        .pinv-pay-wrap { margin-top: 30px; }
+        table.pinv-pay {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11.5px;
         }
-        .danger-alert{
-            color: #000;
-            border:1px solid #f5c6cb;
-            padding: 8px 10px;
+        table.pinv-pay thead th {
+            background: #1B2233;
+            color: #C8A650;
+            padding: 10px;
+            text-align: left;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        table.pinv-pay tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #ECEDF0;
+            color: #3A4055;
+        }
+        table.pinv-pay tbody tr.total-row td {
+            background: #F5F3EC;
+            color: #1B2233;
+            font-weight: 700;
+            border-top: 2px solid #C8A650;
+        }
+
+        /* Notes */
+        .pinv-notes {
+            margin-top: 28px;
+            padding: 16px 20px;
+            background: #F8F7F1;
+            border: 1px solid #E5DFC5;
+            font-size: 11px;
+            color: #5A5844;
+            line-height: 1.6;
+        }
+        .pinv-notes strong { color: #1B2233; }
+
+        /* Signature block */
+        .pinv-thank {
             text-align: center;
-            margin: 10px 0 0;
+            padding: 30px 44px 8px;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            color: #1B2233;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
-        .grand-tax {
-            margin-top: 0;
+        .pinv-thank .em { color: #C8A650; font-weight: 700; font-style: normal; letter-spacing: 3px; text-transform: uppercase; font-size: 11px; }
+
+        .pinv-sigs {
+            display: table;
+            width: 100%;
+            padding: 22px 44px 8px;
         }
-        .grand-tax tr:first-child td {
-            padding-bottom: 0;
+        .pinv-sig-cell {
+            display: table-cell;
+            width: 45%;
+            vertical-align: bottom;
         }
-        .grand-tax tr:last-child td {
-            padding-top: 0;
+        .pinv-sig-cell.right { text-align: right; }
+        .pinv-sig-line {
+            border-top: 1px solid #1B2233;
+            padding-top: 8px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #1B2233;
+            font-weight: 700;
         }
-        .grand-tax td {
-            padding-left: 0;
-            padding-right: 0;
+        .pinv-sig-name { font-size: 11px; color: #7C8397; margin-top: 3px; font-style: italic; }
+
+        /* Footer */
+        .pinv-footer {
+            margin-top: 26px;
+            padding: 16px 44px;
+            background: #1B2233;
+            color: #B0B8CC;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-align: center;
         }
-        .signature_section{
-            margin-top:80px;
-            margin-left:-9px;
+        .pinv-footer .brandmark {
+            color: #C8A650;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 11px;
         }
-        .signature_section p{
-            /* float:left; */
-            border-top:1px solid #1d1d1b;
-            padding:12px 0px 0px;
-            font-size:15px;
-            margin:0px 0px -5px;
+
+        @media not print {
+            .pinv-shell { margin-top: 30px; margin-bottom: 30px; box-shadow: 0 12px 60px rgba(27, 34, 51, 0.18); border-radius: 4px; overflow: hidden; }
         }
-        .signature_section span{
-            font-size:12px;
-            font-weight:bold;
-            display:block;
-            width:100%;
-        }
-        .static_text h4{
-            text-align: left;
-            font-size:21px;
-            padding:5px 0px 13px;
-            margin:0px;
-            font-weight:bold;
-        }
-        .static_text2.static_text h4{
-            padding:5px 0px 5px;
-        }
-        .static_text2 span{
-            text-align: left;
-            font-size:17px;
-            font-weight:lighter;
-            float:left;
-            padding-top:6px;
-            margin-right:7px;
-        }
-        .static_text2 span.high{
-            margin-left:7px;
-        }
-        .static_text p{
-            margin:0px 0px 0px;
-            padding:0px;
-            border-bottom:1px dotted #8d8d8d;
-        }
-        .logo_caption{
-            font-size:11px;
-            font-weight:lighter;
-            margin-left:-6px;
-        }
-        .logo_caption2{
-            margin-top:-9px;
-        }
-        .static_text2 .counter{
-            width:36px;
-            height:36px;
-            border: 0.5px solid #ddd;
-            margin:0px 6px;
-            border-radius:100%;
-            float:left;
-            text-align:center;
-            font-size:17px;
-            font-weight:lighter;
-            vertical-align: middle;
-        }
-        .static_text2 .counter strong{
-            font-weight:lighter;
-            padding-top:7px;
-            display:inline-block;
-            width:100%;
-            text-align:center;
+        @page { size: A4 portrait; margin: 8mm 6mm; }
+        @media print {
+            body { background: #FFFFFF; }
+            .pinv-shell { box-shadow: none; margin: 0; border-radius: 0; }
         }
     </style>
 </head>
 <body>
-<div class="invoice-pdf">
+<div class="pinv-shell">
 
-    <table>
-        <tr>
-            <td style="float:left">
-                <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; margin-bottom: 10px;">DEMO</div>
-                <p class="logo_caption">{{$location_info->address}}.</p>
-                <p class="logo_caption logo_caption2">Phone. {{$location_info->fdo_phone}} &nbsp;| &nbsp; Email. {{$account_info->email}}  &nbsp; | &nbsp;  www.demo.com  &nbsp; | &nbsp; NTN. {{$location_info->ntn}} &nbsp; | &nbsp; STN. {{$location_info->stn}}</p>
-            </td>
-            <td style="padding:0px !important; float:right; width:120px; text-align:right;">
-                <div class="invoice_btn" style="width:120px; float:right; text-align:right;">
-                   <span>INVOICE</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <table style="margin:19px 0px 30px;">
-        <tr>
-            <td class="main_heading"><?php echo \Carbon\Carbon::parse($package->created_at)->format('F j,Y'); ?>, {{\Carbon\Carbon::parse($package->created_at)->format('h:i a')}}</td>
-        </tr>
-        <!--tr>
-            <td class="main_heading">Consumption Invoice <strong>{{$packageadvances}}</strong></td>
-        </tr-->
-        <tr>
-            <td class="main_heading">Package# <strong>{{$package->name}}</strong></td>
-        </tr>
-        <tr>
-            <td class="main_heading">{{ucfirst($package->user->name)}}, <strong>C-{{$package->user->id}}</strong></td>
-        </tr>
-    </table>
+    <div class="pinv-topband"></div>
 
-    <table style="display:none;">
-        <tr style="padding-top: 30px;">
-            <th>Client</th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th><!-- left empty --></th>
-            <th colspan="3" style="width: 250px;">Company</th>
-        </tr>
-        <tr>
-            <td style="width:200px"><strong>Name:</strong> <span
-                        style="padding-left: 10px;">{{$package->user->name}}</span></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>Name:</strong><span style="padding-left: 10px;">{{$account_info->name}}</span><</td>
-        </tr>
-        <tr>
-            <td><strong>Patient ID:</strong> <span style="padding-left: 10px;">{{'C-'.$package->user->id}}</span></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>Contact:</strong> <span
-                        style="padding-left: 10px;">{{$company_phone_number->data}}</span></td>
-        </tr>
-        <tr>
-            <td><strong>Email:</strong> <span style="padding-left: 10px;">{{$package->user->email}}</span></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>Email:</strong> <span style="padding-left: 10px;">{{$account_info->email}}</span>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3" style="width:130px"><strong>Clinic Name:</strong> <span
-                        style="padding-left: 10px;">{{$location_info->name}}</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3" style="width:130px"><strong>Clinic Contact:</strong> <span
-                        style="padding-left: 10px;">{{$location_info->fdo_phone}}</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>Address:</strong> <span
-                        style="padding-left: 10px;">{{$location_info->address}}</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>NTN:</strong> <span style="padding-left: 10px;">{{$location_info->ntn}}</span></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td><!-- left empty --></td>
-            <td colspan="3"><strong>STN:</strong> <span style="padding-left: 10px;">{{$location_info->stn}}</span></td>
-        </tr>
-    </table>
-    <table class="table">
-        <tr>
-            <th>Service Name</th>
-            <th>Service Price</th>
-            <th>Discount Name</th>
-            <th>Discount Type</th>
-            <th>Discount Price</th>
-            <th>Subtotal</th>
-            <th>Tax %</th>
-            <th>Tax</th>
-            <th>Total</th>
-        </tr>
-        @if($packagebundles)
-            @foreach($packagebundles as $packagebundles)
+    <!-- Header -->
+    <div class="pinv-head">
+        <div class="pinv-brand">
+            <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic">
+            <div class="pinv-brand-tag">Aesthetic &middot; Plan Statement</div>
+        </div>
+        <div class="pinv-doc-head">
+            <div class="pinv-monogram">Plan &middot; Statement</div>
+            <h1>Plan <strong>Invoice</strong></h1>
+            <div class="pinv-doc-ref">{{ $package->name ?? '' }}</div>
+        </div>
+    </div>
+
+    <!-- Meta strip -->
+    <div class="pinv-meta-strip">
+        <div class="pinv-meta-cell">
+            <div class="k">Plan</div>
+            <div class="v">{{ $package->name ?? '' }}</div>
+            <div class="vs">{{ ucfirst($package->plan_type ?? 'plan') }}</div>
+        </div>
+        <div class="pinv-meta-cell">
+            <div class="k">Client</div>
+            <div class="v">{{ ucfirst($package->user->name ?? '') }}</div>
+            <div class="vs">C-{{ $package->user->id ?? '' }}</div>
+        </div>
+        <div class="pinv-meta-cell">
+            <div class="k">Issued</div>
+            <div class="v">{{ \Carbon\Carbon::parse($package->created_at)->format('d M Y') }}</div>
+            <div class="vs">{{ \Carbon\Carbon::parse($package->created_at)->format('h:i A') }}</div>
+        </div>
+    </div>
+
+    <!-- Body: Services -->
+    <div class="pinv-body">
+        <div class="pinv-section-head">
+            <h3>Plan Components</h3>
+            <p>Services and bundles included in this plan</p>
+        </div>
+
+        <table class="pinv-services">
+            <thead>
                 <tr>
-                    <td><?php
-                        $ptype = $package->plan_type ?? 'plan';
-                        $st = $packagebundles->source_type ?? null;
-                        $nameShown = '-';
+                    <th style="width: 34%;">Service / Bundle</th>
+                    <th style="width: 12%;" class="money">Price</th>
+                    <th style="width: 14%;">Discount</th>
+                    <th style="width: 12%;" class="money">Subtotal</th>
+                    <th style="width: 10%;" class="money">Tax %</th>
+                    <th style="width: 10%;" class="money">Tax</th>
+                    <th style="width: 12%;" class="money">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($packagebundles)
+                    @foreach($packagebundles as $packagebundles)
+                        <?php
+                            $ptype = $package->plan_type ?? 'plan';
+                            $st = $packagebundles->source_type ?? null;
+                            $nameShown = '-';
 
-                        if ($st === 'service' && $packagebundles->service) {
-                            $nameShown = $packagebundles->service->name;
-                        } elseif ($st === 'bundle' && $packagebundles->bundle) {
-                            $nameShown = $packagebundles->bundle->name;
-                        } elseif ($st === 'membership' && $packagebundles->membershipType) {
-                            $nameShown = $packagebundles->membershipType->name;
-                        } elseif ($ptype === 'bundle') {
-                            if ($packagebundles->bundle) {
-                                $nameShown = $packagebundles->bundle->name;
-                            }
-                        } elseif ($ptype === 'plan') {
-                            if ($packagebundles->service) {
+                            if ($st === 'service' && $packagebundles->service) {
                                 $nameShown = $packagebundles->service->name;
+                            } elseif ($st === 'bundle' && $packagebundles->bundle) {
+                                $nameShown = $packagebundles->bundle->name;
+                            } elseif ($st === 'membership' && $packagebundles->membershipType) {
+                                $nameShown = $packagebundles->membershipType->name;
+                            } elseif ($ptype === 'bundle' && $packagebundles->bundle) {
+                                $nameShown = $packagebundles->bundle->name;
+                            } elseif ($ptype === 'plan') {
+                                if ($packagebundles->service) {
+                                    $nameShown = $packagebundles->service->name;
+                                } elseif ($packagebundles->bundle) {
+                                    $nameShown = $packagebundles->bundle->name;
+                                }
+                            } elseif ($ptype === 'membership' && $packagebundles->membershipType) {
+                                $nameShown = $packagebundles->membershipType->name;
                             } elseif ($packagebundles->bundle) {
                                 $nameShown = $packagebundles->bundle->name;
+                            } elseif ($packagebundles->service) {
+                                $nameShown = $packagebundles->service->name;
+                            } elseif ($packagebundles->membershipType) {
+                                $nameShown = $packagebundles->membershipType->name;
                             }
-                        } elseif ($ptype === 'membership' && $packagebundles->membershipType) {
-                            $nameShown = $packagebundles->membershipType->name;
-                        } elseif ($packagebundles->bundle) {
-                            $nameShown = $packagebundles->bundle->name;
-                        } elseif ($ptype !== 'bundle' && $packagebundles->service) {
-                            $nameShown = $packagebundles->service->name;
-                        } elseif ($packagebundles->membershipType) {
-                            $nameShown = $packagebundles->membershipType->name;
-                        }
-
-                        echo $nameShown ?: '-';
-                    ?></td>
-                    <td>{{number_format($packagebundles->service_price)}}</td>
-                    <td>
-                        @if($packagebundles->discount_id == null)
-                            {{'-'}}
-                        @elseif($packagebundles->discount_name)
-                            {{$packagebundles->discount_name}}
-                        @else
-                            {{$packagebundles->discount->name}}
-                        @endif
-                    </td>
-                    <td><?php if ($packagebundles->discount_type == null) {
-                            echo '-';
-                        } else {
-                            echo $packagebundles->discount_type;
-                        } ?>
-                    </td>
-                    <td><?php if ($packagebundles->discount_price == null) {
-                            echo '0.00';
-                        } else {
-                            echo $packagebundles->discount_price;
-                        } ?>
-                    </td>
-                    <td>{{$packagebundles->tax_exclusive_net_amount}}</td>
-                    <td>{{$packagebundles->tax_percenatage}}</td>
-                    <td>{{$packagebundles->tax_price}}</td>
-                    <td>{{$packagebundles->tax_including_price}}</td>
-                </tr>
-            @endforeach
-        @endif
-    </table>
-    <table class="grand-tax">
-        <tbody>
-        <tr>
-            <td style="text-align: right;"><strong>Total:</strong> <?php echo $grand_total;?>/-</td>
-        </tr>
-        <tr>
-            <td><strong>Note:</strong> All treatment prices are inclusive of taxes</td>
-        </tr>
-        </tbody>
-    </table>
-{{--    <div class="inclu-tax" style="float: left; margin-top:20px; width: 50%;">--}}
-{{--        <strong>Note:</strong> All treatment prices are inclusive of taxes--}}
-{{--    </div>--}}
-{{--    <div class="grand-total" style="float: right; margin-top:20px;">--}}
-{{--        --}}
-{{--    </div>--}}
-
-
-    <table style="margin:32 px 0px 0px -8px;" class="static_text">
-        <tr>
-            <td>
-                <h4>Cash Received</h4>
-            </td>
-        </tr>
-    </table>
-
-
-    <table class="table">
-        <tr>
-            <th>Payment Mode</th>
-            <th>Cash Flow</th>
-            <th>Cash Amount</th>
-            <th>Created At</th>
-        </tr>
-        @if($packageadvances)
-            <?php $total_received = 0; ?>
-            @foreach($packageadvances as $packageadvances)
-                @if($packageadvances->cash_amount != '0' && $packageadvances->cash_flow == 'in')
-                    <tr>
-                        <td><?php echo $packageadvances->paymentmode->name; ?></td>
-                        <td><?php echo $packageadvances->cash_flow; ?></td>
-                        <td><?php echo number_format($packageadvances->cash_amount) ?>/-</td>
-                        <td><?php echo \Carbon\Carbon::parse($packageadvances->created_at)->format('F j,Y h:i A'); ?></td>
-                    </tr>
-                    <?php $total_received += $packageadvances->cash_amount; ?>
+                        ?>
+                        <tr>
+                            <td class="name">{{ $nameShown ?: '-' }}</td>
+                            <td class="money">{{ number_format($packagebundles->service_price) }}</td>
+                            <td>
+                                @if($packagebundles->discount_id == null)
+                                    <span style="color:#B0B8CC;">—</span>
+                                @elseif($packagebundles->discount_name)
+                                    {{ $packagebundles->discount_name }}
+                                @else
+                                    {{ $packagebundles->discount->name }}
+                                @endif
+                                @if($packagebundles->discount_price)
+                                    <div style="font-size:10px;color:#8A8F9E;margin-top:2px;">− {{ number_format($packagebundles->discount_price) }}</div>
+                                @endif
+                            </td>
+                            <td class="money">{{ number_format($packagebundles->tax_exclusive_net_amount ?? 0) }}</td>
+                            <td class="money">{{ $packagebundles->tax_percenatage }}%</td>
+                            <td class="money">{{ number_format($packagebundles->tax_price ?? 0) }}</td>
+                            <td class="money"><strong>{{ number_format($packagebundles->tax_including_price ?? 0) }}</strong></td>
+                        </tr>
+                    @endforeach
                 @endif
-            @endforeach
-            <tr>
-                <td><b>Total</b></td>
-                <td></td>
-                <td><b>{{number_format($total_received)}}/-</b></td>
-                <td></td>
-            </tr>
-        @endif
-    </table>
-    <table class="grand-tax" style="margin-top: 18px;">
-        <tr>
-            <td style="font-size:15px;">Thank you for your business with DEMO.</td>
-        </tr>
+            </tbody>
+        </table>
 
-        <tr>
-            <td></td>
-        </tr>
-        <tr>
-            <td style="font-size:15px;">
-                <strong>Note: </strong>For Privacy, Cancellation,
-                Late and Refund policies, please visit
-                <a href="https://demo.example/" target="_blank">www.demo.com</a>
-            </td>
-        </tr>
+        <div class="pinv-grand-wrap">
+            <div class="pinv-grand-box">
+                <div class="row total">
+                    <span class="label">Plan Total</span>
+                    <span class="amount">Rs. {{ $grand_total ?? 0 }}/-</span>
+                </div>
+            </div>
+        </div>
 
-    </table>
+        <!-- Payments -->
+        <div class="pinv-pay-wrap">
+            <div class="pinv-section-head">
+                <h3>Payments Received</h3>
+                <p>Cash flow records against this plan</p>
+            </div>
+
+            <table class="pinv-pay">
+                <thead>
+                    <tr>
+                        <th>Payment Mode</th>
+                        <th>Flow</th>
+                        <th style="text-align:right;">Amount</th>
+                        <th style="text-align:right;">Received At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($packageadvances)
+                        <?php $total_received = 0; ?>
+                        @foreach($packageadvances as $packageadvances)
+                            @if($packageadvances->cash_amount != '0' && $packageadvances->cash_flow == 'in')
+                                <tr>
+                                    <td>{{ $packageadvances->paymentmode->name ?? '—' }}</td>
+                                    <td style="text-transform:uppercase;letter-spacing:1px;font-size:10px;color:#C8A650;">{{ $packageadvances->cash_flow }}</td>
+                                    <td style="text-align:right;">{{ number_format($packageadvances->cash_amount) }}/-</td>
+                                    <td style="text-align:right;color:#7C8397;">{{ \Carbon\Carbon::parse($packageadvances->created_at)->format('d M Y, h:i A') }}</td>
+                                </tr>
+                                <?php $total_received += $packageadvances->cash_amount; ?>
+                            @endif
+                        @endforeach
+                        <tr class="total-row">
+                            <td>Total Received</td>
+                            <td></td>
+                            <td style="text-align:right;">Rs. {{ number_format($total_received) }}/-</td>
+                            <td></td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pinv-notes">
+            <strong>Note.</strong> All treatment prices are inclusive of applicable taxes.
+            For questions about this plan statement, please reach out to the centre where it was issued.
+        </div>
+    </div>
+
+    <!-- Thank you -->
+    <div class="pinv-thank">
+        Thank you for choosing Clarity Aesthetic. <br>
+        <span class="em">Where Precision Meets Radiance</span>
+    </div>
+
+    <!-- Signatures -->
+    <div class="pinv-sigs">
+        <div class="pinv-sig-cell">
+            <div class="pinv-sig-line">Client Signature</div>
+            <div class="pinv-sig-name">{{ ucfirst($package->user->name ?? '') }}</div>
+        </div>
+        <div class="pinv-sig-cell right">
+            <div class="pinv-sig-line">Authorised Signature</div>
+            <div class="pinv-sig-name">Clarity Aesthetic</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="pinv-footer">
+        <span class="brandmark">Clarity Aesthetic</span>
+        {{ $location_info->address ?? '' }}
+        @if(!empty($location_info->fdo_phone)) &nbsp;&middot;&nbsp; {{ $location_info->fdo_phone }} @endif
+        @if(!empty($account_info->email)) &nbsp;&middot;&nbsp; {{ $account_info->email }} @endif
+        &nbsp;&middot;&nbsp; https://clarityaesthetic.pk
+        @if(!empty($location_info->ntn)) &nbsp;&middot;&nbsp; NTN {{ $location_info->ntn }} @endif
+        @if(!empty($location_info->stn)) &nbsp;&middot;&nbsp; STN {{ $location_info->stn }} @endif
+    </div>
 </div>
 </body>
 </html>

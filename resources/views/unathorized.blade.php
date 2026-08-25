@@ -3,7 +3,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>DEMO - 403 Forbidden</title>
+  <title>Clarity Aesthetic - 403 Forbidden</title>
   <style>
  @import url("https://fonts.googleapis.com/css?family=Lato");
 * {

@@ -458,7 +458,12 @@ class InvoicesController extends Controller
             }
         } else {
 
-            $content = view('admin.invoices.invoice_pdf', compact('Invoiceinfo', 'patient', 'account', 'service', 'discount', 'invoicestatus', 'company_phone_number', 'location_info', 'appointment_info', 'bundle', 'download', 'service_price_display'))->render();
+            $isConsultancy = ($appointment_info?->appointment_type_id == 1) || $flag == 1;
+            $viewName = $isConsultancy
+                ? 'admin.invoices.consultancy_invoice_pdf'
+                : 'admin.invoices.invoice_pdf';
+
+            $content = view($viewName, compact('Invoiceinfo', 'patient', 'account', 'service', 'discount', 'invoicestatus', 'company_phone_number', 'location_info', 'appointment_info', 'bundle', 'download', 'service_price_display'))->render();
             $pdf = App::make('dompdf.wrapper');
             $pdf->loadHTML($content);
             if ($download) {
@@ -469,7 +474,7 @@ class InvoicesController extends Controller
                 return $pdf->download('treatment-invoice-C-'.$Invoiceinfo->patient_id.'.pdf');
             }
 
-            return view('admin.invoices.invoice_pdf', compact('Invoiceinfo', 'patient', 'account', 'service', 'discount', 'invoicestatus', 'company_phone_number', 'location_info', 'appointment_info', 'bundle', 'download', 'service_price_display'));
+            return view($viewName, compact('Invoiceinfo', 'patient', 'account', 'service', 'discount', 'invoicestatus', 'company_phone_number', 'location_info', 'appointment_info', 'bundle', 'download', 'service_price_display'));
         }
     }
 

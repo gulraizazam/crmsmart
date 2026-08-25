@@ -3,7 +3,7 @@
 <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
     <!--begin::Logo-->
     <a href="{{route('admin.home')}}">
-        <span style="font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 700; color: #ffffff; letter-spacing: 3px; line-height: 1.2;">DEMO</span>
+        <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:34px;width:auto;max-width:180px;display:inline-block;"/>
     </a>
     <!--end::Logo-->
     <!--begin::Toolbar-->

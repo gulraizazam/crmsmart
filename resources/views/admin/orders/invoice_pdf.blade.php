@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>DEMO</title>
+    <title>Clarity Aesthetic — Invoice</title>
     <meta
-        content="DEMO is a Medical Spa offering more than 60 treatment for skin rejuvenation and body contouring"
+        content="Clarity Aesthetic"
         name="description" />
     <meta content="Red Signal" name="author" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -216,10 +216,10 @@
         <table>
             <tr>
                 <td>
-                    <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; margin-bottom: 10px;">DEMO</div>
+                    <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
                     <p class="logo_caption">{{ $location_info->address }}.</p>
                     <p class="logo_caption logo_caption2">Phone. {{ $location_info->fdo_phone }} &nbsp; | &nbsp; Email.
-                        {{ $account->email }} &nbsp; | &nbsp; www.demo.com &nbsp; | &nbsp; NTN.
+                        {{ $account->email }} &nbsp; | &nbsp; https://clarityaesthetic.pk &nbsp; | &nbsp; NTN.
                         {{ $location_info->ntn }} &nbsp; | &nbsp; STN. {{ $location_info->stn }}</p>
                 </td>
                 <td style="padding:0px !important; float:right; width:120px; text-align:right;">

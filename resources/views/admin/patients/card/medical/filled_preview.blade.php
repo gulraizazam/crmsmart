@@ -88,7 +88,7 @@
                             <div class="row">
 
                                 <div class="col-md-6">
-                                    <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
+                                    <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:60px;width:auto;max-width:240px;display:block;"/>
                                     <div class="mt-15">
                                         <h1>Patient Detail</h1>
                                         <p> <strong>Patient Name: </strong> {{$medicalinformation->patient?$medicalinformation->patient->name : "Null"}}</p>

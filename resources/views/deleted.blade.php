@@ -59,7 +59,7 @@
 
             <div class="row">
                 <div class="col-md-2">
-                    <div style="font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: #212529; letter-spacing: 4px;">DEMO</div>
+                    <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:70px;width:auto;max-width:260px;display:inline-block;"/>
                 </div>
                 <div class="col-md-6">&nbsp;</div>
                 

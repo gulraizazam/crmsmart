@@ -79,7 +79,7 @@
             <td>
                 <div><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Clarity Aesthetic" style="height: 70px; max-width: 260px; width: auto; display: block;"></div>
                 <p class="logo_caption">{{ $location->address }}.</p>
-                <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; Email. care@demo.com &nbsp; | &nbsp; www.demo.com &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
+                <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; https://clarityaesthetic.pk &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
             </td>
             <td style="padding:0px !important; float:right; width:120px; text-align:right;">
                 <div class="invoice_btn" style="width:120px; float:right; text-align:right;">

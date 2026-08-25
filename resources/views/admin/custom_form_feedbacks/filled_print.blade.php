@@ -251,7 +251,7 @@
                     <tbody>
                     <tr class="data-split-wrap">
                         <td>
-                            <div style="font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px;">DEMO</div>
+                            <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:60px;width:auto;max-width:240px;display:block;"/>
                         </td>
                         <td>
                             <p class="order-date text-right">#{{ $thisId }} / {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $custom_form->created_at)->format('Y-M-d') }}</p>
