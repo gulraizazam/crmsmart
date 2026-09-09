@@ -24,7 +24,9 @@ class AddPlanidToActivitiesTableIfMissing extends Migration
         }
 
         if (Schema::hasColumn('activities', 'planId') && Schema::hasColumn('activities', 'plan_id')) {
+            DB::statement('SET @activities_mutation_allowed = 1');
             DB::statement('UPDATE activities SET `planId` = `plan_id` WHERE `planId` IS NULL AND `plan_id` IS NOT NULL');
+            DB::statement('SET @activities_mutation_allowed = NULL');
         }
     }
 
