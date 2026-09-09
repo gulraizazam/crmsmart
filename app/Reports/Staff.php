@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: abdullah@redsignal.biz
+ * User: Smart Aesthetics
  * Date: 11/15/2018
  * Time: 2:49 PM
  */

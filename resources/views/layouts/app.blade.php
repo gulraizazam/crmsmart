@@ -2,10 +2,10 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <title>Clarity Aesthetic | @yield('title')</title>
+    <title>Smart Aesthetics | @yield('title')</title>
     <meta charset="utf-8" />
-    <meta name="description" content="Smart Aesthetic" />
-    <meta name="keywords" content="Smart Aesthetic" />
+    <meta name="description" content="Smart Aesthetics" />
+    <meta name="keywords" content="Smart Aesthetics" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="{{asset('favicon.svg')}}?v=2" />
     <link rel="icon" type="image/x-icon" href="{{asset('favicon.ico')}}?v=2" />

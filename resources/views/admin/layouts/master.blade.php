@@ -3,12 +3,12 @@
 <!--begin::Head-->
 <head>
     <meta charset="utf-8" />
-    <title>Clarity Aesthetic | @yield('title')
+    <title>Smart Aesthetics | @yield('title')
     </title>
     <meta
-        content="Clarity Aesthetic Management System"
+        content="Smart Aesthetics Management System"
         name="description" />
-    <meta content="Red Signal" name="author" />
+    <meta content="Smart Aesthetics" name="author" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />

@@ -2,7 +2,7 @@
 <title>{{ trans('global.global_title_smart') }}</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="Smart Aesthetic is a Medical Spa offering more than 60 treatment for skin rejuvenation and body contouring" name="description"/>
+<meta content="Smart Aesthetics is a Medical Spa offering more than 60 treatment for skin rejuvenation and body contouring" name="description"/>
 <meta content="Hasan Akhtar" name="author"/>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <!--begin::Fonts-->

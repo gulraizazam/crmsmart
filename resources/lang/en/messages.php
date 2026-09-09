@@ -1,6 +1,6 @@
 <?php
 
-/* @author <abdullah@redsignal.biz> */
+/* @author Smart Aesthetics */
 // It is a file placed in respective language directory .... it is used for custom messages i-e success & Error Messages
 /*
     |--------------------------------------------------------------------------

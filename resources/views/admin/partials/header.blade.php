@@ -3,7 +3,7 @@
         <a href="javascript:void(0);" class="layout-menu-toggle" id="layout-menu-toggle" aria-label="Open menu">
             <i class="la la-bars"></i>
         </a>
-        <h4 class="navbar-page-title">@yield('title', 'Clarity Aesthetic')</h4>
+        <h4 class="navbar-page-title">@yield('title', 'Smart Aesthetics')</h4>
     </div>
 
     <div class="navbar-right">

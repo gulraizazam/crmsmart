@@ -6,7 +6,7 @@
     <aside class="sneat-auth-visual" aria-hidden="true">
         <div class="sneat-auth-visual-inner">
             <div class="sneat-auth-visual-copy">
-                <h2>Clarity Aesthetic</h2>
+                <h2>Smart Aesthetics</h2>
                 <p>Appointments, patients, and clinic operations in one place.</p>
             </div>
             <div class="sneat-auth-art">
@@ -41,11 +41,11 @@
                         <path fill="currentColor" d="M13.79.36L3.4 7.44C.57 9.69-.38 12.48.56 15.8c.13.43.54 1.99 2.57 3.43  .69.49 2.2 1.15 4.53 1.99l-4.96 3.3C.45 26.3.09 28.51 1.56 31.17c1.27 1.64 3.65 2.09 5.53 1.37 1.26-.48 4.36-2.54 9.33-6.16 1.62-1.88 2.28-3.92 1.99-6.14-.44-2.7-2.23-4.66-5.36-5.86l-2.13-.9 7.7-5.49L13.79.36z"/>
                     </svg>
                 </span>
-                <span class="sneat-auth-brand-text">Clarity</span>
+                <span class="sneat-auth-brand-text">Smart</span>
             </div>
 
             <div class="sneat-auth-header">
-                <h1>Welcome to Clarity!</h1>
+                <h1>Welcome to Smart Aesthetics!</h1>
                 <p>Sign in to your account to continue</p>
             </div>
 
@@ -87,7 +87,7 @@
             </form>
 
             <div class="login-footer">
-                <p>&copy; {{ date('Y') }} Clarity Aesthetic. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} Smart Aesthetics. All rights reserved.</p>
             </div>
         </div>
     </div>

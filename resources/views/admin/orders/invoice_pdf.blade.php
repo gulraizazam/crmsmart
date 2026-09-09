@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Clarity Aesthetic — Invoice</title>
+    <title>Smart Aesthetics — Invoice</title>
     <meta
-        content="Clarity Aesthetic"
+        content="Smart Aesthetics"
         name="description" />
-    <meta content="Red Signal" name="author" />
+    <meta content="Smart Aesthetics" name="author" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <style>
         table {
@@ -216,10 +216,10 @@
         <table>
             <tr>
                 <td>
-                    <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
+                    <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
                     <p class="logo_caption">{{ $location_info->address }}.</p>
                     <p class="logo_caption logo_caption2">Phone. {{ $location_info->fdo_phone }} &nbsp; | &nbsp; Email.
-                        {{ $account->email }} &nbsp; | &nbsp; https://clarityaesthetic.pk &nbsp; | &nbsp; NTN.
+                        {{ $account->email }} &nbsp; | &nbsp; https://aestheticlinics.net &nbsp; | &nbsp; NTN.
                         {{ $location_info->ntn }} &nbsp; | &nbsp; STN. {{ $location_info->stn }}</p>
                 </td>
                 <td style="padding:0px !important; float:right; width:120px; text-align:right;">

@@ -8,7 +8,7 @@
     </div>
     <div class="row invoice-logo">
         <div class="col-md-6 col-sm-6 col-xs-12 invoice-logo-space">
-            <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic" style="height:60px;width:auto;max-width:240px;display:block;"/>
+            <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:60px;width:auto;max-width:240px;display:block;"/>
         </div>
 
         <div class="col-md-6 col-sm-6 col-xs-12">

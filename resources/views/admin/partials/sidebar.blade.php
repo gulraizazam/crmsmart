@@ -6,7 +6,7 @@
                     <path fill="currentColor" d="M13.79.36L3.4 7.44C.57 9.69-.38 12.48.56 15.8c.13.43.54 1.99 2.57 3.43  .69.49 2.2 1.15 4.53 1.99l-4.96 3.3C.45 26.3.09 28.51 1.56 31.17c1.27 1.64 3.65 2.09 5.53 1.37 1.26-.48 4.36-2.54 9.33-6.16 1.62-1.88 2.28-3.92 1.99-6.14-.44-2.7-2.23-4.66-5.36-5.86l-2.13-.9 7.7-5.49L13.79.36z"/>
                 </svg>
             </span>
-            <span class="app-brand-text">Clarity</span>
+            <span class="app-brand-text">Smart</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-close d-xl-none" id="layout-menu-close" aria-label="Close menu">&times;</a>
     </div>

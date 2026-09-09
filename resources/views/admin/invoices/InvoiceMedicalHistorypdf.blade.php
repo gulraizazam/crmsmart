@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Clarity Aesthetic — Consultation Form</title>
+    <title>Smart Aesthetics — Consultation Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     @php
         $patientAge = '';
@@ -338,7 +338,7 @@
 
         <!-- Header -->
         <div class="cf-brand-wrap">
-            <img class="cf-brand-logo" src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic">
+            <img class="cf-brand-logo" src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics">
             <div class="cf-brand-tag">Aesthetic &middot; Wellness &middot; Confidence</div>
         </div>
 
@@ -436,11 +436,11 @@
 
         <!-- Footer -->
         <div class="cf-footer-contact">
-            <div class="brand">Clarity Aesthetic</div>
+            <div class="brand">Smart Aesthetics</div>
             {{ $location_info->address ?? '' }}
             @if(!empty($location_info->fdo_phone)) &nbsp;&middot;&nbsp; {{ $location_info->fdo_phone }} @endif
             @if(!empty($account->email)) &nbsp;&middot;&nbsp; {{ $account->email }} @endif
-            &nbsp;&middot;&nbsp; https://clarityaesthetic.pk
+            &nbsp;&middot;&nbsp; https://aestheticlinics.net
         </div>
     </div>
 </div>

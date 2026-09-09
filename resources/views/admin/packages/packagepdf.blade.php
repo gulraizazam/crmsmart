@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Clarity Aesthetic — Plan Invoice {{ $package->name ?? '' }}</title>
-    <meta content="Clarity Aesthetic" name="description" />
+    <title>Smart Aesthetics — Plan Invoice {{ $package->name ?? '' }}</title>
+    <meta content="Smart Aesthetics" name="description" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -299,13 +299,13 @@
 <body>
 <div class="cinv-shell">
     <div class="cinv-stripe">
-        <div class="cinv-stripe-label">Clarity Aesthetic</div>
+        <div class="cinv-stripe-label">Smart Aesthetics</div>
     </div>
 
     <!-- Header -->
     <div class="cinv-head">
         <div class="cinv-brand">
-            <img src="{{ asset('logoClarity.jpg') }}" alt="Clarity Aesthetic">
+            <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics">
             <div class="cinv-brand-sub">Aesthetic Care &middot; Plan</div>
         </div>
         <div class="cinv-doc-type">
@@ -482,7 +482,7 @@
 
     <div class="cinv-note">
         <strong>Note.</strong> All treatment prices are inclusive of applicable taxes.
-        Thank you for choosing Clarity Aesthetic.
+        Thank you for choosing Smart Aesthetics.
     </div>
 
     <!-- Signatures -->
@@ -493,14 +493,14 @@
         </div>
         <div class="cinv-sig-block">
             <div class="cinv-sig-line">Authorised Signature</div>
-            <div class="cinv-sig-name">Clarity Aesthetic</div>
+            <div class="cinv-sig-name">Smart Aesthetics</div>
         </div>
     </div>
 
     <div class="cinv-footer">
-        <strong>Clarity Aesthetic</strong>
+        <strong>Smart Aesthetics</strong>
         &nbsp;&middot;&nbsp;
-        https://clarityaesthetic.pk
+        https://aestheticlinics.net
         &nbsp;&middot;&nbsp;
         @if(!empty($location_info->ntn)) NTN {{ $location_info->ntn }} &nbsp;&middot;&nbsp; @endif
         @if(!empty($location_info->stn)) STN {{ $location_info->stn }} &nbsp;&middot;&nbsp; @endif
