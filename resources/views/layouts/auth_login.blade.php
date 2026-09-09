@@ -10,10 +10,9 @@
     <link rel="icon" type="image/x-icon" href="{{asset('favicon.ico')}}?v=2" />
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}?v=2" />
     <link rel="apple-touch-icon" href="{{asset('apple-touch-icon.png')}}?v=2" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" />
     <link href="{{asset('assets/css/auth/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/auth/style.bundle.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/login-aesthetic.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/sneat-login.css')}}?v=1" rel="stylesheet" type="text/css" />
 </head>
 <body class="login-page">
 

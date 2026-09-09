@@ -1,0 +1,441 @@
+/* Sneat auth — login only. Tokens match sneat-layout.css. */
+
+:root {
+    --sneat-primary: #696cff;
+    --sneat-primary-dark: #5f61e6;
+    --sneat-primary-soft: rgba(105, 108, 255, 0.16);
+    --sneat-heading: #566a7f;
+    --sneat-body: #697a8d;
+    --sneat-muted: #a1acb8;
+    --sneat-border: #d9dee3;
+    --sneat-bg: #f5f5f9;
+    --sneat-paper: #fff;
+    --sneat-shadow: 0 0.125rem 0.5rem 0.0625rem rgba(161, 172, 184, 0.12);
+    --sneat-shadow-lg: 0 0.25rem 1.25rem 0 rgba(147, 158, 170, 0.2);
+    --sneat-radius: 0.5rem;
+    --sneat-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body.login-page {
+    margin: 0;
+    min-height: 100%;
+}
+
+body.login-page {
+    font-family: var(--sneat-font);
+    background: var(--sneat-bg) !important;
+    color: var(--sneat-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.sneat-auth {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    width: 100%;
+    background: var(--sneat-bg);
+}
+
+.sneat-auth-visual {
+    display: none;
+    position: relative;
+    flex: 1 1 58%;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.55) 0%, transparent 42%),
+        radial-gradient(circle at 88% 78%, rgba(105, 108, 255, 0.28) 0%, transparent 46%),
+        linear-gradient(145deg, #e7e7ff 0%, #d8daff 42%, #cfd1ff 100%);
+}
+
+.sneat-auth-visual-inner {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.5rem 3rem 2.25rem;
+}
+
+.sneat-auth-visual-copy h2 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--sneat-heading);
+}
+
+.sneat-auth-visual-copy p {
+    margin: 0;
+    max-width: 28rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--sneat-body);
+}
+
+.sneat-auth-art {
+    width: min(100%, 34rem);
+    margin-inline: auto;
+    margin-block: 1.5rem 0.5rem;
+}
+
+.sneat-auth-art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.sneat-auth-form-col {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+}
+
+.sneat-auth-card {
+    width: 100%;
+    max-width: 26.5rem;
+    background: var(--sneat-paper);
+    border: 1px solid var(--sneat-border);
+    border-radius: var(--sneat-radius);
+    box-shadow: var(--sneat-shadow-lg);
+    padding: 1.75rem 1.5rem 1.5rem;
+    container-type: inline-size;
+}
+
+.sneat-auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.sneat-auth-brand-logo {
+    display: flex;
+    color: var(--sneat-primary);
+    flex: 0 0 auto;
+}
+
+.sneat-auth-brand-text {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--sneat-heading);
+}
+
+.sneat-auth-header {
+    margin-bottom: 1.5rem;
+}
+
+.sneat-auth-header h1 {
+    margin: 0 0 0.4rem;
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--sneat-heading);
+    line-height: 1.3;
+}
+
+.sneat-auth-header p {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--sneat-body);
+}
+
+.sneat-login-form .fv-row,
+.sneat-login-form .form-group {
+    margin-bottom: 1.05rem;
+}
+
+.sneat-login-form .form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sneat-heading);
+}
+
+.sneat-login-form .form-input,
+.sneat-login-form .form-input.form-control {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--sneat-border);
+    border-radius: 0.375rem;
+    background: var(--sneat-paper);
+    font-family: var(--sneat-font);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--sneat-heading);
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sneat-login-form .form-input::placeholder,
+.sneat-login-form .form-input.form-control::placeholder {
+    color: var(--sneat-muted);
+    opacity: 1;
+}
+
+.sneat-login-form .form-input:hover:not(:focus),
+.sneat-login-form .form-input.form-control:hover:not(:focus) {
+    border-color: #c5cbd3;
+}
+
+.sneat-login-form .form-input:focus,
+.sneat-login-form .form-input.form-control:focus,
+.sneat-login-form .form-input:focus-visible,
+.sneat-login-form .form-input.form-control:focus-visible {
+    border-color: var(--sneat-primary);
+    box-shadow: 0 0 0 0.15rem var(--sneat-primary-soft);
+    background: var(--sneat-paper);
+}
+
+.password-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+
+.password-header .form-label {
+    margin-bottom: 0;
+}
+
+.forgot-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sneat-primary);
+    text-decoration: none;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.forgot-link:hover,
+.forgot-link:focus-visible {
+    color: var(--sneat-primary-dark);
+    text-decoration: underline;
+    outline: none;
+}
+
+.password-toggle {
+    position: relative;
+}
+
+.password-toggle .form-input,
+.password-toggle .form-input.form-control {
+    padding-inline-end: 3rem;
+}
+
+.password-toggle .toggle-eye {
+    position: absolute;
+    inset-inline-end: 0.15rem;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    width: 2.75rem;
+    height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sneat-muted);
+    cursor: pointer;
+    border-radius: 0.375rem;
+}
+
+.password-toggle .toggle-eye:hover,
+.password-toggle .toggle-eye:focus-visible {
+    color: var(--sneat-heading);
+    outline: none;
+}
+
+.password-toggle .toggle-eye:focus-visible {
+    box-shadow: 0 0 0 0.15rem var(--sneat-primary-soft);
+}
+
+.btn-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 2.75rem;
+    margin-top: 0.35rem;
+    padding: 0.6rem 1rem;
+    border: 0;
+    border-radius: 0.375rem;
+    background: var(--sneat-primary);
+    color: #fff;
+    font-family: var(--sneat-font);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.btn-login:hover {
+    background: var(--sneat-primary-dark);
+    box-shadow: 0 0.25rem 0.65rem 0 rgba(105, 108, 255, 0.45);
+}
+
+.btn-login:active {
+    transform: translateY(1px);
+}
+
+.btn-login:focus,
+.btn-login:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.15rem var(--sneat-primary-soft), 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+
+.login-alerts {
+    margin-bottom: 1rem;
+}
+
+.login-alerts:empty {
+    margin-bottom: 0;
+}
+
+.login-alerts .alert {
+    margin: 0 0 0.65rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    border: 1px solid transparent;
+}
+
+.login-alerts .alert i {
+    margin-inline-end: 0.35rem;
+}
+
+.login-alerts .alert-danger {
+    background: #fce8e6;
+    color: #c62828;
+    border-color: #f5c6c2;
+}
+
+.login-alerts .alert-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
+}
+
+.login-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sneat-border);
+    text-align: center;
+}
+
+.login-footer p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--sneat-muted);
+}
+
+.fv-plugins-message-container {
+    margin-top: 0.35rem;
+}
+
+.fv-plugins-message-container .fv-help-block,
+.fv-plugins-bootstrap5-row-invalid .fv-help-block {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: #ff4c51;
+}
+
+.has-danger .form-input,
+.has-danger .form-input.form-control,
+.is-invalid.form-input,
+.form-control.is-invalid {
+    border-color: #ff4c51;
+}
+
+.has-success .form-input,
+.has-success .form-input.form-control {
+    border-color: #71dd37;
+}
+
+@media (min-width: 768px) {
+    .sneat-auth-form-col {
+        padding: 2rem;
+    }
+
+    .sneat-auth-card {
+        padding: 2.25rem 2rem 1.75rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .sneat-auth-visual {
+        display: flex;
+    }
+
+    .sneat-auth-form-col {
+        flex: 0 0 26.5rem;
+        max-width: 42%;
+        padding: 2.5rem 2.25rem;
+        background: var(--sneat-bg);
+    }
+
+    .sneat-auth-card {
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+        padding: 0;
+        max-width: 24.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .sneat-auth-form-col {
+        flex-basis: 28rem;
+        max-width: 38%;
+    }
+}
+
+@media (max-width: 375px) {
+    .sneat-auth-form-col {
+        padding: 0.85rem;
+    }
+
+    .sneat-auth-card {
+        padding: 1.35rem 1.1rem 1.15rem;
+    }
+
+    .sneat-auth-header h1 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-login,
+    .sneat-login-form .form-input,
+    .sneat-login-form .form-input.form-control {
+        transition: none;
+    }
+
+    .btn-login:active {
+        transform: none;
+    }
+}
