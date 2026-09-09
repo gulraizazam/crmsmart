@@ -95,7 +95,7 @@
                                 <h3 id="add-patient-name"></h3>
                                 <input type="hidden" id="add_patient_id" name="patient_id_1">
                             </div>
-                            <div class="fv-row col-md-2 mt-2">
+                            <div class="fv-row col-md-2 mt-2 d-none">
                                 <label class="required fw-bold fs-6 mb-2 pl-0">Membership</label>
                                 <h4 id="patient_membership" style="font-size:15px">No Membership</h4>
                             </div>
@@ -129,7 +129,7 @@
                                 </select>
                                 <small class="text-danger ml-1 mt-1"><b id="add_patient_id_error" class="create-plan-error"></b></small>
                             </div>
-                            <div class="fv-row col-md-2 mt-2">
+                            <div class="fv-row col-md-2 mt-2 d-none">
                                 <label class="required fw-bold fs-6 mb-2 pl-0">Membership </label>
                                 <input type="text" id="patient_membership" class="form-control form-control-solid mb-3 mb-lg-0" disabled placeholder="No data">
                             </div>

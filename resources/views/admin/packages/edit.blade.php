@@ -111,7 +111,7 @@
                                 <label class="required fw-bold fs-6 mb-2 pl-0">Patient Name</label>
                                 <h3 id="edit-patient-name" style="font-size: 15px; font-weight: 700; color: #3D4A35; margin: 0;"></h3>
                             </div>
-                            <div class="fv-row col-md-2 mt-2">
+                            <div class="fv-row col-md-2 mt-2 d-none">
                                 <label class="required fw-bold fs-6 mb-2 pl-0">Membership </label>
                                 <h4 id="edit-membership-name" style="font-size:14px; color: #3D4A35; margin: 0;"></h4>
                             </div>
