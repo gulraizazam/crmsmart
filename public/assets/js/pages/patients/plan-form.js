@@ -179,7 +179,7 @@ function displayData(response) {
             Object.values(packagebundles).forEach(function (packagebundle) {
                 service_options += '<tr>';
                 service_options += '<td><a href="javascript:void(0);" onclick="toggle(' + packagebundle.id + ')">' + packagebundle.bundle.name + '</a></td>';
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + (parseFloat(packagebundle.service_price) || 0).toFixed(2) + '</td>';
                 service_options += '<td>';
                 if (packagebundle.discount_id == null) {
                     service_options += '-';
@@ -1477,7 +1477,7 @@ function setEditData(response) {
         $("#edit_parent_id").val(package?.patient_id);
         $("#edit_random_id").val(package?.random_id);
         $("#edit_random_id_1").val(package?.random_id);
-        $("#edit_package_total_1").val(total_price ? total_price.toFixed(2) : '0.00');
+        $("#edit_package_total_1").val(total_price ? (parseFloat(total_price) || 0).toFixed(2) : '0.00');
         $("#edit_grand_total_1").val(grand_total);
         $('#edit_cash_amount_1').val(0);
         $('#edit_cash_amount_1').prop('disabled', true);
@@ -1630,7 +1630,7 @@ function setEditData(response) {
 
                 service_options += '<tr class="HR_' + packagebundle.id + '">';
                 service_options += '<td><a href="javascript:void(0);" onclick="toggle(' + packagebundle.id + ')">' + packagebundle.bundle.name + '</a></td>';
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + (parseFloat(packagebundle.service_price) || 0).toFixed(2) + '</td>';
                 service_options += '<td>';
                 if (packagebundle.discount_id == null) {
                     service_options += '-';
@@ -2198,7 +2198,7 @@ function displayDataForEdit(response) {
             Object.values(packagebundles).forEach(function (packagebundle) {
                 service_options += '<tr>';
                 service_options += '<td><a href="javascript:void(0);" onclick="toggle(' + packagebundle.id + ')">' + packagebundle.bundle.name + '</a></td>';
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + (parseFloat(packagebundle.service_price) || 0).toFixed(2) + '</td>';
                 service_options += '<td>';
                 if (packagebundle.discount_id == null) {
                     service_options += '-';

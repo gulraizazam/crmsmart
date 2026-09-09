@@ -214,8 +214,8 @@
         </script>
         {{-- Use the SAME JS files as main plans module --}}
         <script src="{{ asset('assets/js/pages/appointments/referred-by-patient-search.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/patients/plan-form.js') }}?v=2"></script>
-        <script src="{{ asset('assets/js/pages/admin_settings/create-plan.js') }}?v=2"></script>
+        <script src="{{ asset('assets/js/pages/patients/plan-form.js') }}?v=3"></script>
+        <script src="{{ asset('assets/js/pages/admin_settings/create-plan.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/create-bundle.js') }}"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/edit-bundle.js') }}"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/create-membership.js') }}"></script>

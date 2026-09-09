@@ -111,7 +111,7 @@
     </div>
 
     @push('js')
-        <script src="{{ asset('assets/js/pages/admin_settings/create-plan.js') }}?v=2"></script>
+        <script src="{{ asset('assets/js/pages/admin_settings/create-plan.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/crud/forms/validation/admin_settings/refunds.js') }}"></script>
 
         <script>

@@ -935,14 +935,14 @@ function setEditData(response) {
                 } else {
                     service_options += '<td><a href="javascript:void(0)" style="color: #009ef7;">' + bundleNameText + '</a></td>';
                 }
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + planAmountFixed(packagebundle.service_price) + '</td>';
                 service_options += '<td>';
                 if (packagebundle.discount_id == null) {
                     service_options += '-';
                 } else if (packagebundle.discount_name) {
                     service_options += packagebundle.discount_name;
                 } else {
-                    service_options += packagebundle.discount.name;
+                    service_options += (packagebundle.discount && packagebundle.discount.name) ? packagebundle.discount.name : '-';
                 }
                 service_options += '</td>';
 
@@ -1104,7 +1104,7 @@ function setEditData(response) {
         $("#edit_parent_id").val(package?.patient_id)
         $("#edit_location_id").val(package?.location?.id)
         $("#edit_random_id_1").val(package?.random_id)
-        $("#edit_package_total_1").val(total_price.toFixed(2));
+        $("#edit_package_total_1").val(planAmountFixed(total_price));
         $("#edit_grand_total_1").val(grand_total);
         ExistingTotal = parseFloat(total_price) || 0;
         $('#edit_cash_amount_1').val(0);
@@ -1369,7 +1369,7 @@ function displayData(response) {
 
                 if (packageadvance.cash_amount != '0') {
                     history_options += '<tr>';
-                    history_options += '<td>' + packageadvance.paymentmode.name + '</td>';
+                    history_options += '<td>' + (packageadvance.paymentmode && packageadvance.paymentmode.name ? packageadvance.paymentmode.name : '-') + '</td>';
                     if (packageadvance.is_refund == 1) {
                         history_options += '<td>out / refund</td>';
                     } else if (packageadvance.is_setteled == 1) {
@@ -1400,14 +1400,14 @@ function displayData(response) {
                     itemName = packagebundle.membership_type.name;
                 }
                 service_options += '<td>' + itemName + '</td>';
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + planAmountFixed(packagebundle.service_price) + '</td>';
                 service_options += '<td>';
                 if (packagebundle.discount_id == null) {
                     service_options += '-';
                 } else if (packagebundle.discount_name) {
                     service_options += packagebundle.discount_name;
                 } else {
-                    service_options += packagebundle.discount.name;
+                    service_options += (packagebundle.discount && packagebundle.discount.name) ? packagebundle.discount.name : '-';
                 }
                 service_options += '</td>';
 
@@ -1506,8 +1506,8 @@ function displayData(response) {
         $(".plan_history").html(history_options);
         var totalam = Math.round(response.data.grand_total);
         $(".package_total_price").text(totalam);
-        $("#user_name").text(package.user.name)
-        $("#location_name").text(package.location.name)
+        $("#user_name").text(package.user ? package.user.name : '')
+        $("#location_name").text(package.location ? package.location.name : '')
 
 
     } catch (error) {
