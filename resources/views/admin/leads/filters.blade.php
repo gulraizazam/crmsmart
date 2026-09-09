@@ -1,85 +1,144 @@
-<div class="mt-2 mb-7">
+@push("css")
+    <style>
+        @media (max-width: 991px) {
+            .all-filters-wrapper {
+                display: none;
+            }
+            .mobile-filter-toggle {
+                margin-bottom: 10px;
+            }
+        }
 
-    <div class="row align-items-center">
-        <div class="advance-search col-md-12 col-lg-12 col-xl-12">
-            <div class="row align-items-center mr-2" style="float: right;">
-                <div class="row">
-                    <button class="btn btn-sm btn-default ml-2 mt-10" onclick="advanceFilters();">
-                        <i class="advance-arrow fa fa-caret-right"></i>
-                        Advance
-                    </button>
+        @media (min-width: 992px) {
+            .mobile-filter-toggle {
+                display: none !important;
+            }
+        }
+    </style>
+@endpush
+
+<div class="mt-2 mb-7 js-filter-bar">
+
+    <div class="row mb-3 mobile-filter-toggle">
+        <div class="col-12">
+            <button class="btn btn-primary btn-block" onclick="toggleAllFilters();">
+                <i class="fa fa-filter mr-2"></i>
+                <span>Filters</span>
+                <i class="filter-toggle-arrow fa fa-chevron-down"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="all-filters-wrapper">
+        <div class="sneat-filter-row">
+
+            <div class="filterouterdiv mb-0 patient-search-wider js-filter-item" data-filter="search" data-default="1">
+                <label>Search Lead:</label>
+                <input type="text" class="form-control lead_search_filter" placeholder="Search by ID, Name or Phone" id="lead_search_filter" autocomplete="off" />
+                <input type="hidden" id="search_id" class="filter-field" />
+                <input type="hidden" id="search_full_name" class="filter-field" />
+                <input type="hidden" id="search_phone" class="filter-field" />
+                <div class="suggesstion-box-leads" style="display: none; position: absolute; z-index: 1130; background: white; border: 1px solid #d9dee3; max-height: 300px; overflow-y: auto; width: 100%;">
+                    <ul class="suggestion-list-leads" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row mb-6">
-        <div class="col-lg-3 mb-lg-0 mb-6">
-            <label>Search Lead:</label>
-            <input type="text" class="form-control lead_search_filter" placeholder="Search by ID, Name or Phone" id="lead_search_filter" autocomplete="off" />
-            <input type="hidden" id="search_id" class="filter-field" />
-            <input type="hidden" id="search_full_name" class="filter-field" />
-            <input type="hidden" id="search_phone" class="filter-field" />
-            <div class="suggesstion-box-leads" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid #ddd; max-height: 300px; overflow-y: auto; width: calc(100% - 30px);">
-                <ul class="suggestion-list-leads" style="list-style: none; padding: 0; margin: 0;"></ul>
+
+            <div class="filterouterdiv mb-0 js-filter-item" data-filter="city" data-default="1">
+                <label>City:</label>
+                <select class="form-control filter-field select2" id="search_city_id" onchange="LoadLoc()"></select>
             </div>
-        </div>
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>City:</label>
-            <select class="form-control filter-field select2" id="search_city_id" onchange="LoadLoc()"></select>
-        </div>
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>Centre:</label>
-            <select class="form-control filter-field select2" id="search_location_id">
-                <option value="">All</option>
-            </select>
-        </div>
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>Service:</label>
-            <select class="form-control filter-field select2" id="search_service_id"></select>
-        </div>
-        @if(request('type') == '')
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>Lead Status:</label>
-            <select class="form-control filter-field select2" id="search_status_id"></select>
-        </div>
-        @endif
-        @if(request('type') == 'junk')
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>Service:</label>
-            <select class="form-control filter-field select2" id="search_service_id"></select>
-        </div>
-        @endif
 
-    </div>
-
-    <div class="row mb-8 advance-filters" style="display: none;">
-        <div class="col-lg-2 mb-lg-0 mb-6">
-            <label>Gender:</label>
-            <select class="form-control filter-field select2" id="search_gender_id">
-                <option value="">Select</option>
-                <option value="1">Male</option>
-                <option value="2">Female</option>
-            </select>
-        </div>
-        <div class="col-md-3 mb-lg-0 mb-6">
-            {!! Form::label('date_range', 'Created at:', ['class' => 'control-label']) !!}
-            <div class="input-group">
-                {!! Form::text('date_range', null, ['id' => 'date_range', 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Select Date Range']) !!}
+            @if(request('type') == '')
+            <div class="filterouterdiv mb-0 js-filter-item" data-filter="status" data-default="1">
+                <label>Lead Status:</label>
+                <select class="form-control filter-field select2" id="search_status_id"></select>
             </div>
-        </div>
-        <div class="col-lg-3 mb-lg-0">
-            <label>Created By:</label>
-            <select class="form-control filter-field select2" id="search_created_by">
-            </select>
+            @endif
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="centre" data-label="Centre">
+                <label>
+                    Centre:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Centre filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_location_id">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="service" data-label="Service">
+                <label>
+                    Service:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Service filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_service_id"></select>
+            </div>
+
+            @if(request('type') != '')
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="status" data-label="Lead Status">
+                <label>
+                    Lead Status:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Lead Status filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_status_id"></select>
+            </div>
+            @endif
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="gender" data-label="Gender">
+                <label>
+                    Gender:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Gender filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_gender_id">
+                    <option value="">Select</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                </select>
+            </div>
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="created_at" data-label="Created At">
+                <label>
+                    Created at:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Created At filter">&times;</button>
+                </label>
+                <div class="input-group">
+                    {!! Form::text('date_range', null, ['id' => 'date_range', 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Select Date Range']) !!}
+                </div>
+            </div>
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="created_by" data-label="Created By">
+                <label>
+                    Created By:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Created By filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_created_by">
+                </select>
+            </div>
+
+            <div class="sneat-filter-actions">
+                <div class="js-add-filter-wrap">
+                    <button type="button" class="btn sneat-add-filter-btn js-add-filter-btn" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-plus"></i>
+                        Add filter
+                    </button>
+                    <div class="sneat-add-filter-menu js-filter-menu sneat-filter-item-hidden" role="menu">
+                        <button type="button" class="js-filter-menu-item" data-filter="centre" role="menuitem">Centre</button>
+                        <button type="button" class="js-filter-menu-item" data-filter="service" role="menuitem">Service</button>
+                        @if(request('type') != '')
+                        <button type="button" class="js-filter-menu-item" data-filter="status" role="menuitem">Lead Status</button>
+                        @endif
+                        <button type="button" class="js-filter-menu-item" data-filter="gender" role="menuitem">Gender</button>
+                        <button type="button" class="js-filter-menu-item" data-filter="created_at" role="menuitem">Created At</button>
+                        <button type="button" class="js-filter-menu-item" data-filter="created_by" role="menuitem">Created By</button>
+                    </div>
+                </div>
+                @include('admin.partials.filter-buttons')
+            </div>
+
         </div>
     </div>
 
-
-    <div class="row">
-        <div class="col-md-10">
-
-            @include('admin.partials.filter-buttons')
-
-        </div>
-    </div>
 </div>
+
+@push('js')
+    <script src="{{ asset('assets/sneat/js/sneat-filter-picker.js') }}?v=1"></script>
+@endpush

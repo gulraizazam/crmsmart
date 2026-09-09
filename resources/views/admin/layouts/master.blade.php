@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" />
     <!--end::Fonts-->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=2" />
@@ -23,43 +24,30 @@
     <link href="{{ asset('assets/plugins/custom/prismjs/prismjs.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Theme Styles-->
-    <!--begin::Layout Themes(used by all pages)-->
-    <link href="{{ asset('assets/css/themes/layout/header/base/light.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/themes/layout/header/menu/light.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/themes/layout/brand/dark.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/themes/layout/aside/dark.css') }}" rel="stylesheet" type="text/css" />
-    <!--end::Layout Themes-->
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/dark-overrides.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/sneat/css/sneat-datatables.css') }}?v=1" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/sneat/css/sneat-layout.css') }}?v=6" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/sneat-appointment-modals.css') }}?v=7" rel="stylesheet" type="text/css" />
     @stack('css')
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-    <div class="page-loader page-loader-base">
-        <div class="blockui">
-            <span>Please wait...</span>
-            <span>
-                <div class="spinner spinner-primary"></div>
-            </span>
-        </div>
-    </div>
-    <div class="d-flex flex-column flex-root">
-        <!--begin::Page-->
-        <div class="d-flex flex-row flex-column-fluid page">
-            @include('admin.partials.mobile-header')
+<body id="kt_body" class="sneat-shell">
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-overlay"></div>
+        <div class="layout-container">
             @include('admin.partials.sidebar')
-            <!--begin::Wrapper-->
-            <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-                @yield('content')
-                @include('admin.partials.footer')
+            <div class="layout-page">
+                @include('admin.partials.header')
+                <div class="content-wrapper">
+                    @yield('content')
+                    @include('admin.partials.footer')
+                </div>
             </div>
         </div>
-        <!--end::Page-->
     </div>
-    <!--end::Main-->
     @routes
     <script>
         var HOST_URL = "/metronic/theme/html/tools/preview";
@@ -132,6 +120,9 @@
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/prismjs/prismjs.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="{{ asset('assets/sneat/js/sneat-ktdatatable-adapter.js') }}"></script>
+    <script src="{{ asset('assets/sneat/js/sneat-layout.js') }}?v=2"></script>
     <!--end::Global Theme Bundle-->
     <!--begin::ApexCharts Latest (overrides bundled v3.25.0)-->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
@@ -149,28 +140,7 @@
     @include('admin.partials.messages', ['toastr' => true])
     @stack('js')
     <script>
-        var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-
-        if (width < 1536) {
-            $("#kt_aside_toggle").addClass("active");
-            $("#kt_body").addClass("aside-minimize");
-        }
-
         $(function() {
-            $(".user-setting").click(function() {
-                $(".user-popup").slideToggle();
-            });
-
-            $(document).on('click', function(e) {
-                var container = $(".user-setting");
-                if (!$(e.target).closest(container).length) {
-                    $(".user-popup").hide();
-                }
-            });
-        });
-
-        // Cashflow Notification Bell
-        (function() {
             var $bell = $('#cashflow_notification_toggle');
             var $dropdown = $('#cashflow-notif-dropdown');
             var $count = $('#cashflow-notif-count');
@@ -252,7 +222,7 @@
                 if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
                 return Math.floor(diff/86400) + 'd ago';
             }
-        })();
+        });
     </script>
 
     @if(request()->is('*/cashflow*'))

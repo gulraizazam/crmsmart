@@ -1,0 +1,250 @@
+/* Sneat (ThemeSelection) DataTables skin — scoped so Metronic layout can stay until the full theme swap. */
+
+.sneat-datatable {
+    --sneat-primary: #696cff;
+    --sneat-primary-hover: #5f61e6;
+    --sneat-heading: #566a7f;
+    --sneat-body: #697a8d;
+    --sneat-muted: #a1acb8;
+    --sneat-border: #d9dee3;
+    --sneat-bg: #fff;
+    --sneat-hover: rgba(67, 89, 113, 0.04);
+    --sneat-radius: 0.375rem;
+    --sneat-font: "Public Sans", "Segoe UI", sans-serif;
+    font-family: var(--sneat-font);
+    color: var(--sneat-body);
+    position: relative;
+}
+
+.sneat-datatable .card-datatable,
+.sneat-datatable .sneat-dt-wrap {
+    background: var(--sneat-bg);
+    border: 1px solid var(--sneat-border);
+    border-radius: var(--sneat-radius);
+    overflow: hidden;
+}
+
+.sneat-datatable .dataTables_wrapper {
+    font-family: var(--sneat-font);
+    padding: 0;
+    position: relative;
+}
+
+.sneat-datatable .sneat-dt-toolbar,
+.sneat-datatable .sneat-dt-footer {
+    padding: 1rem 1.25rem;
+    margin: 0 !important;
+}
+
+.sneat-datatable .sneat-dt-toolbar {
+    border-bottom: 1px solid var(--sneat-border);
+}
+
+.sneat-datatable .sneat-dt-footer {
+    border-top: 1px solid var(--sneat-border);
+}
+
+.sneat-datatable table.dataTable {
+    margin: 0 !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 0.9375rem;
+    color: var(--sneat-body);
+}
+
+.sneat-datatable table.dataTable thead th {
+    background: var(--sneat-bg);
+    color: var(--sneat-heading);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    border-bottom: 1px solid var(--sneat-border) !important;
+    border-top: 0 !important;
+    padding: 0.75rem 1.25rem;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.sneat-datatable table.dataTable thead th.sorting,
+.sneat-datatable table.dataTable thead th.sorting_asc,
+.sneat-datatable table.dataTable thead th.sorting_desc {
+    cursor: pointer;
+}
+
+.sneat-datatable table.dataTable tbody td {
+    padding: 0.8125rem 1.25rem;
+    border-top: 1px solid var(--sneat-border) !important;
+    vertical-align: middle;
+    color: var(--sneat-body);
+    font-weight: 400;
+}
+
+.sneat-datatable table.dataTable tbody tr:first-child td {
+    border-top: 0 !important;
+}
+
+.sneat-datatable table.dataTable tbody tr:hover {
+    background: var(--sneat-hover);
+}
+
+.sneat-datatable table.dataTable tbody tr.odd,
+.sneat-datatable table.dataTable tbody tr.even {
+    background: var(--sneat-bg);
+}
+
+.sneat-datatable .dataTables_length label,
+.sneat-datatable .dataTables_info {
+    color: var(--sneat-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+.sneat-datatable .dataTables_length select {
+    display: inline-block;
+    width: auto;
+    min-width: 4.5rem;
+    height: 2.25rem;
+    margin: 0 0.5rem;
+    padding: 0.25rem 1.75rem 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--sneat-font);
+    color: var(--sneat-heading);
+    background-color: var(--sneat-bg);
+    border: 1px solid var(--sneat-border);
+    border-radius: var(--sneat-radius);
+}
+
+.sneat-datatable .dataTables_paginate {
+    padding: 0;
+    text-align: right;
+}
+
+.sneat-datatable .dataTables_paginate .paginate_button,
+.sneat-datatable .dataTables_paginate .pagination .page-item .page-link,
+.sneat-datatable .dataTables_paginate > span > a,
+.sneat-datatable .dataTables_paginate > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    margin: 0 0.125rem;
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--sneat-font);
+    font-weight: 500;
+    color: var(--sneat-heading) !important;
+    background: var(--sneat-bg) !important;
+    border: 1px solid var(--sneat-border) !important;
+    border-radius: var(--sneat-radius) !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.sneat-datatable .dataTables_paginate .paginate_button.current,
+.sneat-datatable .dataTables_paginate .paginate_button.current:hover,
+.sneat-datatable .dataTables_paginate .pagination .page-item.active .page-link {
+    color: #fff !important;
+    background: var(--sneat-primary) !important;
+    border-color: var(--sneat-primary) !important;
+}
+
+.sneat-datatable .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled),
+.sneat-datatable .dataTables_paginate .pagination .page-item .page-link:hover {
+    color: var(--sneat-primary) !important;
+    background: rgba(105, 108, 255, 0.08) !important;
+    border-color: var(--sneat-primary) !important;
+}
+
+.sneat-datatable .dataTables_paginate .paginate_button.disabled,
+.sneat-datatable .dataTables_paginate .paginate_button.disabled:hover {
+    color: var(--sneat-muted) !important;
+    background: var(--sneat-bg) !important;
+    border-color: var(--sneat-border) !important;
+    cursor: default;
+    opacity: 0.65;
+}
+
+.sneat-datatable .dataTables_processing {
+    display: none;
+    position: absolute !important;
+    inset: 0;
+    z-index: 5;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--sneat-heading);
+    font-family: var(--sneat-font);
+    font-size: 0.8125rem;
+}
+
+/* DataTables toggles display via inline style. Never use display:!important here or the veil stays after load. */
+.sneat-datatable .dataTables_processing[style*="display: block"],
+.sneat-datatable .dataTables_processing[style*="display:block"] {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.sneat-dt-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sneat-dt-spinner .sneat-dt-wave {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+    height: 1.5rem;
+}
+
+.sneat-dt-spinner .sneat-dt-wave span {
+    display: block;
+    width: 0.3rem;
+    height: 100%;
+    background: var(--sneat-primary);
+    border-radius: 0.125rem;
+    animation: sneat-dt-wave 1s ease-in-out infinite;
+}
+
+.sneat-dt-spinner .sneat-dt-wave span:nth-child(2) { animation-delay: 0.1s; }
+.sneat-dt-spinner .sneat-dt-wave span:nth-child(3) { animation-delay: 0.2s; }
+.sneat-dt-spinner .sneat-dt-wave span:nth-child(4) { animation-delay: 0.3s; }
+.sneat-dt-spinner .sneat-dt-wave span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes sneat-dt-wave {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sneat-dt-spinner .sneat-dt-wave span {
+        animation: none;
+        transform: scaleY(0.7);
+    }
+}
+
+.sneat-datatable .dataTables_empty {
+    padding: 2.5rem 1rem !important;
+    color: var(--sneat-muted);
+    font-size: 0.9375rem;
+    text-align: center;
+}
+
+.sneat-datatable .dropdown-menu {
+    font-family: var(--sneat-font);
+    border: 1px solid var(--sneat-border);
+    border-radius: var(--sneat-radius);
+    box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.45);
+}
+
+.sneat-datatable a.text-primary {
+    color: var(--sneat-primary) !important;
+    font-weight: 600;
+}

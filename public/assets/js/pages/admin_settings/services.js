@@ -1,4 +1,18 @@
 
+function normalizeServiceColor(color) {
+    if (!color) {
+        return '#000000';
+    }
+    color = String(color).trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+        return color;
+    }
+    if (/^#[0-9a-fA-F]{3}$/.test(color)) {
+        return '#' + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2) + color.charAt(3) + color.charAt(3);
+    }
+    return '#000000';
+}
+
 var table_url = route('admin.services.datatable');
 let changePages = 1000;
 var table_columns = [
@@ -47,8 +61,9 @@ var table_columns = [
             if (data.slug == 'all') {
                 return '-';
             }
-            if (typeof data.price !== 'undefined') {
-                return '<span>'+data.price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'</span>';
+            var price = parseFloat(data.price);
+            if (!isNaN(price)) {
+                return '<span>'+price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'</span>';
             } else {
                 return '00.00';
             }
@@ -236,7 +251,7 @@ function setEditData(response) {
         $("#edit_parent_service").val(service.parent_id);
         $("#edit_service_name").val(service.name);
         $("#edit_duration").val(service.duration);
-        $("#edit_color").val(service.color);
+        $("#edit_color").val(normalizeServiceColor(service.color));
         $("#edit_price").val(service.price);
 
         // Set Trix editor content
@@ -344,7 +359,7 @@ function setDuplicateData(response) {
         $("#edit_parent_service").val(service.parent_id);
         $("#edit_service_name").val(service.name);
         $("#edit_duration").val(service.duration);
-        $("#edit_color").val(service.color);
+        $("#edit_color").val(normalizeServiceColor(service.color));
         $("#edit_price").val(service.price);
 
         // Set Trix editor content

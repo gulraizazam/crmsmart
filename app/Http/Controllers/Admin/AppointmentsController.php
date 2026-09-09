@@ -76,7 +76,6 @@ use App\Helpers\Widgets\PlanAppointmentCalculation;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 use App\Http\Requests\Admin\StoreUpdateAppointmentCommentsRequest;
 use App\Models\MachineTypeHasServices;
-use App\Services\MetaConversionApiService;
 
 class AppointmentsController extends Controller
 {
@@ -663,37 +662,6 @@ class AppointmentsController extends Controller
                             ->whereNull('patient_id')
                             ->update(['patient_id' => $appointment_data['patient_id']]);
                     }
-                    
-                    // Send Meta CAPI event for booked status
-                    if ($leadRecord) {
-                        \Log::info('Sending Meta CAPI booked event', [
-                            'lead_id' => $leadRecord->id,
-                            'phone' => $leadRecord->phone,
-                            'meta_lead_id' => $leadRecord->meta_lead_id,
-                            'email' => $leadRecord->email,
-                        ]);
-                        try {
-                            $metaService = new MetaConversionApiService();
-                            $metaService->sendLeadStatus(
-                                $leadRecord->phone,
-                                'booked',
-                                $leadRecord->meta_lead_id,
-                                $leadRecord->email
-                            );
-                            \Log::info('Meta CAPI booked event sent successfully', [
-                                'lead_id' => $leadRecord->id,
-                            ]);
-                        } catch (\Exception $e) {
-                            \Log::error('Meta CAPI booked event failed: ' . $e->getMessage(), [
-                                'lead_id' => $leadRecord->id,
-                                'exception' => $e->getTraceAsString(),
-                            ]);
-                        }
-                    } else {
-                        \Log::warning('No lead record found for Meta CAPI booked event', [
-                            'phone' => $appointment_data['phone'],
-                        ]);
-                    }
                 }
                 
                 // Check if lead_service exists for this service
@@ -974,20 +942,8 @@ class AppointmentsController extends Controller
             $employees = [];
         }
 
-        // If machine_id is provided, load services based on both machine and doctor
-        // Otherwise, load services based only on doctor
-        if ($request->machine_id) {
-            $intersect_resource_service_ids = LocationsWidget::loadAppointmentServiceByLocationResource($request->machine_id, Auth::User()->account_id);
-            $intersect_location_doctor_service_ids = LocationsWidget::loadAppointmentServiceByLocationDoctor($request->location_id, $request->doctor_id, Auth::User()->account_id);
-
-            $serviceIds = [];
-            if (count($intersect_resource_service_ids) && count($intersect_location_doctor_service_ids)) {
-                $serviceIds = array_intersect($intersect_resource_service_ids, $intersect_location_doctor_service_ids);
-            }
-        } else {
-            // No machine selected, load services based only on doctor
-            $serviceIds = LocationsWidget::loadAppointmentServiceByLocationDoctor($request->location_id, $request->doctor_id, Auth::User()->account_id);
-        }
+        // Load services based on doctor and location only. Machines are not used for treatments.
+        $serviceIds = LocationsWidget::loadAppointmentServiceByLocationDoctor($request->location_id, $request->doctor_id, Auth::User()->account_id);
 
         if (count($serviceIds)) {
             $services = Services::whereIn('id', $serviceIds)->get()->pluck('name', 'id');
@@ -1288,10 +1244,12 @@ class AppointmentsController extends Controller
         if (! $appointment) {
             return ApiHelper::apiResponse($this->success, 'Resource not found.', false);
         }
-        $resourceHadRotaDay = ResourceHasRotaDays::find($appointment->resource_has_rota_day_id);
-        $machineHadRotaDay = ResourceHasRotaDays::find($appointment->resource_has_rota_day_id_for_machine);
-        $biggerTime = ResourceHasRota::getBiggerTime($resourceHadRotaDay->start_time, $machineHadRotaDay->start_time);
-        $smallerTime = ResourceHasRota::getSmallerTime($resourceHadRotaDay->end_time, $machineHadRotaDay->end_time);
+        $resourceHadRotaDay = $appointment->resource_has_rota_day_id
+            ? ResourceHasRotaDays::find($appointment->resource_has_rota_day_id)
+            : null;
+        $machineHadRotaDay = null;
+        $biggerTime = $resourceHadRotaDay->start_time ?? null;
+        $smallerTime = $resourceHadRotaDay->end_time ?? null;
         $cities = Cities::getActiveFeaturedOnly(ACL::getUserCities(), Auth::User()->account_id)->get();
         if ($cities) {
             $cities = $cities->pluck('full_name', 'id');
@@ -1384,10 +1342,12 @@ class AppointmentsController extends Controller
         if (! $appointment) {
             return ApiHelper::apiResponse($this->success, 'Resource not found.', false);
         }
-        $resourceHadRotaDay = ResourceHasRotaDays::find($appointment->resource_has_rota_day_id);
-        $machineHadRotaDay = ResourceHasRotaDays::find($appointment->resource_has_rota_day_id_for_machine);
-        $biggerTime = ResourceHasRota::getBiggerTime($resourceHadRotaDay->start_time, $machineHadRotaDay->start_time);
-        $smallerTime = ResourceHasRota::getSmallerTime($resourceHadRotaDay->end_time, $machineHadRotaDay->end_time);
+        $resourceHadRotaDay = $appointment->resource_has_rota_day_id
+            ? ResourceHasRotaDays::find($appointment->resource_has_rota_day_id)
+            : null;
+        $machineHadRotaDay = null;
+        $biggerTime = $resourceHadRotaDay->start_time ?? null;
+        $smallerTime = $resourceHadRotaDay->end_time ?? null;
         $cities = Cities::getActiveFeaturedOnly(ACL::getUserCities(), Auth::User()->account_id)->get();
         if ($cities) {
             $cities = $cities->pluck('full_name', 'id');
@@ -1753,7 +1713,6 @@ class AppointmentsController extends Controller
             $oldServiceId = $appointment->service_id;
             $oldLocationId = $appointment->location_id;
             $oldCityId = $appointment->city_id;
-            $oldMachineId = $appointment->resource_id;
             $oldConsultancyType = $appointment->consultancy_type;
             $oldPatientName = $patient->name;
             $oldPatientPhone = $patient->phone;
@@ -1782,11 +1741,6 @@ class AppointmentsController extends Controller
             }
             if ($request->has('consultancy_type')) {
                 if ((string) $appointment->consultancy_type !== $request->consultancy_type) {
-                    $appointment_data['updated_by'] = Auth::user()->id;
-                }
-            }
-            if ($request->has('machine_id')) {
-                if ((string) $appointment->resource_id !== $request->machine_id) {
                     $appointment_data['updated_by'] = Auth::user()->id;
                 }
             }
@@ -1850,16 +1804,16 @@ class AppointmentsController extends Controller
             if ($resource) {
                 $resource_has_rota_day = ResourceHasRotaDays::getSingleDayRotaWithResourceID($resource->id, $request->scheduled_date, Auth::User()->account_id, $appointment_data['location_id']);
                 if (count($resource_has_rota_day)) {
-                    $appointment_data['resource_id'] = $resource->id;
                     $appointment_data['resource_has_rota_day_id'] = $resource_has_rota_day['id'];
+                    if ($appointment->appointment_type_id != Config::get('constants.appointment_type_service')) {
+                        $appointment_data['resource_id'] = $resource->id;
+                    }
                 }
             }
             if ($appointment->appointment_type_id == Config::get('constants.appointment_type_service')) {
-                $machine_has_rota_day = ResourceHasRotaDays::getSingleDayRotaWithResourceID($appointment_data['machine_id'], $request->scheduled_date, Auth::User()->account_id, $appointment_data['location_id']);
-                if (count($machine_has_rota_day)) {
-                    $appointment_data['resource_id'] = $appointment_data['machine_id'];
-                    $appointment_data['resource_has_rota_day_id_for_machine'] = $machine_has_rota_day['id'];
-                }
+                unset($appointment_data['machine_id'], $appointment_data['resourceId']);
+                $appointment_data['resource_id'] = null;
+                $appointment_data['resource_has_rota_day_id_for_machine'] = null;
             }
             $appointment->update($appointment_data);
             if (count($appointment->getChanges()) > 1) {
@@ -1981,16 +1935,6 @@ class AppointmentsController extends Controller
                 $fieldChanges['City'] = [
                     'old' => $oldCity->name ?? 'Unknown',
                     'new' => $newCity->name ?? 'Unknown'
-                ];
-            }
-            
-            // Check machine change (for treatments)
-            if ($request->has('machine_id') && $oldMachineId != $request->machine_id) {
-                $oldMachine = Resources::find($oldMachineId);
-                $newMachine = Resources::find($request->machine_id);
-                $fieldChanges['Machine'] = [
-                    'old' => $oldMachine->name ?? 'Unknown',
-                    'new' => $newMachine->name ?? 'Unknown'
                 ];
             }
             
@@ -2290,22 +2234,6 @@ class AppointmentsController extends Controller
                     'lead_id' => $appointment->lead_id,
                     'service_id' => $appointment->service_id,
                 ])->update(['lead_status_id' => $arrivedStatus->id]);
-                
-                // Send Meta CAPI event for arrived status
-                // $leadRecord = Leads::find($appointment->lead_id);
-                // if ($leadRecord) {
-                //     try {
-                //         $metaService = new MetaConversionApiService();
-                //         $metaService->sendLeadStatus(
-                //             $leadRecord->phone,
-                //             'arrived',
-                //             $leadRecord->meta_lead_id,
-                //             $leadRecord->email
-                //         );
-                //     } catch (\Exception $e) {
-                //         \Log::error('Meta CAPI arrived event failed: ' . $e->getMessage());
-                //     }
-                // }
             }
         }
 
@@ -2634,34 +2562,15 @@ class AppointmentsController extends Controller
                         ]);
                     }
                 } else {
-                    $resource_id = $request->machine_id;
-                    if (($request->machineRotaDayID != $appointment->resource_has_rota_day_id_for_machine) || ! $resource_id) {
-                        /*
-                         * Data is changed, avoid to provide rota
-                         */
-                        return response()->json([
-                            'status' => 0,
-                            'resource_has_rota_day' => null,
-                            'machine_has_rota_day' => null,
-                            'selected' => null,
-                        ]);
-                    }
                     /*
-                     * Treatment: Find overlapped doctor and machine area
+                     * Treatment: doctor rota only (machines are not used)
                      */
                     $resource_has_rota_day = ResourceHasRotaDays::getSingleDayRotaWithResourceID($resource->id, $request->scheduled_date, Auth::User()->account_id, $location_id);
-                    $machine_has_rota_day = ResourceHasRotaDays::getSingleDayRotaWithResourceID($resource_id, $request->scheduled_date, Auth::User()->account_id, $location_id);
-                    if (count($resource_has_rota_day) && count($machine_has_rota_day)) {
-                        if (
-                            ($resource_has_rota_day['start_time'] && $resource_has_rota_day['end_time']) &&
-                            ($machine_has_rota_day['start_time'] && $machine_has_rota_day['end_time']) &&
-                            $appointment->scheduled_time
-                        ) {
-                            $biggerTime = ResourceHasRota::getBiggerTime($resource_has_rota_day['start_time'], $machine_has_rota_day['start_time']);
-                            $smallerTime = ResourceHasRota::getSmallerTime($resource_has_rota_day['end_time'], $machine_has_rota_day['end_time']);
-                            $selected = (ResourceHasRota::checkTime(Carbon::parse($appointment->scheduled_time)->format('h:i A'), $biggerTime, $smallerTime, true)) ? Carbon::parse($appointment->scheduled_time)->format('h:i A') : '';
-                            $resource_has_rota_day['start_time'] = Carbon::parse($biggerTime)->format('h:ia');
-                            $resource_has_rota_day['end_time'] = Carbon::parse($smallerTime)->subMinutes($appointment->service->duration_in_minutes)->format('h:ia');
+                    if (count($resource_has_rota_day)) {
+                        if ($resource_has_rota_day['start_time'] && $resource_has_rota_day['end_time'] && $appointment->scheduled_time) {
+                            $selected = (ResourceHasRota::checkTime(Carbon::parse($appointment->scheduled_time)->format('h:i A'), $resource_has_rota_day['start_time'], $resource_has_rota_day['end_time'], true)) ? Carbon::parse($appointment->scheduled_time)->format('h:i A') : '';
+                            $resource_has_rota_day['start_time'] = Carbon::parse($resource_has_rota_day['start_time'])->format('h:ia');
+                            $resource_has_rota_day['end_time'] = Carbon::parse($resource_has_rota_day['end_time'])->subMinutes($appointment->service->duration_in_minutes)->format('h:ia');
 
                             if ($resource_has_rota_day['start_off']) {
                                 $resource_has_rota_day['start_off'] = Carbon::parse($resource_has_rota_day['start_off'])->subMinutes($appointment->service->duration_in_minutes)->addMinute('5')->format('h:ia');
@@ -4066,14 +3975,13 @@ class AppointmentsController extends Controller
 
         $location_id = $request->location_id;
         $doctor_id = $request->doctor_id;
-        $machine_id = $request->machine_id;
         $account_id = Auth::User()->account_id;
         $cancelled_appointment_status = AppointmentStatuses::getCancelledStatusOnly($account_id);
         $appointments = Appointments::getScheduledAppointments($request, Config::get('constants.appointment_type_service'), Auth::User()->account_id, true);
         $resources = Resources::getRoomsResourceRotaWithoutDays($request->location_id);
         $start = $request->start;
         $end = $request->end;
-        $minTime = Resources::getMinTimeWithDrAndMachine($location_id, $doctor_id, $machine_id, $start, $end);
+        $minTime = Resources::getMinTimeWithDr($location_id, $doctor_id, $start, $end);
         if ($request->has('start') && $request->has('end')) {
 
             $doctor_rotas = Resources::getDoctorWithRotasWithSpecificDate($request->location_id, $request->doctor_id, $request->start, $request->end);
@@ -4214,7 +4122,9 @@ class AppointmentsController extends Controller
                 if ($doctor_check_availability) {
                     // Appointment Data
                     $data = $request->all();
-                    $data['resource_id'] = $request->resourceId ?? null;
+                    unset($data['resourceId'], $data['machine_id'], $data['resource_has_rota_day_id_for_machine']);
+                    $data['resource_id'] = null;
+                    $data['resource_has_rota_day_id_for_machine'] = null;
                     $appointment = Appointments::findOrFail($request->id);
                     $data['first_scheduled_count'] = $appointment->first_scheduled_count;
                     $data['scheduled_at_count'] = $appointment->scheduled_at_count;
@@ -4280,35 +4190,7 @@ class AppointmentsController extends Controller
 
         if ($request->service_id) {
             $child_services = Appointments::getNodeServices($request->service_id, Auth::User()->account_id, true, true);
-            
-            // If resource_id is provided, filter services by machine type
-            if ($request->resource_id) {
-                $resource = Resources::whereId($request->resource_id)->first();
-                if ($resource) {
-                    $machine_services = MachineTypeHasServices::where('machine_type_id', $resource->machine_type_id)
-                    ->where('service_id',$request->service_id)
-                    ->first();
-                    if($machine_services){
-                        return ApiHelper::apiResponse($this->success, 'Record found', true, [
-                            'services' => $child_services,
-                        ]);
-                    }else{
 
-                        $machine_services = MachineTypeHasServices::where('machine_type_id', $resource->machine_type_id)
-                        ->whereIn('service_id',array_keys($child_services))
-                        ->pluck('service_id');
-
-                        $available_services = array_filter($child_services, function ($service, $id) use ($machine_services) {
-                            return in_array($id, $machine_services->toArray()); // Convert collection to array
-                        }, ARRAY_FILTER_USE_BOTH);
-                        return ApiHelper::apiResponse($this->success, 'Record found', true, [
-                            'services' => $available_services,
-                        ]);
-                    }
-                }
-            }
-            
-            // No resource selected or resource not found, return all child services
             return ApiHelper::apiResponse($this->success, 'Record found', true, [
                 'services' => $child_services,
             ]);
@@ -4333,23 +4215,6 @@ class AppointmentsController extends Controller
             ->where('parent_id', '!=', 0)
             ->orderBy('name', 'asc')
             ->get();
-
-        // If resource_id is provided, filter services by machine type
-        if ($request->resource_id) {
-            $resource = Resources::whereId($request->resource_id)->first();
-            if ($resource) {
-                // Get all service IDs that are compatible with this machine type
-                $compatibleServiceIds = MachineTypeHasServices::where('machine_type_id', $resource->machine_type_id)
-                    ->pluck('service_id')
-                    ->toArray();
-
-                // Filter child services to only those compatible with the machine
-                // Either the service itself OR its parent should be in compatible services
-                $childServices = $childServices->filter(function ($service) use ($compatibleServiceIds) {
-                    return in_array($service->id, $compatibleServiceIds) || in_array($service->parent_id, $compatibleServiceIds);
-                });
-            }
-        }
 
         // Format for dropdown
         $services = [];
@@ -5183,7 +5048,6 @@ class AppointmentsController extends Controller
         if ($appointment->appointment_type_id == config('constants.appointment_type_consultancy')) {
             $rota = AppointmentCheckesWidget::AppointmentConsultancyCheckes($object);
         } else {
-            $object->machine_id = $appointment->resource_id;
             $rota = AppointmentCheckesWidget::AppointmentAppointmentCheckesfromcalender($object);
         }
 
@@ -5206,7 +5070,6 @@ class AppointmentsController extends Controller
         if ($appointment->appointment_type_id == config('constants.appointment_type_consultancy')) {
             $rota = AppointmentCheckesWidget::AppointmentConsultancyCheckes($object);
         } else {
-            $object->machine_id = $appointment->resource_id;
             $rota = AppointmentCheckesWidget::AppointmentAppointmentCheckesfromcalender($object);
         }
 

@@ -1,74 +1,24 @@
 @extends('admin.layouts.master')
 @section('title', 'Conversion')
 @section('content')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
     @push('css')
-        <style>
-            .table-wrapper {
-                overflow-x: scroll;
-            }
-            .table thead th, .table thead td {
-                padding-top: 0.3rem !important;
-                padding-bottom: 0.3rem !important;
-            }
-            .sn-report-head{
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                padding: 8px 15px 10px;
-            }
-            .sn-report-head {
-                background-color: #4A5540;
-                color: #fff;
-            }
-            .sn-white-btn {
-                background-color: #7A8B6A !important;
-                border: #7A8B6A !important;
-                color: #fff !important;
-            }
-            .sn-white-btn > i {
-                color: #fff !important;;
-            }
-            .shdoc-header {
-                background: rgba(54, 65, 80, 1) !important;
-                color: #fff !important;
-                font-weight: bold !important;
-            }
-            .table thead th, .table thead td {
-                padding-top: 0.3rem !important;
-                padding-bottom: 0.3rem !important;
-            }
-        </style>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-reports.css') }}?v=4" rel="stylesheet" type="text/css" />
     @endpush
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Reports', 'title' => 'General Revenue Reports'])
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-reports-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
-                <div class="card card-custom">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <span class="card-icon">
-                                <span class="svg-icon svg-icon-md svg-icon-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13" rx="1.5" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8" rx="1.5" />
-                                            <path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6" rx="1.5" />
-                                        </g>
-                                    </svg>
-                                </span>
-                            </span>
+            <div class="container-fluid sneat-page">
+                <div class="card card-custom sneat-page-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
                             <h3 class="card-label">Conversion Report</h3>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="mt-2 mb-7">
-                            <div class="row align-items-center">
-                                <div class="col-lg-12 col-xl-12">
-                                    <div class="row align-items-center">
+                            <div class="sneat-filter-row">
                                             <div class="form-group col-md-3 sn-select @if($errors->has('date_range')) has-error @endif">
                                                 {!! Form::label('date_range', 'Date Range*', ['class' => 'control-label']) !!}
                                                 <div class="input-group">
@@ -114,14 +64,12 @@
                                                 {!! Form::select('doctor_id', $operators, null, ['id' => 'doctor_id', 'style' => 'width: 100%;', 'class' => 'form-control select2']) !!}
                                                 <span id="doctor_id_handler"></span>
                                             </div>
-                                            <div class="form-group col-md-2 sn-select @if($errors->has('group_id')) has-error @endif">
-                                                {!! Form::label('load_report', '&nbsp;', ['class' => 'control-label']) !!}<br/>
+                                            <div class="sneat-filter-actions">
                                                 <a href="javascript:void(0);" onclick="loadReport($(this));" id="load_report"
-                                                    class="btn btn-success spinner-button">Load Report</a>
+                                                    class="btn btn-primary spinner-button">Load Report</a>
                                             </div>
-                                        <hr>
-                                        <div class="clear clearfix" style="margin-bottom: 15px;"></div>
-                                        <div style="overflow: hidden; width: 100%;" id="content"></div>
+                            </div>
+                                        <div class="sneat-report-result" id="content"></div>
                                             {!! Form::open(['method' => 'POST', 'target' => '_blank', 'route' => ['admin.reports.account_sales_report_load'], 'id' => 'report-form']) !!}
                                             {!! Form::hidden('date_range', null, ['id' => 'date_range-report']) !!}
                                             {!! Form::hidden('city_id', null, ['id' => 'city_id-report']) !!}
@@ -134,15 +82,12 @@
                                             {!! Form::hidden('converted', null, ['id' => 'converted_type-report']) !!}
                                             {!! Form::hidden('discount_id', '', ['id' => 'discount_id-report']) !!}
                                             {!! Form::close() !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     @include('admin.settings.edit')
     @push('js')
         <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>

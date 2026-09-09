@@ -50,7 +50,7 @@
 
                     <div class="card-body">
                         <!--begin::Search Form-->
-                    @include('admin.discounts.filters')
+                    @include('admin.voucherTypes.filters')
                     <!--end::Search Form-->
 
                         <!--begin: Datatable-->

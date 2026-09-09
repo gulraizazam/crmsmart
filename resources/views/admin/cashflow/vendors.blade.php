@@ -1,15 +1,18 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow - Vendors')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Vendor Management', 'title' => 'Vendors'])
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!-- Vendors List -->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-store mr-2"></i>Vendors</h3></div>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Vendors</h3></div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_vendor_manage'))
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#modal_vendor"><i class="la la-plus"></i> Add Vendor</button>
@@ -17,7 +20,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-4">
+                        <div class="row mb-4 sneat-cf-filters">
                             <div class="col-md-3">
                                 <select id="filter-active" class="form-control form-control-sm kt-select2-general">
                                     <option value="">All Status</option>
@@ -49,9 +52,9 @@
                 </div>
 
                 <!-- Vendor Requests -->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-inbox mr-2"></i>Vendor Requests</h3></div>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Vendor Requests</h3></div>
                         <div class="card-toolbar">
                             <button class="btn btn-info" data-toggle="modal" data-target="#modal_vendor_request"><i class="la la-plus"></i> Request New Vendor</button>
                         </div>
@@ -67,9 +70,9 @@
                 </div>
 
                 <!-- Vendor Ledger (shown when clicking a vendor) -->
-                <div class="card card-custom d-none" id="vendor-ledger-card">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-list-alt mr-2"></i>Vendor Ledger: <span id="ledger-vendor-name"></span></h3></div>
+                <div class="card card-custom sneat-page-card d-none" id="vendor-ledger-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Vendor Ledger: <span id="ledger-vendor-name"></span></h3></div>
                         <div class="card-toolbar">
                             <button class="btn btn-secondary" id="btn-close-ledger"><i class="la la-times"></i> Close</button>
                             @if(Gate::allows('cashflow_vendor_transaction'))
@@ -99,7 +102,7 @@
     <!-- Add/Edit Vendor Modal -->
     <div class="modal fade" id="modal_vendor">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title" id="vendor-modal-title">Add Vendor</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <form id="form-vendor">
@@ -129,7 +132,7 @@
     <!-- Vendor Request Modal -->
     <div class="modal fade" id="modal_vendor_request" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title">Request New Vendor</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <form id="form-vendor-request">
@@ -146,7 +149,7 @@
     <!-- Vendor Purchase Modal -->
     <div class="modal fade" id="modal_transaction" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title">Record Purchase / Bill</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <p class="text-muted font-size-sm mb-3">Record goods received or bill from vendor. This increases the balance owed. Payments are recorded automatically when expenses are linked to a vendor.</p>

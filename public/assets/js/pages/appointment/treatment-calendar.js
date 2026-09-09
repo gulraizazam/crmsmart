@@ -61,7 +61,6 @@ var TreatmentCalendar = function() {
                             data: {
                                 location_id: $('#treatment_location_filter').val(),
                                 doctor_id: query_result.doctor_id,
-                                machine_id: $('#treatment_resource_filter').val(),
                                 start: formatDate(event.start, 'YYYY-MM-DD'),
                                 end: formatDate(event.end, 'YYYY-MM-DD'),
                             },
@@ -304,7 +303,6 @@ var TreatmentCalendar = function() {
                         end: formatDate(event.end, 'YYYY-MM-DDTHH:mm:ss'),
                         doctor_id: $("#treatment_doctor_filter").val(),
                         location_id: $("#treatment_location_filter").val(),
-                        resourceId: $("#treatment_resource_filter").val() || null,
                     },
                     cache: false,
                     success: function(response) {
@@ -338,7 +336,6 @@ var TreatmentCalendar = function() {
                     start: formatDate(event.start, 'YYYY-MM-DD'),
                     end: formatDate(event.end, 'YYYY-MM-DD'),
                     location_id: $("#treatment_location_filter").val(),
-                    machine_id: $("#treatment_resource_filter").val()
                 },
                 cache: false,
                 success: function (response) {
@@ -460,15 +457,12 @@ var TreatmentCalendar = function() {
 
             let start = formatDate(info.date, 'YYYY-MM-DDTHH:mm:ss');
             let create_url = route('admin.appointments.treatment.create', {
-                //city_id : $("#treatment_city_filter").val(),
                 location_id : $("#treatment_location_filter").val(),
-                machine_id : $("#treatment_resource_filter").val(),
                 doctor_id : $("#treatment_doctor_filter").val(),
-                resource_id : $("#treatment_resource_filter").val(),
                 start : start,
                 appointment_type : 'treatment',
             });
-            if($("#treatment_resource_filter").val() != ''){
+            if($("#treatment_location_filter").val() != '' && $("#treatment_doctor_filter").val() != ''){
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -489,7 +483,7 @@ var TreatmentCalendar = function() {
                     }
                 });
             }else{
-                toastr.error("Please select machine first");
+                toastr.error("Please select doctor first");
             }
 
         },
@@ -665,7 +659,7 @@ function setCreateTreatment(response, start) {
         $("#treatment_location_id").val(location_id);
         $("#treatment_doctor_id").val(doctor_id);
         $("#treatment_start").val(start);
-        $("#treatment_resource_id").val($("#treatment_resource_filter").val());
+        $("#treatment_resource_id").val('');
         
         // Initialize timepicker and set scheduled time
         if (start) {
@@ -850,7 +844,7 @@ var TreatmentResourceCalendar = function() {
             html += '    <i class="fa fa-calendar" style="margin-right: 8px;"></i>';
             html += '    <span id="current-date-text">' + currentDate.format('dddd, MMMM D, YYYY');
             if (isToday) {
-                html += ' <span style="color: #1BC5BD; font-size: 12px; margin-left: 8px;">(Today)</span>';
+                html += ' <span style="color: #71dd37; font-size: 12px; margin-left: 8px;">(Today)</span>';
             }
             html += '</span>';
             html += '    <input type="text" id="treatment-resource-calendar-datepicker" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" />';
@@ -945,7 +939,6 @@ var TreatmentResourceCalendar = function() {
                     data: {
                         location_id: $('#treatment_location_filter').val(),
                         doctor_id: doctor.id,
-                        machine_id: loadingMachineId,
                         start: currentDate.format('YYYY-MM-DD') + 'T00:00:00',
                         end: currentDate.format('YYYY-MM-DD') + 'T23:59:59',
                     },
@@ -1090,8 +1083,8 @@ var TreatmentResourceCalendar = function() {
                     var topOffset = minutesOffset * pixelsPerMinute;
 
                     var appointmentHeight = duration * pixelsPerMinute;
-                    var bgColor = event.color || '#7A8B6A';
-                    var borderColor = event.color ? TreatmentResourceCalendar.darkenColor(event.color, 20) : '#187de4';
+                    var bgColor = event.color || '#696cff';
+                    var borderColor = event.color ? TreatmentResourceCalendar.darkenColor(event.color, 20) : '#5f61e6';
 
                     var startTimeFormatted = startTime.format('h:mm A');
                     var endTimeFormatted = endTime.format('h:mm A');
@@ -1324,8 +1317,8 @@ var TreatmentResourceCalendar = function() {
                 'left': '2px',
                 'right': '2px',
                 'height': blockHeight + 'px',
-                'background': '#E4E6EF',
-                'border-left': '4px solid #5E6278',
+                'background': '#f5f5f9',
+                'border-left': '4px solid #a1acb8',
                 'border-radius': '6px',
                 'display': 'flex',
                 'align-items': 'center',
@@ -1412,8 +1405,6 @@ var TreatmentResourceCalendar = function() {
             let create_url = route('admin.appointments.treatment.create', {
                 location_id: window.eventData.location_id,
                 doctor_id: doctorId,
-                machine_id: '',
-                resource_id: '',
                 start: start,
                 appointment_type: 'treatment',
             });
@@ -1680,7 +1671,6 @@ var TreatmentResourceCalendar = function() {
                     end: newEnd,
                     doctor_id: newDoctorId,
                     location_id: $('#treatment_location_filter').val(),
-                    resourceId: finalMachineId || null
                 },
                 cache: false,
                 success: function(response) {

@@ -32,6 +32,15 @@ class UpdateAppointmentRequest extends FormRequest
             unset($data['resource_id']);
             unset($data['resource_has_rota_day_id']);
             unset($data['resource_has_rota_day_id_for_machine']);
+            unset($data['machine_id']);
+            unset($data['resourceId']);
+        } elseif (isset($data['appointment_type']) &&
+            (strtolower($data['appointment_type']) === 'treatment' ||
+             strtolower($data['appointment_type']) === 'service')) {
+            unset($data['resource_id']);
+            unset($data['resource_has_rota_day_id_for_machine']);
+            unset($data['machine_id']);
+            unset($data['resourceId']);
         } elseif (isset($data['resource_id'])) {
             $resourceExists = \App\Models\Resources::find($data['resource_id']);
             if (!$resourceExists) {

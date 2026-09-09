@@ -589,7 +589,9 @@
 
     // Initialize when document is ready
     $(document).ready(function() {
-        loadDashboardStats(); // Load stats via API first
+        if (!document.getElementById('dash-overview-kpis')) {
+            loadDashboardStats();
+        }
         loadActivities(1); // Load activities via API
         initActivitiesScroll(); // Initialize infinite scroll for activities
         initDropdownHandlers();

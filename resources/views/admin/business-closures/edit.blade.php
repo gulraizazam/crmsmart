@@ -1,5 +1,5 @@
-<div class="modal-content">
-    <div class="modal-header">
+<div class="modal-content sch-modal">
+    <div class="modal-header sch-modal-header">
         <h5 class="modal-title">Edit Business Closed Period</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <i aria-hidden="true" class="ki ki-close"></i>
@@ -9,7 +9,7 @@
         @csrf
         @method('PUT')
         <input type="hidden" id="edit_closure_id" name="closure_id" value="">
-        <div class="modal-body pt-5">
+        <div class="modal-body sch-modal-body">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer justify-content-center">
+        <div class="sch-footer">
             <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary font-weight-bold" id="btn_edit_business_closure">
                 <span class="indicator-label">Submit</span>

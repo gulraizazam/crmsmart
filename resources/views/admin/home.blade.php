@@ -1,75 +1,14 @@
-@extends('admin.layouts.master')
+﻿@extends('admin.layouts.master')
 @section('title', 'Dashboard')
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=2">
 
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    @include('admin.partials.breadcrumb')
+<div class="content d-flex flex-column flex-column-fluid sneat-dashboard" id="kt_content">
     <div class="d-flex flex-column-fluid">
-        <div class="container">
+        <div class="container-fluid dash-container">
+            @include('admin.partials.dashboard-overview')
+            <div id="kt_mixed_widget_1_chart" style="height: 0; overflow: hidden;"></div>
             <div class="row">
-                <div class="col-12">
-                    <div class="stats-banner gutter-b">
-                        <div class="stats-banner-header">
-                            <h3 class="stats-banner-title">Dashboard Overview</h3>
-                            <select class="stats-filter-select" name="type" onchange="changeDate();" id="recordfilter">
-                                <option value="today" {{ (request('type')=='today' || !request('type')) ? 'selected' : '' }}>Today</option>
-                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This Week</option>
-                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This Month</option>
-                            </select>
-                        </div>
-                        <div id="kt_mixed_widget_1_chart" style="height: 0; overflow: hidden;"></div>
-                        <div class="stats-grid">
-                            <div class="stats-card stats-card--sales">
-                                <div class="stats-card__icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                    </svg>
-                                </div>
-                                <div class="stats-card__body">
-                                    <span class="stats-card__value dashboard-counter" id="allleads"><span class="skeleton-loader">Loading...</span></span>
-                                    <a href="javascript:void(0);" class="stats-card__label">Sales</a>
-                                </div>
-                                <div class="stats-card__accent"></div>
-                            </div>
-                            <div class="stats-card stats-card--revenue">
-                                <div class="stats-card__icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="stats-card__body">
-                                    <span class="stats-card__value dashboard-counter" id="allrevenue"><span class="skeleton-loader">Loading...</span></span>
-                                    <a href="javascript:void(0);" class="stats-card__label">Revenue Consumed</a>
-                                </div>
-                                <div class="stats-card__accent"></div>
-                            </div>
-                            <div class="stats-card stats-card--consult">
-                                <div class="stats-card__icon">
-                                    <i class="la la-stethoscope"></i>
-                                </div>
-                                <div class="stats-card__body">
-                                    <span class="stats-card__value dashboard-counter" id="allconsult"><span class="skeleton-loader">Loading...</span></span>
-                                    <a id="allconsultantdate" href="javascript:void(0);" class="stats-card__label">Consultancies</a>
-                                </div>
-                                <div class="stats-card__accent"></div>
-                            </div>
-                            <div class="stats-card stats-card--treat">
-                                <div class="stats-card__icon">
-                                    <i class="la la-medkit"></i>
-                                </div>
-                                <div class="stats-card__body">
-                                    <span class="stats-card__value dashboard-counter" id="alltreat"><span class="skeleton-loader">Loading...</span></span>
-                                    <a id="alltreatmentdate" href="javascript:void(0);" class="stats-card__label">Treatments</a>
-                                </div>
-                                <div class="stats-card__accent"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="modal fade" id="modal_change_appointment_status" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered form-popup" id="appointment_status_change">
                         @include('admin.appointments.appointment-forms.change-status')
@@ -80,11 +19,12 @@
                         @include('admin.appointments.appointment-forms.schedule')
                     </div>
                 </div>
+
                 <div class="col-12" id="activitydiv">
-                    <div class="card card-custom card-stretch gutter-b" style="max-height: 500px; overflow-y: auto;" id="activities-container">
+                    <div class="card card-custom dash-widget" id="activities-container">
                         <div class="card-header align-items-center border-0 mt-4">
                             <h3 class="card-title align-items-start flex-column">
-                                <span class="font-weight-bolder text-dark">Today's Activities!</span>
+                                <span class="font-weight-bolder text-dark">Today's Activities</span>
                                 <span class="text-muted mt-3 font-weight-bold font-size-sm" id="totalactivities">0 activities</span>
                             </h3>
                         </div>
@@ -105,319 +45,10 @@
                         </div>
                     </div>
                 </div>
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_collection_by_centre'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" id="collection-by-centre-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="collectionbycenter">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Collection by Centre</span>
-                                <ul class="nav nav-tabs d-flex align-items-center">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="collection_centre" class="form-control collection_centre" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="flex-column text-right d-none">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-pie-chart"></span>
-                                    <span class="text-muted font-weight-bold mt-2 pie-income-title">Weekly
-                                        Income</span>
-                                </div>
-                            </div>
-                            <div id="collection-by-centre"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_unattended_report'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" style="height: 605px;" id="patient-followup-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;overflow-y: hidden;">
-                        <div class="card card-custom card-stretch gutter-b" style="min-height: 605px">
-                            <div class="card-body p-0">
-                                <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1 wrap_unattended_payment">
-                                    <span class="dashboard-counter text-uppercase">Unattended Payments</span>
-                                    <ul class="nav nav-tabs d-flex align-items-center">
-                                        <li style="border-bottom: none;">
-                                            <div class="actions action-style p-3 mr-3">
-                                                <div class="btn-group">
-                                                    <a class="form-control btndropdown btn_Report dashboard_unattended_report"
-                                                        href="{{ route('admin.reports.follow_up') }}"> View Report
-                                                        <i class="fa fa-angle-right"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="btn-group">
-                                                    <a class="form-control btndropdown btn_Report dashboard_unattended_report"
-                                                        href="{{ route('admin.follow_up.download') }}"> Download
-                                                        <i class="fa fa-download ml-2"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-spacer2" id="unattended-payments-scroll" style="max-height: 400px; overflow-y: auto;">
-                                    <div class='table-responsive'>
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th class='table-cols'>ID</th>
-                                                    <th class='table-cols'>Name</th>
-                                                    <th class='table-cols'>Treatment</th>
-                                                    <th class='table-cols'>Balance</th>
-                                                    <th class='table-cols'>Conversion Date</th>
-                                                </tr>
-                                            </thead>
 
-                                            <tbody id="patient-follow-up"></tbody>
-                                        </table>
-                                        <div class="text-center py-2" id="unattended-loader" style="display: none;">
-                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                        <img src="{{ asset('assets/media/loader.gif') }}" class="custom_loader loader-img-unattended" style="width: 50px; display: block; margin: 50px auto;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_revenue_by_centre'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" id="revenue-by-centre-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="revenue_by_centre">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Revenue by Centre</span>
-                                <ul class="nav nav-tabs d-flex align-items-center">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="revenue_centre" class="form-control" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-centre"></span>
-                                    <span class="text-muted font-weight-bold mt-2 revenue-centre-title">Today
-                                        Revenue</span>
-                                </div>
-                            </div>
-                            <div id="revenue-centre"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_overdue_treatments'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" style="height: 605px;" id="patient-followup-onemonth-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;overflow-y: hidden;">
-                        <div class="card card-custom card-stretch gutter-b" style="min-height: 605px;">
-                            <div class="card-body p-0">
-                                <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1 wrap_unattended_payment">
-                                    <span class="dashboard-counter text-uppercase">Overdue Treatments</span>
-                                    <ul class="nav nav-tabs d-flex align-items-center">
-                                        <li style="border-bottom: none;">
-                                            <div class="actions action-style p-3 mr-3">
-                                                <div class="btn-group">
-                                                    <a class="form-control btndropdown btn_Report dashboard_overdue_treatments"
-                                                        href="{{ route('admin.reports.follow_up') }}"> View Report
-                                                        <i class="fa fa-angle-right"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="btn-group">
-                                                    <a class="form-control btndropdown btn_Report dashboard_overdue_treatments"
-                                                        href="{{ route('admin.monthly_follow_up.download') }}">
-                                                        Download
-                                                        <i class="fa fa-download ml-2"></i>
-                                                    </a>
-
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                                <div class="card-spacer2" id="overdue-treatments-scroll" style="max-height: 400px; overflow-y: auto;">
-                                    <div class='table-responsive'>
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th class='table-cols'>ID</th>
-                                                    <th class='table-cols'>Name</th>
-                                                    <th class='table-cols'>Balance</th>
-                                                    <th class='table-cols'>Last Arrived</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="patient-follow-up-one-month"></tbody>
-                                        </table>
-                                        <div class="text-center py-2" id="overdue-loader" style="display: none;">
-                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                        <img src="{{ asset('assets/media/loader.gif') }}" class="custom_loader loader-img-overdue" style="width: 50px; display: block; margin: 50px auto;">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_revenue_by_service'))
-                <div class="col-lg-6 col-xxl-6 mt-6" id="revenue-service-category-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="revenue_by_service_category">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Revenue by Service Category</span>
-                                <ul class="nav nav-tabs d-flex align-items-center">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="revenue_service_cate" class="form-control" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                <!-- <option value="lastmonth"
-                                                        {{ request('type') == 'lastmonth' ? 'selected' : '' }}>Last Month</option> -->
-                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-category-service"></span>
-                                    <span class="text-muted font-weight-bold mt-2 service-category-title"></span>
-                                </div>
-                            </div>
-                            <div id="revenue-service-category"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style mt-6" id="revenue-service-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="revenue_by_service">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Revenue by Service</span>
-                                <ul class="nav nav-tabs d-flex align-items-center">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="revenue_service" class="form-control" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-service"></span>
-                                    <span class="text-muted font-weight-bold mt-2 service-title"></span>
-                                </div>
-                            </div>
-                            <div id="revenue-service"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_appointment_by_status'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" id="consultancy-status-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="consultancy_status1">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Consultancy by Status</span>
-                                <ul class="nav nav-tabs d-flex align-items-center">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="consultancy_status" class="form-control" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-appointment-by-status"></span>
-                                    <span class="text-muted font-weight-bold mt-2 appointment-by-status-title"></span>
-                                </div>
-                            </div>
-                            <div id="consultancy_by_status"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_appointment_by_type'))
-                <div class="col-lg-6 col-xxl-6 custom_tabs_style" id="treatment-status-section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;" id="treatment_status1">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Treatment by Status</span>
-                                <ul class="nav nav-tabs d-flex align-items-center custom_hover_effect">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="treatment_status" class="form-control" name="type">
-                                                <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today
-                                                </option>
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This
-                                                    Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This
-                                                    Month</option>
-                                                                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-appointment-by-status"></span>
-                                    <span class="text-muted font-weight-bold mt-2 appointment-by-status-title"></span>
-                                </div>
-                            </div>
-                            <div id="treatment_by_status"></div>
-                            <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                        </div>
-                    </div>
-                </div>
-                @endif
                 @if (\Illuminate\Support\Facades\Gate::allows('dashboard_staff_wise_arrival'))
                 <div class="col-lg-12 col-xxl-12 custom_tabs_style" id="staff_wise_arrival">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;">
+                    <div class="card card-custom dash-widget" >
                         <div class="card-body p-0">
                             <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
                                 <span class="dashboard-counter text-uppercase">Centre Wise Arrival</span>
@@ -530,7 +161,7 @@
                 @endif
                 @if (\Illuminate\Support\Facades\Gate::allows('dashboard_doctor_wise_conversion'))
                 <div class="col-lg-12 col-xxl-12 custom_tabs_style" id="doctor_wise_conversion_section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;">
+                    <div class="card card-custom dash-widget" >
                         <div class="card-body p-0">
                             <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
                                 <span class="dashboard-counter text-uppercase">Doctor Wise Conversion</span>
@@ -612,150 +243,6 @@
                     </div>
                 </div>
                 @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_doctor_wise_feedback'))
-                <div class="col-lg-12 col-xxl-12 custom_tabs_style" id="doctor_wise_feedback_section">
-                    <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;">
-                        <div class="card-body p-0">
-                            <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                <span class="dashboard-counter text-uppercase">Doctor Ratings - Based on Client Insight</span>
-                                <ul class="nav nav-tabs d-flex align-items-center  doc_feedback_ul">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions action-style p-3 mr-3">
-                                            <div class="btn-group">
-                                                <select class="form-control btndropdown btn_Report doctorwisefeedback selectcenterfeedback"
-                                                    data-placeholder="Select Centre" data-dropdown-css-class="select2-dropdown">
-                                                    @if ($hasMultipleCentres)
-                                                    <option value="all" data-period="thismonth">All Centres</option>
-                                                    @endif
-                                                    @foreach ($centres as $centre)
-                                                    <option value="{{ $centre->id }}" data-period="thismonth">{{ $centre->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li style="border-bottom: none;">
-                                        <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                            <select id="dr_wise_fed" class="form-control" name="type">
-                                                <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                <option value="last7days" {{ request('type')=='last7days' || request('type')=='' ? 'selected' : '' }}>Last 7 Days</option>
-                                                <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This Week</option>
-                                                <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This Month</option>
-                                                <option value="lastmonth" {{ request('type')=='lastmonth' ? 'selected' : '' }}>Last Month</option>
-                                                <option value="all" {{ request('type')=='all' ? 'selected' : '' }}>Life Time</option>
-                                            </select>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                <div class="d-none flex-column text-right">
-                                    <span class="text-dark-75 font-weight-bolder font-size-h3 total-appointment-by-status"></span>
-                                    <span class="text-muted font-weight-bold mt-2 appointment-by-status-title"></span>
-                                </div>
-                            </div>
-
-                            <div class="row pt-7">
-                                <div class="col-12" style="overflow-x: auto; overflow-y: hidden;">
-                                    <div id="doc_wise_feedback_data"></div>
-                                </div>
-
-                                <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @if (\Illuminate\Support\Facades\Gate::allows('dashboard_upselling_report'))
-                    <div class="col-lg-12 col-xxl-12 custom_tabs_style" id="doctor_upselling_section">
-                        <div class="card card-custom card-stretch card-stretch-half gutter-b" style="min-height: 605px;">
-                            <div class="card-body p-0">
-                                <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
-                                    <span class="dashboard-counter text-uppercase">Doctor Upselling</span>
-                                    <ul class="nav nav-tabs d-flex align-items-center  doc_upselling_ul">
-                                    <li style="border-bottom: none;">
-                                        <div class="actions action-style p-3 mr-3">
-                                            <div class="btn-group">
-                                                <select class="form-control btndropdown btn_Report doctorUpselling selectcenterupselling"
-                                                    id="doctor_upselling_centre_select"
-                                                    data-placeholder="Select Centre" data-dropdown-css-class="select2-dropdown">
-                                                    @if ($hasMultipleCentres)
-                                                    <option value="all" data-period="thismonth" selected>All Centres</option>
-                                                    @endif
-                                                    @foreach ($centres as $centre)
-                                                    <option value="{{ $centre->id }}" data-period="thismonth" {{ (!$hasMultipleCentres && count($centres) == 1) ? 'selected' : '' }}>{{ $centre->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                        <li style="border-bottom: none;">
-                                            <div class="actions date_action_dropdown action-style py-3 mr-0">
-                                                <select id="dr_wise_upselling_period" class="form-control" name="type">
-                                                    <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today</option>
-                                                    <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
-                                                    <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
-                                                    <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This Week</option>
-                                                    <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This Month</option>
-                                                    <option value="lastmonth" {{ request('type')=='lastmonth' ? 'selected' : '' }}>Last Month</option>
-                                                </select>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <div class="d-none flex-column text-right">
-                                        <span class="text-dark-75 font-weight-bolder font-size-h3 total-appointment-by-status"></span>
-                                        <span class="text-muted font-weight-bold mt-2 appointment-by-status-title"></span>
-                                    </div>
-                                </div>
-
-                                <div class="row pt-7" style="position: relative;">
-                                    <div class="col-7">
-                                        <div id="doctor_upselling_chart" style="min-height: 400px;">
-                                            <div class="d-flex align-items-center justify-content-center" style="height: 400px;" id="doctor_upselling_placeholder">
-                                                <div class="text-center text-muted">
-                                                    <i class="fas fa-info-circle mb-2"></i><br>
-                                                    Select a centre to view doctor upselling data
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="table-responsive" style="overflow-y: scroll; height: 475px;">
-                                            <table class="table" id="doctor_upselling_table">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th class="text-left">Doctor Name</th>
-                                                        <th class="text-right">Upselling Amount</th>
-                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="doctor_upselling_tbody">
-                                                    <tr id="no_data_row">
-                                                        <td colspan="3" class="text-center text-muted py-5">
-                                                            <i class="fas fa-info-circle mb-2"></i><br>
-                                                            Select a centre to view data
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot id="doctor_upselling_tfoot" style="display: none;">
-                                                    <tr class="font-weight-bold bg-light">
-                                                        <td>Total</td>
-                                                        <td class="text-right" id="total_upselling_amount">0.00</td>
-                                                        
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-upselling" style="height: 60px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                @endif
             </div>
         </div>
     </div>
@@ -768,9 +255,9 @@
 <script src="{{ asset('assets/js/pie.js') }}"></script>
 <script src="{{ asset('assets/js/home.js') }}?v={{ @filemtime(public_path('assets/js/home.js')) }}"></script>
 <script>
-// Dashboard configuration for lazy loading and routes
+window.dashboardOverviewCharts = @json($charts ?? []);
 window.dashboardConfig = {
-    requestType: '{{ $requestType ?? 'thismonth' }}',
+    requestType: '{{ $period->value ?? $requestType ?? 'last90days' }}',
     locationIds: {!! json_encode($location_id) !!},
     startDate: '{{ $today ?? '' }}',
     endDate: '{{ $today ?? '' }}',
@@ -782,6 +269,7 @@ window.dashboardConfig = {
     }
 };
 </script>
+<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=1"></script>
 <script src="{{ asset('assets/js/dashboard.js') }}?v={{ @filemtime(public_path('assets/js/dashboard.js')) }}"></script>
 <script src="{{ asset('assets/js/dashboard-charts.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-charts.js')) }}"></script>
 @endpush

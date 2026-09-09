@@ -1,5 +1,28 @@
 "use strict";
 
+function sneatPatientInitials(name) {
+    if (!name) {
+        return '?';
+    }
+    var parts = String(name).trim().split(/\s+/);
+    if (!parts.length || !parts[0]) {
+        return '?';
+    }
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
+
+function sneatPatientAvatarTone(id) {
+    var tones = ['primary', 'info', 'success', 'warning'];
+    var n = parseInt(id, 10);
+    if (isNaN(n)) {
+        n = 0;
+    }
+    return tones[Math.abs(n) % tones.length];
+}
+
 /**
  * Shared Treatment Column Definitions
  * 
@@ -20,37 +43,40 @@ function getTreatmentColumns(includePatientColumn = true, perms = null) {
     // Permissions are read dynamically in templates, not at initialization
     // This allows the datatable to work even before permissions are loaded from API
     
-    var columns = [
-        {
+    var columns = [];
+
+    if (includePatientColumn) {
+        columns.push({
+            field: 'name',
+            title: 'Patient',
+            width: 220,
+            template: function (data) {
+                var detail_url = route('admin.appointments.detail', { id: data.id });
+                var view_url = route('admin.patients.card', { id: data.patient_id });
+                var initials = sneatPatientInitials(data.name);
+                var tone = sneatPatientAvatarTone(data.patient_id);
+                return '<div class="sneat-patient-cell">' +
+                    '<span class="sneat-patient-avatar sneat-patient-avatar--' + tone + '" aria-hidden="true">' + initials + '</span>' +
+                    '<div class="sneat-patient-copy">' +
+                        '<a class="sneat-patient-name" href="' + view_url + '">' + (data.name || 'N/A') + '</a>' +
+                        '<div class="sneat-patient-meta">' +
+                            '<a href="javascript:void(0);" class="sneat-patient-id" onclick="viewDetail(`' + detail_url + '`)">' + data.Patient_ID + '</a>' +
+                            '<span class="sneat-patient-sep" aria-hidden="true"></span>' +
+                            phoneClip(data) +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }
+        });
+    } else {
+        columns.push({
             field: 'Patient_ID',
             title: 'ID',
             width: 60,
             sortable: false,
             template: function (data) {
                 var detail_url = route('admin.appointments.detail', { id: data.id });
-                return '<a href="javascript:void(0);" onclick="viewTreatmentDetail(`' + detail_url + '`)">' + data.Patient_ID + '</a>';
-            }
-        }
-    ];
-    
-    // Include patient column only for main module
-    if (includePatientColumn) {
-        columns.push({
-            field: 'name',
-            title: 'Patient',
-            width: 80,
-            template: function (data) {
-                var view_url = route('admin.patients.card', { id: data.patient_id });
-                return '<a href="' + view_url + '" style="color: #626574; font-weight: bold;">' + data.name + '</a>';
-            }
-        });
-        
-        columns.push({
-            field: 'phone',
-            title: 'Phone',
-            width: 90,
-            template: function (data) {
-                return phoneClip(data);
+                return '<a href="javascript:void(0);" onclick="viewDetail(`' + detail_url + '`)">' + data.Patient_ID + '</a>';
             }
         });
     }

@@ -17,12 +17,11 @@
                 </a>
             </li>
 
-            @if(Gate::allows('permissions_manage') || Gate::allows('roles_manage') || Gate::allows('users_manage') || Gate::allows('user_types_manage'))
+            @if(Gate::allows('permissions_manage') || Gate::allows('roles_manage') || Gate::allows('users_manage'))
             <li class="nav-item start @if(
                     $request->segment(2) == 'permissions' ||
                     $request->segment(2) == 'roles' ||
-                    $request->segment(2) == 'users' ||
-                    $request->segment(2) == 'user_types'
+                    $request->segment(2) == 'users'
 
                 ) active open @endif">
                 <a href="javascript:;" class="nav-link nav-toggle">
@@ -52,13 +51,14 @@
                         </a>
                     </li>
                     @endif
-                    @if(Gate::allows('user_types_manage'))
+                    {{-- User Types menu hidden --}}
+                    {{-- @if(Gate::allows('user_types_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'user_types' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.user_types.index') }}">
                             <span class="title">@lang('global.user_types.title')</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                 </ul>
             </li>
             @endcan
@@ -88,13 +88,13 @@
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
-                    @if(Gate::allows('leads_create'))
+                    {{-- @if(Gate::allows('leads_create'))
                     <li class="nav-item start {{ ($request->segment(2) == 'leads' && $request->segment(3) == 'create') ? 'active' : '' }}">
                         <a href="{{ route('admin.leads.create') }}">
                             <span class="title">Create Lead</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @if(Gate::allows('leads_manage'))
                     <li class="nav-item start {{ ($request->segment(2) == 'leads' && $request->segment(3) != 'create' && $request->segment(3) != 'junk') ? 'active' : '' }}">
                         <a href="{{ route('admin.leads.index') }}">
@@ -147,10 +147,7 @@
             @endif
 
             @if(
-            Gate::allows('settings_manage') ||
-            Gate::allows('user_operator_settings_manage') ||
-            Gate::allows('sms_templates_manage') ||
-            Gate::allows('regions_manage') ||
+            Gate::allows('cities_manage') ||
             Gate::allows('cities_manage') ||
             Gate::allows('payment_modes_manage') ||
             Gate::allows('custom_forms_manage') ||
@@ -174,8 +171,7 @@
             Gate::allows('invoices_manage') ||
             Gate::allows('refunds_manage') ||
             Gate::allows('pabao_records_manage') ||
-            Gate::allows('machineType_manage') ||
-            Gate::allows('towns_manage')
+            Gate::allows('machineType_manage')
 
 
             )
@@ -218,20 +214,20 @@
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
-                    @if(Gate::allows('settings_manage'))
+                    {{-- @if(Gate::allows('settings_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'settings' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.settings.index') }}">
                             <span class="title">@lang('global.settings.title')</span>
                         </a>
                     </li>
-                    @endif
-                    @if(Gate::allows('user_operator_settings_manage'))
+                    @endif --}}
+                    {{-- @if(Gate::allows('user_operator_settings_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'user_operator_settings' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.user_operator_settings.index') }}">
                             <span class="title">@lang('global.user_operator_settings.title')</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @if(Gate::allows('payment_modes_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'payment_modes' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.payment_modes.index') }}">
@@ -253,20 +249,20 @@
                         </a>
                     </li>
                     @endif
-                    @if(Gate::allows('sms_templates_manage'))
+                    {{-- @if(Gate::allows('sms_templates_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'sms_templates' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.sms_templates.index') }}">
                             <span class="title">@lang('global.sms_templates.title')</span>
                         </a>
                     </li>
-                    @endif
-                    @if(Gate::allows('regions_manage'))
+                    @endif --}}
+                    {{-- @if(Gate::allows('regions_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'regions' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.regions.index') }}">
                             <span class="title">@lang('global.regions.title')</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @if(Gate::allows('cities_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'cities' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.cities.index') }}">
@@ -274,13 +270,13 @@
                         </a>
                     </li>
                     @endif
-                    @if(Gate::allows('towns_manage'))
+                    {{-- @if(Gate::allows('towns_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'towns' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.towns.index') }}">
                             <span class="title">@lang('global.towns.title')</span>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @if(Gate::allows('locations_manage'))
                     <li class="nav-item start {{ $request->segment(2) == 'locations' ? 'active active-sub' : '' }}">
                         <a href="{{ route('admin.locations.index') }}">
@@ -401,14 +397,14 @@
                 </a>
             </li>
             @endif
-            {{--Refunds Start--}}
-            @if(Gate::allows('refunds_manage'))
+            {{-- Refunds menu hidden --}}
+            {{-- @if(Gate::allows('refunds_manage'))
             <li class="nav-item start {{ $request->segment(2) == 'refunds' ? 'active active-sub' : '' }}">
                 <a href="{{ route('admin.refunds.index') }}">
                     <span class="title">@lang('global.refunds.title')</span>
                 </a>
             </li>
-            @endif
+            @endif --}}
             @if(Gate::allows('pabao_records_manage'))
             <li class="nav-item start {{ $request->segment(2) == 'pabao_records' ? 'active active-sub' : '' }}">
                 <a href="{{ route('admin.pabao_records.index') }}">

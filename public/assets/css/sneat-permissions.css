@@ -1,0 +1,41 @@
+/* Sneat permissions list. Filter row comes from sneat-consultancies.css via .sneat-appt-page. */
+
+.sneat-permissions-page {
+    --s-primary: #696cff;
+    --s-heading: #566a7f;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+.sneat-permissions-page .badge-success {
+    background: rgba(113, 221, 55, 0.16) !important;
+    color: #3a9b1a !important;
+    border: 0;
+    font-weight: 600;
+    font-size: 12px !important;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.375rem;
+}
+
+.sneat-permissions-page .filterouterdiv.search-wider {
+    min-width: 16rem;
+    flex: 1 1 16rem;
+    max-width: 24rem;
+}
+
+@media (max-width: 991px) {
+    .sneat-permissions-page .all-filters-wrapper {
+        display: none;
+    }
+
+    .sneat-permissions-page .mobile-filter-toggle {
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .sneat-permissions-page .mobile-filter-toggle {
+        display: none !important;
+    }
+}

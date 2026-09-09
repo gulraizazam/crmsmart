@@ -1,35 +1,21 @@
-{{--Menu--}}
-<div class="card mb-8 menu_section" style="width: 100%">
+<div class="sneat-tabs-wrap">
+    <ul class="sneat-page-tabs appointment-menu list-unstyled mb-0">
+        @can('appointments_manage')
+            <li>
+                <a href="javascript:void(0)" onclick="toggleSection($(this), 'appointment');" class="change-tab appointment-tab nav-bar-active">
+                    <i class="la la-list"></i>
+                    <span class="navi-text">Treatments</span>
+                </a>
+            </li>
+        @endcan
 
-    <div class="card-body menu-card">
-        <ul class="horizontal-nav-bar list-unstyled mb-0 appointment-menu horizontalnav_not">
-
-            @can('appointments_manage')
-                <li class="horizontal-nav-bar-li" style="width: 50%;">
-                    <a href="javascript:void(0)" onclick="toggleSection($(this), 'appointment');" class="change-tab appointment-tab navi-link py-4">
-                         <span class="text-muted mb-2 fa_icon">
-                             <i class="la la-handshake-o"></i>
-                        </span>
-                        <p class="navi-text">Treatments</p>
-                    </a>
-                </li>
-            @endcan
-
-            @can("treatments_services")
-                <li class="horizontal-nav-bar-li" style="width: 50%;">
-                    <a href="javascript:void(0)" onclick="toggleSection($(this), 'treatment');" class="change-tab treatment-tab navi-link py-4">
-
-                        <span class="text-muted mb-2 fa_icon">
-                            <i class="la la-medkit"></i>
-                        </span>
-                        <p class="navi-text font-size-lg">Manage Treatment</p>
-
-                    </a>
-                </li>
-            @endcan
-
-        </ul>
-    </div>
-
+        @can("treatments_services")
+            <li>
+                <a href="javascript:void(0)" onclick="toggleSection($(this), 'treatment');" class="change-tab treatment-tab">
+                    <i class="la la-calendar"></i>
+                    <span class="navi-text">Manage Treatment</span>
+                </a>
+            </li>
+        @endcan
+    </ul>
 </div>
-{{--End Menu--}}

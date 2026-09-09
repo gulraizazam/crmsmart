@@ -1,17 +1,12 @@
 // Load all child services (parent_id != 0) function
 window.loadAllChildServices = function () {
-    resource_id = $("#treatment_resource_id").val();
-
-   
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         url: route('admin.appointments.load_all_child_services'),
         type: 'POST',
-        data: {
-            resource_id: resource_id
-        },
+        data: {},
         cache: false,
         success: function(response) {
             
@@ -48,8 +43,6 @@ window.loadAllChildServices = function () {
 
 // Define loadEndServices globally before anything else to ensure it's available immediately
 window.loadEndServices = function (baseServiceId) {
-    resource_id = $("#treatment_resource_id").val();
-
     if(baseServiceId != '') {
         $.ajax({
             headers: {
@@ -58,8 +51,7 @@ window.loadEndServices = function (baseServiceId) {
             url: route('admin.appointments.load_node_service'),
             type: 'POST',
             data: {
-                service_id: baseServiceId,
-                resource_id:resource_id
+                service_id: baseServiceId
             },
             cache: false,
             success: function(response) {

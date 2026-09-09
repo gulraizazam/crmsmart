@@ -231,16 +231,8 @@
                 </div>
                 
             </div>
-            
-            <div class="em-footer">
-                <button type="button" class="em-btn-cancel" onclick="closeEditMembershipModal();">Cancel</button>
-                <button id="EditMembershipFinal" type="button" class="em-btn-save spinner-button-edit-save">
-                    <span class="indicator-label">Save</span>
-                </button>
-            </div>
         </form>
 
-        <!-- History Section -->
         <div class="em-history">
             <div class="em-history-title">Payment History</div>
             <div class="table-responsive">
@@ -259,6 +251,12 @@
             </div>
         </div>
 
+    </div>
+    <div class="em-footer">
+        <button type="button" class="em-btn-cancel" onclick="closeEditMembershipModal();">Cancel</button>
+        <button id="EditMembershipFinal" type="button" class="em-btn-save spinner-button-edit-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

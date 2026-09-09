@@ -64,7 +64,6 @@ use App\Models\Membership;
 use App\Models\MembershipType;
 use App\Models\RoleHasUsers;
 use App\Models\Leads;
-use App\Services\MetaConversionApiService;
 use App\Services\Plan\PlanService;
 use Illuminate\Support\Facades\Log;
 
@@ -1917,67 +1916,6 @@ class PackagesController extends Controller
                     \App\Helpers\ActivityLogger::logLeadConverted($lead, $latestArrivedConsultation, $location, $service, $payment_amount);
                 }
             }
-        }
-        
-        // Send Meta CAPI event
-        self::sendMetaConvertedEvent($latestArrivedConsultation, $package_id, $payment_amount);
-    }
-    
-    /**
-     * Send Meta CAPI event for converted status
-     * 
-     * @param Appointments $appointment
-     * @param int $package_id
-     * @param float $payment_amount
-     */
-    private static function sendMetaConvertedEvent($appointment, $package_id, $payment_amount)
-    {
-        if (!$appointment || !$appointment->lead_id) {
-            return;
-        }
-        
-        $lead = Leads::find($appointment->lead_id);
-        if (!$lead) {
-            return;
-        }
-        
-        // Check if Meta event was already sent for this lead (to prevent duplicates)
-        // We check if any appointment for this lead already has meta_purchase_sent flag
-        $alreadySent = Appointments::where('lead_id', $lead->id)
-            ->where('meta_purchase_sent', 1)
-            ->exists();
-        
-        if ($alreadySent) {
-            \Log::info('Meta CAPI converted event already sent for this lead, skipping', [
-                'lead_id' => $lead->id,
-                'appointment_id' => $appointment->id
-            ]);
-            return;
-        }
-        
-        try {
-            $metaService = new MetaConversionApiService();
-            // Use appointment_id as lead_id for event_id if meta_lead_id is null
-            $eventLeadId = $lead->meta_lead_id ?? 'apt_' . $appointment->id;
-            $metaService->sendLeadStatus(
-                $lead->phone,
-                'converted',
-                $eventLeadId,
-                $lead->email,
-                'PKR',
-                $payment_amount ?? 0
-            );
-            
-            // Mark this appointment as having sent the Meta purchase event
-            $appointment->update(['meta_purchase_sent' => 1]);
-            
-            \Log::info('Meta CAPI converted event sent', [
-                'lead_id' => $lead->id,
-                'appointment_id' => $appointment->id,
-                'event_lead_id' => $eventLeadId
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Meta CAPI converted event failed: ' . $e->getMessage());
         }
     }
 

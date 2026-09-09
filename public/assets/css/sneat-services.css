@@ -1,0 +1,145 @@
+/* Sneat services / bundles / discounts. Filter row from sneat-consultancies.css via .sneat-appt-page. */
+
+.sneat-services-page,
+.sneat-bundles-page,
+.sneat-discounts-page {
+    --s-primary: #696cff;
+    --s-heading: #566a7f;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-soft: #f5f5f9;
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+.sneat-services-page .datatable-pager {
+    display: none !important;
+}
+
+@media (max-width: 991px) {
+    .sneat-services-page .all-filters-wrapper,
+    .sneat-bundles-page .all-filters-wrapper,
+    .sneat-discounts-page .all-filters-wrapper {
+        display: none;
+    }
+
+    .sneat-services-page .mobile-filter-toggle,
+    .sneat-bundles-page .mobile-filter-toggle,
+    .sneat-discounts-page .mobile-filter-toggle {
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .sneat-services-page .mobile-filter-toggle,
+    .sneat-bundles-page .mobile-filter-toggle,
+    .sneat-discounts-page .mobile-filter-toggle {
+        display: none !important;
+    }
+}
+
+.sneat-services-page .sneat-service-sort-zone {
+    padding: 0.5rem 1.25rem 1.5rem;
+}
+
+.sneat-services-page .parentsrc {
+    background: var(--s-soft);
+    border: 1px solid var(--s-border);
+    border-radius: 0.5rem;
+}
+
+.modal trix-toolbar {
+    border: 1px solid var(--s-border, #d9dee3) !important;
+    border-radius: 0.375rem 0.375rem 0 0 !important;
+    background: #f5f5f9 !important;
+    margin-bottom: 0 !important;
+}
+
+.modal trix-editor {
+    border: 1px solid var(--s-border, #d9dee3) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 0.375rem 0.375rem !important;
+    padding: 0.75rem 1rem !important;
+    background: #fff !important;
+    min-height: 150px;
+}
+
+.modal input[type="color"] {
+    padding: 0.15rem !important;
+    width: 5.5rem !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    cursor: pointer;
+}
+
+.modal .tax-radios,
+.modal .radio-inline,
+.modal .radio-list,
+.modal .checkbox-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    align-items: center;
+    min-height: 44px;
+}
+
+.modal .checkbox.checkbox-single {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.modal .configurable-discount-fields .card,
+.modal .edit-configurable-discount-fields .card {
+    border: 1px solid #d9dee3 !important;
+    border-radius: 0.5rem !important;
+    box-shadow: none !important;
+}
+
+.modal .configurable-discount-fields .card-header,
+.modal .edit-configurable-discount-fields .card-header {
+    background: #f5f5f9 !important;
+    border-bottom: 1px solid #d9dee3 !important;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.modal .configurable-discount-fields .card-title,
+.modal .edit-configurable-discount-fields .card-title {
+    color: #566a7f !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+}
+
+.modal .form-check-inline {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.modal .form-check-input {
+    accent-color: #696cff;
+}
+
+#modal_service_instructions .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#modal_service_instructions #service_instructions_content {
+    min-height: 100px;
+    padding: 0.25rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#modal_service_instructions #service_instructions_content img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    #modal_service_instructions .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+}

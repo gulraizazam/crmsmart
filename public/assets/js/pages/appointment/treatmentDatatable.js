@@ -767,7 +767,7 @@ function setTreatmentEditData(response) {
         // Set hidden fields for preserved data
         $("#edit_treatment_city_id").val(appointment.city_id);
         $("#edit_treatment_location_id").val(appointment.location_id);
-        $("#edit_treatment_machine_id").val(appointment.resource_id);
+        $("#edit_treatment_machine_id").val('');
         $("#edit_treatment_patient_name").val(appointment?.patient?.name);
         $("#edit_treatment_patient_phone").val(appointment?.patient?.phone);
         $("#edit_old_treatment_patient_phone").val(appointment?.patient?.phone);

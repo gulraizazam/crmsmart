@@ -1,44 +1,20 @@
-<!--begin::Aside-->
-<div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
-    <!--begin::Brand-->
-    <div class="brand flex-column-auto" id="kt_brand">
-        <!--begin::Logo-->
-        <a href="{{ route('admin.home') }}" class="brand-logo">
-            <span style="margin-left:25px; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Clarity Aesthetic</span>
-        </a>
-        <!--end::Logo-->
-        <!--begin::Toggle-->
-        <button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
-            <span class="svg-icon svg-icon svg-icon-xl">
-                <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Navigation/Angle-double-left.svg-->
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <polygon points="0 0 24 0 24 24 0 24" />
-                        <path d="M5.29288961,6.70710318 C4.90236532,6.31657888 4.90236532,5.68341391 5.29288961,5.29288961 C5.68341391,4.90236532 6.31657888,4.90236532 6.70710318,5.29288961 L12.7071032,11.2928896 C13.0856821,11.6714686 13.0989277,12.281055 12.7371505,12.675721 L7.23715054,18.675721 C6.86395813,19.08284 6.23139076,19.1103429 5.82427177,18.7371505 C5.41715278,18.3639581 5.38964985,17.7313908 5.76284226,17.3242718 L10.6158586,12.0300721 L5.29288961,6.70710318 Z" fill="#000000" fill-rule="nonzero" transform="translate(8.999997, 11.999999) scale(-1, 1) translate(-8.999997, -11.999999)" />
-                        <path d="M10.7071009,15.7071068 C10.3165766,16.0976311 9.68341162,16.0976311 9.29288733,15.7071068 C8.90236304,15.3165825 8.90236304,14.6834175 9.29288733,14.2928932 L15.2928873,8.29289322 C15.6714663,7.91431428 16.2810527,7.90106866 16.6757187,8.26284586 L22.6757187,13.7628459 C23.0828377,14.1360383 23.1103407,14.7686056 22.7371482,15.1757246 C22.3639558,15.5828436 21.7313885,15.6103465 21.3242695,15.2371541 L16.0300699,10.3841378 L10.7071009,15.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(15.999997, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-15.999997, -11.999999)" />
-                    </g>
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand">
+        <a href="{{ route('admin.home') }}" class="app-brand-link">
+            <span class="app-brand-logo">
+                <svg width="25" viewBox="0 0 25 42" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" d="M13.79.36L3.4 7.44C.57 9.69-.38 12.48.56 15.8c.13.43.54 1.99 2.57 3.43  .69.49 2.2 1.15 4.53 1.99l-4.96 3.3C.45 26.3.09 28.51 1.56 31.17c1.27 1.64 3.65 2.09 5.53 1.37 1.26-.48 4.36-2.54 9.33-6.16 1.62-1.88 2.28-3.92 1.99-6.14-.44-2.7-2.23-4.66-5.36-5.86l-2.13-.9 7.7-5.49L13.79.36z"/>
                 </svg>
-                <!--end::Svg Icon-->
             </span>
-        </button>
-        <!--end::Toolbar-->
+            <span class="app-brand-text">Clarity</span>
+        </a>
+        <a href="javascript:void(0);" class="layout-menu-close d-xl-none" id="layout-menu-close" aria-label="Close menu">&times;</a>
     </div>
-    <!--end::Brand-->
-    <!--begin::Aside Menu-->
-    <div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
-        <!--begin::Menu Container-->
-        <div id="kt_aside_menu" class="aside-menu my-4" data-menu-vertical="1" data-menu-scroll="1" data-menu-dropdown-timeout="500">
-            <!--begin::Brand-->
-            <div class="flex-column-auto d-lg-none pt-4 pb-7" id="kt_brand" style="border-bottom: 1px solid #4A5540;">
-                <!--begin::Logo-->
-                <a class="brand-logo">
-                    <span style="margin-left:25px; display:block; font-family: 'Georgia', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 1.5px; line-height: 1.2;">Clarity Aesthetic</span>
-                </a>
-                <!--end::Logo-->
-            </div>
-            <!--end::Brand-->
-            <!--begin::Menu Nav-->
-            <ul class="menu-nav">
+    <div class="menu-inner-shadow"></div>
+    <ul class="menu-inner py-1">
+                <li class="menu-header">
+                    <span class="menu-header-text">Dashboards</span>
+                </li>
                 <li class="menu-item {{ activeMenu('admin.home') }}" aria-haspopup="true">
                     <a href="{{ route('admin.home') }}" class="menu-link">
                         <span class="svg-icon menu-icon">
@@ -56,12 +32,14 @@
                     </a>
                 </li>
 
+                <li class="menu-header">
+                    <span class="menu-header-text">Users</span>
+                </li>
                 @if (Gate::allows('permissions_manage') ||
                 Gate::allows('roles_manage') ||
                 Gate::allows('users_manage') ||
-                Gate::allows('user_types_manage') ||
                 Gate::allows('doctors_manage'))
-                <li class="menu-item menu-item-submenu {{ openMenu(['admin.permissions.index', 'admin.users.index', 'admin.roles.index', 'admin.roles.edit', 'admin.users.index', 'admin.doctors.index', 'admin.user_types.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
+                <li class="menu-item menu-item-submenu {{ openMenu(['admin.permissions.index', 'admin.users.index', 'admin.roles.index', 'admin.roles.edit', 'admin.users.index', 'admin.doctors.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
                             <i class="font-icon la la-user"></i>
@@ -115,7 +93,8 @@
                                 </a>
                             </li>
                             @endcan
-                            @can('user_types_manage')
+                            {{-- User Types menu hidden --}}
+                            {{-- @can('user_types_manage')
                             <li class="menu-item {{ activeMenu('admin.user_types.index') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.user_types.index') }}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -124,7 +103,7 @@
                                     <span class="menu-text">User Types</span>
                                 </a>
                             </li>
-                            @endcan
+                            @endcan --}}
 
                         </ul>
                     </div>
@@ -132,6 +111,9 @@
                 @endif
 
 
+                <li class="menu-header">
+                    <span class="menu-header-text">Clinic</span>
+                </li>
                 <!--Patient menu-->
 
                 @if (Gate::allows('patients_manage'))
@@ -180,7 +162,7 @@
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
 
-                            @can('leads_create')
+                            {{-- @can('leads_create')
                             <li class="menu-item {{ isActive(url('admin/leads?create=create'), 'create') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.leads.index', ['create' => 'create']) }}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -189,7 +171,7 @@
                                     <span class="menu-text">Create Lead </span>
                                 </a>
                             </li>
-                            @endcan
+                            @endcan --}}
 
                             @can('leads_manage')
                             <li class="menu-item {{ isActive(url('admin/leads'), 'other') }}" aria-haspopup="true">
@@ -277,14 +259,15 @@
                     </a>
                 </li>
                 @endif
-                @if (Gate::allows('refunds_manage'))
+                {{-- Refunds menu hidden --}}
+                {{-- @if (Gate::allows('refunds_manage'))
                 <li class="menu-item {{ activeMenu('admin.refunds.index') }}" aria-haspopup="true">
                     <a href="{{ route('admin.refunds.index') }}" class="menu-link">
                         <span class="svg-icon menu-icon"><i class="font-icon la la-refresh"></i></span>
                         <span class="menu-text"> Refunds </span>
                     </a>
                 </li>
-                @endif
+                @endif --}}
                 @if (Gate::allows('services_manage') || Gate::allows('packages_manage') || Gate::allows('discounts_manage'))
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.services.index']) }} {{ openMenu(['admin.bundles.index']) }} {{ openMenu(['admin.discounts.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
@@ -428,14 +411,15 @@
                 </li>
                 @endif
                 --}}
-                @if (Gate::allows('feedbacks_manage'))
+                {{-- Doctor Ratings menu hidden --}}
+                {{-- @if (Gate::allows('feedbacks_manage'))
                 <li class="menu-item {{ activeMenu('admin.feedbacks.index') }} " aria-haspopup="true">
                     <a href="{{ route('admin.feedbacks.index') }}" class="menu-link">
                         <span class="svg-icon menu-icon"><i class="font-icon la la-file"></i></span>
                         <span class="menu-text">Doctor Ratings</span>
                     </a>
                 </li>
-                @endif
+                @endif --}}
                 @if (Gate::allows('resourcerotas_manage') || Gate::allows('business_closures_manage'))
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.resourcerotas.schedule', 'admin.business-closures.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -471,11 +455,10 @@
                 </li>
                 @endif
 
-                @if (Gate::allows('settings_manage') ||
-                Gate::allows('user_operator_settings_manage') ||
-                Gate::allows('sms_templates_manage') ||
-                Gate::allows('regions_manage') ||
-                Gate::allows('cities_manage') ||
+                <li class="menu-header">
+                    <span class="menu-header-text">Settings</span>
+                </li>
+                @if (Gate::allows('cities_manage') ||
                 Gate::allows('payment_modes_manage') ||
                 Gate::allows('custom_forms_manage') ||
                 Gate::allows('custom_form_feedbacks_manage') ||
@@ -491,21 +474,15 @@
                 Gate::allows('finances_manage') ||
                 Gate::allows('invoices_manage') ||
                 Gate::allows('pabao_records_manage') ||
-                Gate::allows('machineType_manage') ||
-                Gate::allows('towns_manage'))
+                Gate::allows('machineType_manage'))
 
                 <li class="menu-item menu-item-submenu {{ openMenu([
-                        'admin.settings.index',
-                        'admin.user_operator_settings.index',
                         'admin.payment_modes.index',
                         'admin.payment_modes.sort',
-                        'admin.regions.index',
-                        'admin.regions.sort',
                         'admin.cities.index',
                         'admin.cities.sort',
                         'admin.lead_sources.index',
                         'admin.lead_sources.sort',
-                        'admin.towns.index',
                         'admin.lead_statuses.index',
                         'admin.lead_statuses.sort',
                         'admin.appointment_statuses.index',
@@ -514,7 +491,6 @@
                         'admin.resources.index',
                         'admin.logs.index',
 
-                        'admin.sms_templates.index',
                         'admin.centre_targets.index',
 
                         'admin.packagesadvances.index',
@@ -538,7 +514,7 @@
                         <i class="menu-arrow"></i>
                     </a>
 
-                    @can('settings_manage')
+                    {{-- @can('settings_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -553,8 +529,8 @@
 
                         </ul>
                     </div>
-                    @endcan
-                    @can('user_operator_settings_manage')
+                    @endcan --}}
+                    {{-- @can('user_operator_settings_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -569,7 +545,7 @@
 
                         </ul>
                     </div>
-                    @endcan
+                    @endcan --}}
 
                     @can('payment_modes_manage')
                     <div class="menu-submenu">
@@ -588,7 +564,7 @@
                     </div>
                     @endcan
 
-                    @can('regions_manage')
+                    {{-- @can('regions_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -603,7 +579,7 @@
 
                         </ul>
                     </div>
-                    @endcan
+                    @endcan --}}
 
                     @can('cities_manage')
                     <div class="menu-submenu">
@@ -622,7 +598,7 @@
                     </div>
                     @endcan
 
-                    @can('towns_manage')
+                    {{-- @can('towns_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -637,7 +613,7 @@
 
                         </ul>
                     </div>
-                    @endcan
+                    @endcan --}}
 
                     @can('lead_sources_manage')
                     <div class="menu-submenu">
@@ -756,7 +732,7 @@
                     </div>
                     @endcan -->
 
-                    @can('sms_templates_manage')
+                    {{-- @can('sms_templates_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -771,7 +747,7 @@
 
                         </ul>
                     </div>
-                    @endcan
+                    @endcan --}}
 
                     
 
@@ -916,6 +892,9 @@
                 @endif
                 --}}
                 <!-- End Inventory menu -->
+                <li class="menu-header">
+                    <span class="menu-header-text">Reports</span>
+                </li>
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.reports.finance_reports', 'admin.reports.operations_report', 'admin.reports.inventory_report']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -1229,9 +1208,12 @@
                     @endcan -->
                 </li>
 
+                <li class="menu-header">
+                    <span class="menu-header-text">Finance</span>
+                </li>
                 {{-- Cash Flow Module --}}
-                <!-- @can('cashflow_manage')
-                <li class="menu-item menu-item-submenu {{ openMenu(['admin.cashflow.dashboard','admin.cashflow.expenses','admin.cashflow.transfers','admin.cashflow.vendors','admin.cashflow.staff','admin.cashflow.fdm','admin.cashflow.reports','admin.cashflow.settings']) }}" aria-haspopup="true" data-menu-toggle="hover">
+                @can('cashflow_manage')
+                <li class="menu-item menu-item-submenu {{ openMenu(['admin.cashflow.dashboard','admin.cashflow.expenses','admin.cashflow.transfers','admin.cashflow.vendors','admin.cashflow.staff','admin.cashflow.reports','admin.cashflow.settings']) }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
                         <i class="menu-icon la la-money-bill-wave"></i>
                         <span class="menu-text">Cash Flow</span>
@@ -1283,14 +1265,14 @@
                                 </a>
                             </li>
                             @endcan
-                            @can('cashflow_fdm_view')
+                            {{-- @can('cashflow_fdm_view')
                             <li class="menu-item {{ activeMenu('admin.cashflow.fdm') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.cashflow.fdm') }}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot"><span></span></i>
                                     <span class="menu-text">FDM View</span>
                                 </a>
                             </li>
-                            @endcan
+                            @endcan --}}
                             @can('cashflow_reports')
                             <li class="menu-item {{ activeMenu('admin.cashflow.reports') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.cashflow.reports') }}" class="menu-link">
@@ -1310,13 +1292,7 @@
                         </ul>
                     </div>
                 </li>
-                @endcan -->
+                @endcan
 
             </ul>
-            <!--end::Menu Nav-->
-        </div>
-        <!--end::Menu Container-->
-    </div>
-    <!--end::Aside Menu-->
-</div>
-<!--end::Aside-->
+</aside>

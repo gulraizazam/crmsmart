@@ -590,7 +590,7 @@ var CustomResourceCalendar = function() {
             html += '    <i class="fa fa-calendar" style="margin-right: 8px;"></i>';
             html += '    <span id="current-date-text">' + currentDate.format('dddd, MMMM D, YYYY');
             if (isToday) {
-                html += ' <span style="color: #1BC5BD; font-size: 12px; margin-left: 8px;">(Today)</span>';
+                html += ' <span style="color: #71dd37; font-size: 12px; margin-left: 8px;">(Today)</span>';
             }
             html += '</span>';
             html += '    <input type="text" id="resource-calendar-datepicker" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" />';
@@ -776,8 +776,8 @@ var CustomResourceCalendar = function() {
                     var appointmentHeight = duration * pixelsPerMinute;
 
                     // Use appointment color if available, otherwise default to blue
-                    var bgColor = event.color || '#7A8B6A';
-                    var borderColor = event.color ? CustomResourceCalendar.darkenColor(event.color, 20) : '#187de4';
+                    var bgColor = event.color || '#696cff';
+                    var borderColor = event.color ? CustomResourceCalendar.darkenColor(event.color, 20) : '#5f61e6';
 
                     // Format timings
                     var startTimeFormatted = startTime.format('h:mm A');
@@ -1029,8 +1029,8 @@ var CustomResourceCalendar = function() {
                 'left': '2px',
                 'right': '2px',
                 'height': blockHeight + 'px',
-                'background': '#E4E6EF',
-                'border-left': '4px solid #5E6278',
+                'background': '#f5f5f9',
+                'border-left': '4px solid #a1acb8',
                 'border-radius': '6px',
                 'display': 'flex',
                 'align-items': 'center',

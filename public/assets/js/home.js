@@ -522,11 +522,11 @@ function initUserWiseArrival(period, userID, time = '') {
 }
 
 function ConsultanciesByStatus(bar) {
-    const primary = '#7A8B6A';
-    const success = '#C4A265';
-    const info = '#7B9BAD';
-    const warning = '#D4956A';
-    const danger = '#A8B89A';
+    const primary = '#696cff';
+    const success = '#71dd37';
+    const info = '#03c3ec';
+    const warning = '#ffab00';
+    const danger = '#ff3e1d';
     let Data = bar.data.bar;
     let modifiedData;
     if (Data.length > 0) {
@@ -705,6 +705,9 @@ function initDoctorWiseConversion(period, centre_id, time = '', nochangeDr = tru
     });
 }
 function initDoctorWiseFeedback(period, centre_id, time = '', nochangeDr = true) {
+    if (!$('#doctor_wise_feedback_section').length) {
+        return;
+    }
     var $container = $("#doctor_wise_feedback_section");
     $container.find(".loader-img-attended").show();
     $container.find("#doc_wise_feedback_data").hide();
@@ -853,11 +856,11 @@ function LoadDocWiseConversion(doc_id, time = '') {
 }
 
 function DoctorWiseConversion(bar) {
-    const primary = '#7A8B6A';
-    const success = '#C4A265';
-    const info = '#7B9BAD';
-    const warning = '#D4956A';
-    const danger = '#A8B89A';
+    const primary = '#696cff';
+    const success = '#71dd37';
+    const info = '#03c3ec';
+    const warning = '#ffab00';
+    const danger = '#ff3e1d';
     let labels = bar.data.labels;
     
     // Calculate dynamic width based on number of doctors (min 800px, 60px per doctor)
@@ -949,11 +952,11 @@ function DoctorWiseConversion(bar) {
     doc_wise_conversion_chart.render();
 }
 function DoctorWiseFeedback(bar) {
-    const primary = '#7A8B6A';
-    const success = '#C4A265';
-    const info = '#7B9BAD';
-    const warning = '#D4956A';
-    const danger = '#A8B89A';
+    const primary = '#696cff';
+    const success = '#71dd37';
+    const info = '#03c3ec';
+    const warning = '#ffab00';
+    const danger = '#ff3e1d';
     // Handle both response structures (direct or wrapped in data)
     let responseData = bar.data || bar;
     let labels = responseData.labels || [];
@@ -1075,11 +1078,11 @@ function DoctorWiseFeedback(bar) {
     }
 }
 function AllDoctorWiseConversion(bar) {
-    const primary = '#7A8B6A';
-    const success = '#C4A265';
-    const info = '#7B9BAD';
-    const warning = '#D4956A';
-    const danger = '#A8B89A';
+    const primary = '#696cff';
+    const success = '#71dd37';
+    const info = '#03c3ec';
+    const warning = '#ffab00';
+    const danger = '#ff3e1d';
     let labels = bar.data.labels;
     let modifiedData = labels;
     
@@ -1187,6 +1190,9 @@ var unattendedPaymentsState = {
 };
 
 function initPatientFollowUp(period, centre_id, arrived, reset = true) {
+    if (!$('#patient-followup-section').length) {
+        return;
+    }
     if (reset) {
         unattendedPaymentsState.page = 1;
         unattendedPaymentsState.hasMore = true;
@@ -1250,6 +1256,9 @@ var overdueTreatmentsState = {
 };
 
 function initPatientFollowUpOneMonth(reset = true) {
+    if (!$('#patient-followup-onemonth-section').length) {
+        return;
+    }
     if (reset) {
         overdueTreatmentsState.page = 1;
         overdueTreatmentsState.hasMore = true;

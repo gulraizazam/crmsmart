@@ -228,12 +228,12 @@
             </div>
         </div>
 
-        <div class="ab-footer">
-            <button type="button" class="ab-btn-cancel" onclick="resetVoucherAddBundle(event)">Cancel</button>
-            <button id="AddPackageFinalBundle" type="submit" class="ab-btn-save spinner-button-save">
-                <span class="indicator-label">Save</span>
-            </button>
-        </div>
+    </div>
+    <div class="ab-footer">
+        <button type="button" class="ab-btn-cancel" onclick="resetVoucherAddBundle(event)">Cancel</button>
+        <button id="AddPackageFinalBundle" type="submit" class="ab-btn-save spinner-button-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

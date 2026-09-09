@@ -20,5 +20,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/.deploy
+/.claude
 server.php
 .sql

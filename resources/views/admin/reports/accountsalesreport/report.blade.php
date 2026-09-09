@@ -134,20 +134,20 @@
                             </tr>
                         @endforeach
 
-                        <tr style="background: #364150;color: #fff; font-weight: bold">
-                            <td style="text-align: center; color: #fff;">Total</td>
+                        <tr class="sn-row-total">
+                            <td style="text-align: center;">Total</td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td style="text-align: right;color: #fff;">{{ number_format( $grandserviceprice, 2) }}</td>
+                            <td style="text-align: right;">{{ number_format( $grandserviceprice, 2) }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td style="text-align: right;color: #fff;"> {{ number_format( $totalAmount , 2) }} </td>
+                            <td style="text-align: right;"> {{ number_format( $totalAmount , 2) }} </td>
                             <td></td>
                             <td></td>
-                            <td style="text-align: right;color: #fff;"> {{ number_format( $totalTaxAmount, 2 ) }}</td>
+                            <td style="text-align: right;"> {{ number_format( $totalTaxAmount, 2 ) }}</td>
                             <td></td>
                             <td></td>
                         </tr>

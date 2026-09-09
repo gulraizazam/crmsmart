@@ -1,0 +1,42 @@
+/* Sneat application users list. Filter row comes from sneat-consultancies.css via .sneat-appt-page. */
+
+.sneat-users-page {
+    --s-primary: #696cff;
+    --s-heading: #566a7f;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-soft: #f5f5f9;
+}
+
+.sneat-users-page .label-light-info {
+    background: rgba(3, 195, 236, 0.16) !important;
+    color: #03c3ec !important;
+    border: 0;
+    font-weight: 600;
+    margin-right: 0.25rem;
+}
+
+.sneat-users-page .label-light-success {
+    background: rgba(113, 221, 55, 0.16) !important;
+    color: #3a9b1a !important;
+    border: 0;
+    font-weight: 600;
+}
+
+.sneat-users-page .label-light-danger {
+    background: rgba(255, 62, 29, 0.12) !important;
+    color: #ff3e1d !important;
+    border: 0;
+    font-weight: 600;
+}
+
+.modal .sneat-phone-reset {
+    float: right;
+    cursor: pointer;
+    color: #a1acb8;
+    margin-top: 0.15rem;
+}
+
+.modal .sneat-phone-reset:hover {
+    color: #696cff;
+}

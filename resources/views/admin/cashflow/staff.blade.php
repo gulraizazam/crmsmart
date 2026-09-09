@@ -1,19 +1,22 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow - Staff Advances')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Staff Advances', 'title' => 'Staff'])
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!-- Staff Summary -->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-users mr-2"></i>Staff Advance Summary</h3></div>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Staff Advance Summary</h3></div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_staff_advance'))
-                                <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#modal_advance"><i class="la la-plus"></i> Give Advance</button>
-                                <button class="btn btn-success" data-toggle="modal" data-target="#modal_return"><i class="la la-undo"></i> Record Return</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modal_advance"><i class="la la-plus"></i> Give Advance</button>
+                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_return"><i class="la la-undo"></i> Record Return</button>
                             @endif
                         </div>
                     </div>
@@ -39,9 +42,9 @@
                 </div>
 
                 <!-- Staff Ledger (shown when clicking a staff member) -->
-                <div class="card card-custom d-none" id="staff-ledger-card">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-list-alt mr-2"></i>Ledger: <span id="ledger-staff-name"></span></h3></div>
+                <div class="card card-custom sneat-page-card d-none" id="staff-ledger-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Ledger: <span id="ledger-staff-name"></span></h3></div>
                         <div class="card-toolbar">
                             <button class="btn btn-secondary" id="btn-close-ledger"><i class="la la-times"></i> Close</button>
                         </div>
@@ -78,7 +81,7 @@
     <!-- Give Advance Modal -->
     <div class="modal fade" id="modal_advance">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title">Give Staff Advance</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <form id="form-advance">
@@ -108,7 +111,7 @@
     <!-- Record Return Modal -->
     <div class="modal fade" id="modal_return">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title">Record Staff Return</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <form id="form-return">
@@ -138,7 +141,7 @@
     <!-- Edit Advance Modal -->
     <div class="modal fade" id="modal_edit_advance">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header"><h5 class="modal-title">Edit Staff Advance</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
                 <div class="modal-body">
                     <form id="form-edit-advance">
@@ -169,7 +172,7 @@
     <!-- Audit Trail Modal -->
     <div class="modal fade" id="modal_audit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header py-3" style="background:#F3F6F9;border-bottom:2px solid #E4E6EF;">
                     <h5 class="modal-title font-weight-bolder"><i class="la la-history text-primary mr-2"></i>Audit Trail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="la la-times"></i></button>

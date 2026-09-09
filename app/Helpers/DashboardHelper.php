@@ -47,6 +47,10 @@ class DashboardHelper
                 $start_date = Carbon::now()->subDay(6)->format('Y-m-d');
                 $end_date = Carbon::now()->format('Y-m-d');
                 break;
+            case 'last90days':
+                $start_date = Carbon::now()->subDays(89)->format('Y-m-d');
+                $end_date = Carbon::now()->format('Y-m-d');
+                break;
             case 'week':
                 $start_date = Carbon::now()->startOfWeek(Carbon::SUNDAY)->format('Y-m-d');
                 $end_date = Carbon::now()->format('Y-m-d');
@@ -195,6 +199,7 @@ class DashboardHelper
             'today' => 'today',
             'yesterday' => 'yesterday',
             'last7days' => 'last7days',
+            'last90days' => 'last90days',
             'week' => 'week',
             'month' => 'thisMonth',
             'thismonth' => 'thisMonth',

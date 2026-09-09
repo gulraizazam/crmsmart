@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Config;
 use App\Services\Dashboard\DashboardStatsService;
 use App\Services\Dashboard\DashboardRevenueService;
 use App\Services\Dashboard\DashboardChartService;
+use App\Services\Dashboard\OverviewDashboardService;
+use App\Support\DashboardPeriod;
 
 class HomeController extends Controller
 {
@@ -40,6 +42,7 @@ class HomeController extends Controller
     protected $statsService;
     protected $revenueService;
     protected $chartService;
+    protected $overviewService;
 
     /**
      * Create a new controller instance.
@@ -49,7 +52,8 @@ class HomeController extends Controller
     public function __construct(
         DashboardStatsService $statsService,
         DashboardRevenueService $revenueService,
-        DashboardChartService $chartService
+        DashboardChartService $chartService,
+        OverviewDashboardService $overviewService
     ) {
         $this->middleware('auth');
         $this->success = config('constants.api_status.success');
@@ -59,6 +63,7 @@ class HomeController extends Controller
         $this->statsService = $statsService;
         $this->revenueService = $revenueService;
         $this->chartService = $chartService;
+        $this->overviewService = $overviewService;
     }
 
     /**
@@ -78,8 +83,11 @@ class HomeController extends Controller
             'month' => $dateTimeInfo['month'],
             'currentTime' => $dateTimeInfo['currentTime'],
             'location_id' => $userCentres,
-            'requestType' => $request->type ?? 'today',
+            'requestType' => $request->period ?? $request->type ?? 'last90days',
         ];
+
+        $period = DashboardPeriod::fromRequest($request->query('period', $request->query('type')));
+        $data = array_merge($data, $this->overviewService->build($period));
         
         // Get centres for dropdowns
         $centresExclude = ['All South Region', 'All Central Region', 'All Centres'];

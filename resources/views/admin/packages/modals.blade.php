@@ -92,7 +92,7 @@
                     </span>
                 </div>
             </div>
-            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+            <div class="modal-body scroll-y">
                 <form id="edit_sold_by_form">
                     <input type="hidden" id="package_service_id" name="package_service_id">
                     <div class="fv-row mb-7">

@@ -3,290 +3,15 @@
 @section('content')
     @push('css')
         <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css" />
-        <style>
-            /* Custom Resource Calendar Styles */
-            .resource-calendar-container {
-                display: flex;
-                flex-direction: column;
-                border: 1px solid #e4e6ef;
-                background: #fff;
-                min-height: 600px;
-            }
-            .resource-calendar-container * {
-                box-sizing: border-box;
-            }
-            .resource-calendar-header {
-                display: flex;
-                border-bottom: 2px solid #e4e6ef;
-                background: #f3f6f9;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-                overflow-y: scroll;
-                overflow-x: hidden;
-            }
-            .resource-calendar-header::-webkit-scrollbar {
-                width: 17px; /* Match scrollbar width */
-                height: 0;
-            }
-            .resource-calendar-header::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            .resource-calendar-header::-webkit-scrollbar-thumb {
-                background: transparent;
-            }
-            .resource-calendar-header-doctors {
-                display: flex;
-                flex: 1;
-                min-width: 0;
-            }
-            .resource-time-column {
-                width: 80px;
-                min-width: 80px;
-                max-width: 80px;
-                flex: 0 0 80px;
-                border-right: 2px solid #e4e6ef;
-                background: #f3f6f9;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 15px 5px;
-            }
-            .resource-doctor-header {
-                flex: 1;
-                min-width: 0;
-                padding: 15px 10px;
-                text-align: center;
-                font-weight: 600;
-                border-right: 1px solid #e4e6ef;
-                background: #007bff;
-                color: #fff;
-                word-wrap: break-word;
-                overflow: hidden;
-            }
-            .resource-calendar-body {
-                display: flex;
-                overflow-y: scroll;
-                overflow-x: hidden;
-                max-height: 700px;
-            }
-            .resource-time-slots {
-                width: 80px;
-                min-width: 80px;
-                max-width: 80px;
-                flex: 0 0 80px;
-                border-right: 2px solid #e4e6ef;
-                background: #f3f6f9;
-                display: flex;
-                flex-direction: column;
-            }
-            .resource-time-slot {
-                height: 60px;
-                min-height: 60px;
-                flex-shrink: 0;
-                border-bottom: 1px solid #e4e6ef;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 11px;
-                font-weight: 600;
-                color: #7e8299;
-                box-sizing: border-box;
-            }
-            .resource-time-slot:last-child {
-                border-bottom: 1px solid #e4e6ef;
-            }
-            .resource-doctors-container {
-                display: flex;
-                flex: 1;
-                min-width: 0;
-                align-items: stretch;
-            }
-            .resource-doctor-column {
-                flex: 1 1 0;
-                min-width: 0;
-                border-right: 1px solid #e4e6ef;
-                position: relative;
-                background: #fff;
-                display: flex;
-                flex-direction: column;
-            }
-            .resource-doctor-column.no-rota-column {
-                background: #E4E6EF !important;
-            }
-            .resource-doctor-column.no-rota-column .resource-doctor-slot {
-                background: #E4E6EF !important;
-                cursor: not-allowed !important;
-            }
-            .resource-doctor-slot.no-rota-slot {
-                background: #E4E6EF !important;
-                cursor: not-allowed !important;
-            }
-            .resource-doctor-slot {
-                height: 60px;
-                min-height: 60px;
-                flex-shrink: 0;
-                border-bottom: 1px solid #e4e6ef;
-                position: relative;
-                cursor: not-allowed;
-                transition: background 0.2s;
-                box-sizing: border-box;
-            }
-            .resource-doctor-slot:last-child {
-                border-bottom: 1px solid #e4e6ef;
-            }
-            .resource-doctor-slot:hover {
-                background: #fef5f5;
-            }
-            .resource-doctor-slot.has-rota {
-                background: #e8fff3;
-                cursor: pointer;
-            }
-            .resource-doctor-slot.has-rota:hover {
-                background: #d4f7e3;
-            }
-            .resource-appointment {
-                position: absolute;
-                left: 2px;
-                right: 2px;
-                background: #7A8B6A;
-                color: #fff;
-                padding: 8px 10px;
-                border-radius: 6px;
-                font-size: 11px;
-                overflow: hidden;
-                cursor: move;
-                border: 1px solid transparent;
-                border-left: 4px solid #187de4;
-                z-index: 5;
-                line-height: 1.4;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .resource-appointment:hover {
-                transform: translateY(-2px) scale(1.02);
-                box-shadow: 0 6px 16px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.3);
-                z-index: 10;
-                filter: brightness(1.1);
-            }
-            .resource-appointment.modern-card {
-                backdrop-filter: blur(10px);
-            }
-            .resource-appointment.dragging {
-                opacity: 0.5;
-                cursor: grabbing;
-                z-index: 20;
-            }
-            .resource-doctor-slot.drag-over {
-                background: #fff3cd !important;
-                border: 2px dashed #ffc107 !important;
-            }
-            .resource-doctor-slot.time-off-slot-no-label {
-                background: transparent !important;
-                cursor: not-allowed;
-                pointer-events: none;
-            }
-            .time-off-block {
-                box-shadow: 0 2px 8px rgba(94, 98, 120, 0.2);
-            }
-            .time-off-block:hover {
-                box-shadow: 0 4px 12px rgba(94, 98, 120, 0.3);
-            }
-            .resource-doctor-slot.non-working-day-slot {
-                background: #E4E6EF !important;
-                cursor: not-allowed;
-                pointer-events: none;
-            }
-            .resource-calendar-nav {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 15px 20px;
-                background: #f3f6f9;
-                border-bottom: 1px solid #e4e6ef;
-                margin-bottom: 10px;
-            }
-            .resource-calendar-nav button {
-                padding: 8px 16px;
-                margin: 0 5px;
-            }
-            .resource-calendar-nav .current-date {
-                font-weight: 600;
-                font-size: 16px;
-                padding: 8px 16px;
-                background: #fff;
-                border-radius: 4px;
-                border: 1px solid #e4e6ef;
-                transition: all 0.2s;
-                display: inline-flex;
-                align-items: center;
-                margin-right: 550px;
-            }
-            .resource-calendar-nav .current-date:hover {
-                background: #f3f6f9;
-                border-color: #7A8B6A;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            }
-            /* Make FullCalendar title clickable */
-            .fc-center h2, .fc-toolbar-title {
-                transition: all 0.2s;
-            }
-            .fc-center h2:hover, .fc-toolbar-title:hover {
-                color: #7A8B6A !important;
-                text-decoration: underline;
-            }
-            /* Today button styling when not on today's date */
-            .fc-today-button.fc-button-active {
-                background-color: #7A8B6A !important;
-                border-color: #7A8B6A !important;
-            }
-            /* Animation for newly created appointments */
-            @keyframes pulse-highlight {
-                0%, 100% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.03);
-                    opacity: 0.9;
-                }
-            }
-        </style>
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
     @endpush
-    <!--begin::Content-->
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Consultancy List', 'title' => 'Consultancies'])
-        <!--begin::Entry-->
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <!--begin::Container-->
-            <div class="container">
+            <div class="container-fluid sneat-page">
                 @include('admin.appointments.partials.consultancy-menu')
-                <!--begin::Card-->
-                <div class="card card-custom">
-                    <div class="card-header py-3">
-                        <div class="card-title align-items-center">
-                            <span class="card-icon">
-                                <span class="svg-icon svg-icon-md svg-icon-primary">
-                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Chart-bar1.svg-->
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13"
-                                                rx="1.5" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8"
-                                                rx="1.5" />
-                                            <path
-                                                d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6"
-                                                rx="1.5" />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
-                            </span>
+                <div class="card card-custom sneat-page-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
                             <h3 class="card-label change-label">Consultancies</h3>
 
                             @php
@@ -295,27 +20,24 @@
                             @endphp
 
                             @if($showDropdown)
-                            <div class="ml-5 consultancy-location-header-dropdown d-none" style="min-width: 250px;">
+                            <div class="consultancy-location-header-dropdown d-none">
                                 <select onchange="loadConsultantDoctors($(this).val(), 'consultancy');" class="form-control" id="consultancy_location_filter"></select>
                             </div>
                             @else
-                            <!-- Hidden dropdown for single-centre users -->
                             <div style="display: none;">
                                 <select onchange="loadConsultantDoctors($(this).val(), 'consultancy');" class="form-control" id="consultancy_location_filter"></select>
                             </div>
                             @endif
-
                         </div>
                         <div class="card-toolbar">
-                            <!--begin::Dropdown-->
                             @if (Gate::allows('appointments_export_today'))
                                 <div class="export-appointments">
                                     <a id="today_consultancies"
                                         onclick="loadTodayAppointments('{{ date('Y-m-d') }}', 'consultancy');"
-                                        href="javascript:void(0);" class="btn btn-info font-weight-bolder">
+                                        href="javascript:void(0);" class="btn btn-info">
                                         Today Consultancies
                                     </a>
-                                </div>&nbsp;&nbsp;&nbsp;
+                                </div>
                             @endif
                             @if (Gate::allows('appointments_export'))
                                 <div class="delete-records export-appointments">
@@ -340,43 +62,22 @@
                                         <input type="hidden" id="filter_created_to_id" name="filter_created_to_id">
                                         <input type="hidden" id="filter_rescheduled_by_id"
                                             name="filter_rescheduled_by_id">
-                                        <a id="appointment_exports_submit" class="btn btn-primary font-weight-bolder">
+                                        <a id="appointment_exports_submit" class="btn btn-primary">
                                             <i class="la la-file-export"></i> Export
                                         </a>
                                     </form>
-                                    <!-- <a onclick="changeLimitOffset($(this));" title="On each click Max 1000 records will be export." id="appointment_exports" href="{{ route('admin.appointments.export', [1000, 0]) }}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-file-export"></i> Export
-                                        </a> -->
                                 </div>
-                                <!-- <div class="delete-records export-appointments">
-                                        <a  title="Download Today's Records."  href="download-today-consultancies" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-file-export"></i> Export
-                                        </a>
-                                    </div> -->
                             @endif
-                            <!--end::Button-->
                         </div>
-
                     </div>
 
-                    <!--Start Appointment Section-->
                     <div class="card-body appointment appointment-section">
-                        <!--begin::Search Form-->
                         @include('admin.appointments.filters', ['custom_reset' => 'custom_reset'])
-                        <!--end::Search Form-->
-
-                        <!--begin: Datatable-->
                         <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
-                        <!--end: Datatable-->
                     </div>
-                    <!--End Appointment Section-->
 
-                    <!--Start Consultancy Section-->
                     <div class="card-body appointment consultancy-section d-none">
-
                         @include('admin.appointments.consultancy.filters')
-
-                        {{-- Custom Resource Calendar View --}}
                         <div id="custom_resource_calendar" style="display: none; position: relative;">
                             <div class="appointment-loader-base" style="display: none;">
                                 <div class="blockui"> <span>Please wait...</span>
@@ -386,11 +87,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- Original FullCalendar View --}}
                         <div id="consultancy_calendar" style="position: relative">
-
-                            {{-- loader befor get celendar events --}}
                             <div class="appointment-loader-base" style="display: none;">
                                 <div class="blockui"> <span>Please wait...</span>
                                     <span>
@@ -398,23 +95,12 @@
                                     </span>
                                 </div>
                             </div>
-                            {{-- end loader --}}
-
                         </div>
-
                     </div>
-                    <!--End Consultancy Section-->
-
                 </div>
-                <!--end::Card-->
-
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::Entry-->
-
     </div>
-    <!--end::Content-->
 
     {{-- All forms popups --}}
     @include('admin.appointments.appointment-forms.modals')
@@ -719,7 +405,7 @@
 
         </script>
         <script src="{{ asset('assets/js/pages/appointment/invoice.js?v=1') }}"></script>
-        <script src="{{ asset('assets/js/pages/appointment/consultancy-calendar.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/appointment/consultancy-calendar.js') }}?v={{ @filemtime(public_path('assets/js/pages/appointment/consultancy-calendar.js')) }}"></script>
         <script src="{{ asset('assets/js/pages/appointments/referred-by-patient-search.js') }}"></script>
 
         <script src="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
@@ -732,7 +418,7 @@
     @endpush
 
     @push('datatable-js')
-        <script src="{{ asset('assets/js/pages/appointment/consultation-columns.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/appointment/consultation-columns.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/appointment/consultation-common.js') }}"></script>
         <script src="{{ asset('assets/js/pages/appointment/datatable.js') }}"></script>
     @endpush

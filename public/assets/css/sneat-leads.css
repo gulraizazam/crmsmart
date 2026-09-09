@@ -1,0 +1,200 @@
+/* Sneat leads list. Filter row comes from sneat-consultancies.css via .sneat-appt-page. */
+
+.sneat-leads-page {
+    --s-primary: #696cff;
+    --s-primary-hover: #5f61e6;
+    --s-heading: #566a7f;
+    --s-body: #697a8d;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-paper: #fff;
+    --s-soft: #f5f5f9;
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+.sneat-leads-page .suggesstion-box-leads,
+.sneat-leads-page .suggesstion-box {
+    z-index: 1130 !important;
+    border: 1px solid var(--s-border) !important;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.25rem 1.25rem 0 rgba(147, 158, 170, 0.2);
+    background: #fff !important;
+}
+
+.sneat-leads-page .suggestion-list-leads li,
+.modal .suggestion-list li {
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--s-border);
+    font-size: 0.9375rem;
+    color: var(--s-heading);
+}
+
+.sneat-leads-page .suggestion-list-leads li:hover,
+.modal .suggestion-list li:hover {
+    background: rgba(105, 108, 255, 0.08);
+    color: var(--s-primary);
+}
+
+.sneat-leads-page .filterouterdiv {
+    position: relative;
+}
+
+.sneat-leads-page .datatable-cell[data-field="actions"],
+.sneat-leads-page .datatable-cell[data-field="name"] {
+    overflow: visible !important;
+}
+
+.sneat-leads-page .action-dots .btn-clean,
+.sneat-leads-page .action-dots .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+#modal_view_lead .sneat-lead-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.15rem;
+}
+
+#modal_view_lead .sneat-lead-meta-item {
+    padding: 0.85rem 1rem;
+    background: #f5f5f9;
+    border: 1px solid #d9dee3;
+    border-radius: 0.5rem;
+}
+
+#modal_view_lead .sneat-lead-meta-item label,
+#modal_view_lead .sneat-lead-meta-item th {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a1acb8;
+}
+
+#modal_view_lead .sneat-lead-meta-item td,
+#modal_view_lead .sneat-lead-meta-item span {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #566a7f;
+}
+
+#modal_view_lead .sneat-lead-section-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #566a7f;
+}
+
+.modal .custom_checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #566a7f;
+}
+
+.modal .custom_checkbox > input:checked ~ strong {
+    background-color: #696cff;
+}
+
+.modal .msg_new_lead {
+    font-size: 0.9375rem !important;
+    font-weight: 600;
+}
+
+.modal .help-block a {
+    color: #696cff;
+    font-weight: 600;
+}
+
+.modal-content.ld-modal > form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#modal_add_leads #lead_id {
+    position: relative;
+}
+
+#modal_add_leads .croxcli {
+    color: #a1acb8;
+    cursor: pointer;
+}
+
+#modal_add_leads .croxcli:hover {
+    color: #696cff;
+}
+
+#modal_view_lead .sneat-lead-section {
+    margin-top: 0.25rem;
+    margin-bottom: 1.25rem;
+}
+
+#modal_view_lead .sneat-lead-comment-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+#modal_view_lead .sneat-lead-comment-form .btn {
+    align-self: flex-start;
+    min-height: 44px;
+}
+
+#commentsection .mt-comment {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid #d9dee3;
+}
+
+#commentsection .mt-comment-img img {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#commentsection .mt-comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+#commentsection .mt-comment-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+#commentsection .mt-comment-author {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #566a7f;
+}
+
+#commentsection .mt-comment-date {
+    font-size: 0.75rem;
+    color: #a1acb8;
+}
+
+#commentsection .mt-comment-text {
+    font-size: 0.875rem;
+    color: #697a8d;
+    word-break: break-word;
+}
+
+#modal_edit_leads .suggesstion-box {
+    position: relative;
+    z-index: 1130;
+}

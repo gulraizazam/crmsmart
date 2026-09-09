@@ -251,13 +251,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="ep-footer">
-                <button type="button" class="ep-btn-cancel" onclick="resetVoucherEdit(event)">Cancel</button>
-                <button id="EditPackageFinal" type="button" class="ep-btn-save spinner-button-edit-save">
-                    <span class="indicator-label">Save</span>
-                </button>
-            </div>
         </form>
 
         <div class="ep-history">
@@ -287,6 +280,12 @@
             </div>
         </div>
 
+    </div>
+    <div class="ep-footer">
+        <button type="button" class="ep-btn-cancel" onclick="resetVoucherEdit(event)">Cancel</button>
+        <button id="EditPackageFinal" type="button" class="ep-btn-save spinner-button-edit-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

@@ -52,6 +52,10 @@ class TreatmentService extends AppointmentService
 
         $data['appointment_type_id'] = $this->treatmentTypeId;
 
+        unset($data['machine_id'], $data['resourceId'], $data['resource_has_rota_day_id_for_machine']);
+        $data['resource_id'] = null;
+        $data['resource_has_rota_day_id_for_machine'] = null;
+
         if (isset($data['service_id'])) {
             $service = Services::find($data['service_id']);
             if (!$service) {
@@ -91,6 +95,10 @@ class TreatmentService extends AppointmentService
         if (!$appointment) {
             throw AppointmentException::notFound();
         }
+
+        unset($data['machine_id'], $data['resourceId'], $data['resource_has_rota_day_id_for_machine']);
+        $data['resource_id'] = null;
+        $data['resource_has_rota_day_id_for_machine'] = null;
 
         return $this->updateAppointment($id, $data);
     }

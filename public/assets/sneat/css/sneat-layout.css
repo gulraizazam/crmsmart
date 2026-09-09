@@ -1,0 +1,594 @@
+/* Sneat shell — sidebar + header only. Page cards/modals stay on existing Bootstrap 4. */
+
+:root {
+    --sneat-primary: #696cff;
+    --sneat-primary-soft: rgba(105, 108, 255, 0.16);
+    --sneat-primary-hover: rgba(105, 108, 255, 0.08);
+    --sneat-heading: #566a7f;
+    --sneat-body: #697a8d;
+    --sneat-muted: #a1acb8;
+    --sneat-border: #d9dee3;
+    --sneat-bg: #f5f5f9;
+    --sneat-paper: #fff;
+    --sneat-shadow: 0 0.125rem 0.5rem 0.0625rem rgba(161, 172, 184, 0.12);
+    --sneat-shadow-lg: 0 0.25rem 1.25rem 0 rgba(147, 158, 170, 0.2);
+    --sneat-radius: 0.375rem;
+    --sneat-menu-width: 280px;
+    --sneat-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+body.sneat-shell {
+    background: var(--sneat-bg) !important;
+    font-family: var(--sneat-font);
+    color: var(--sneat-body);
+    overflow: auto !important;
+    height: auto !important;
+    min-height: 100vh;
+}
+
+body.sneat-shell .page-loader {
+    display: none !important;
+}
+
+.layout-wrapper.layout-content-navbar {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 100vh;
+    width: 100%;
+    background: var(--sneat-bg);
+}
+
+.layout-container {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 100vh;
+    align-items: stretch;
+}
+
+.layout-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    background: rgba(67, 89, 113, 0.45);
+}
+
+body.layout-menu-expanded .layout-overlay {
+    display: block;
+}
+
+/* ---- Sidebar ---- */
+
+#layout-menu {
+    position: sticky;
+    top: 0;
+    z-index: 1080;
+    flex: 0 0 var(--sneat-menu-width);
+    width: var(--sneat-menu-width);
+    max-width: var(--sneat-menu-width);
+    height: 100vh;
+    background: var(--sneat-paper) !important;
+    box-shadow: var(--sneat-shadow-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#layout-menu .app-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    padding: 0.75rem 1.25rem 0.5rem;
+    flex: 0 0 auto;
+}
+
+#layout-menu .app-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    min-width: 0;
+}
+
+#layout-menu .app-brand-logo {
+    color: var(--sneat-primary);
+    display: flex;
+}
+
+#layout-menu .app-brand-text {
+    font-family: var(--sneat-font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--sneat-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#layout-menu .layout-menu-close {
+    color: var(--sneat-heading);
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0.25rem;
+    text-decoration: none;
+}
+
+#layout-menu .menu-inner-shadow {
+    display: none;
+}
+
+#layout-menu .menu-inner,
+#layout-menu ul.menu-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0.65rem 0 1.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1 1 auto;
+}
+
+#layout-menu .menu-item {
+    margin: 0.2rem 0;
+    position: relative;
+}
+
+#layout-menu .menu-subnav > .menu-item {
+    margin: 0.15rem 0;
+}
+
+#layout-menu .menu-link {
+    display: flex !important;
+    align-items: center;
+    margin: 0 0.75rem;
+    padding: 0.6rem 0.9rem !important;
+    min-height: 2.75rem;
+    border-radius: var(--sneat-radius);
+    color: var(--sneat-heading) !important;
+    font-family: var(--sneat-font);
+    font-size: 15px !important;
+    font-weight: 500;
+    line-height: 1.35;
+    text-decoration: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    gap: 0.65rem;
+}
+
+#layout-menu .menu-link:hover {
+    background: var(--sneat-primary-hover) !important;
+    color: var(--sneat-primary) !important;
+}
+
+#layout-menu .menu-item.open > .menu-link,
+#layout-menu .menu-item.menu-item-open > .menu-link {
+    color: var(--sneat-primary) !important;
+}
+
+#layout-menu .menu-item.active > .menu-link,
+#layout-menu .menu-item.menu-item-active > .menu-link {
+    background: var(--sneat-primary-soft) !important;
+    color: var(--sneat-primary) !important;
+    font-weight: 600 !important;
+}
+
+#layout-menu .menu-item.active > .menu-link .menu-text,
+#layout-menu .menu-item.menu-item-active > .menu-link .menu-text,
+#layout-menu .menu-item.open > .menu-link .menu-text,
+#layout-menu .menu-item.menu-item-open > .menu-link .menu-text {
+    color: var(--sneat-primary) !important;
+}
+
+#layout-menu .menu-icon,
+#layout-menu .svg-icon.menu-icon,
+#layout-menu .menu-link .font-icon,
+#layout-menu .menu-link i.la,
+#layout-menu .menu-link i.menu-icon {
+    width: 1.5rem;
+    min-width: 1.5rem;
+    font-size: 18px !important;
+    line-height: 1;
+    color: inherit !important;
+    margin: 0 !important;
+}
+
+#layout-menu .menu-text {
+    flex: 1 1 auto;
+    color: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+}
+
+#layout-menu .menu-arrow {
+    margin-left: auto;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: none !important;
+    background: none !important;
+    position: relative;
+    opacity: 0.7;
+}
+
+#layout-menu .menu-arrow::before {
+    content: "";
+    display: block;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+}
+
+#layout-menu .menu-item.open > .menu-link .menu-arrow::before,
+#layout-menu .menu-item.menu-item-open > .menu-link .menu-arrow::before {
+    transform: rotate(45deg);
+}
+
+#layout-menu .menu-submenu {
+    display: none !important;
+    position: static !important;
+    width: auto !important;
+    min-width: 0 !important;
+    left: auto !important;
+    top: auto !important;
+    float: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+}
+
+#layout-menu .menu-item.open > .menu-submenu,
+#layout-menu .menu-item.menu-item-open > .menu-submenu {
+    display: block !important;
+}
+
+#layout-menu .menu-submenu > .menu-arrow {
+    display: none !important;
+}
+
+#layout-menu .menu-subnav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.35rem;
+}
+
+#layout-menu .menu-subnav .menu-link {
+    padding-left: 2.85rem !important;
+    min-height: 2.5rem;
+    font-weight: 400;
+    font-size: 14px !important;
+    color: var(--sneat-body) !important;
+}
+
+#layout-menu .menu-subnav .menu-item.active > .menu-link,
+#layout-menu .menu-subnav .menu-item.menu-item-active > .menu-link {
+    background: var(--sneat-primary-soft) !important;
+    color: var(--sneat-primary) !important;
+    font-weight: 600 !important;
+}
+
+#layout-menu .menu-bullet {
+    display: none !important;
+}
+
+#layout-menu .menu-item-parent {
+    display: none !important;
+}
+
+#layout-menu .menu-header {
+    list-style: none;
+    padding: 0.85rem 1.4rem 0.35rem;
+    margin: 0;
+    pointer-events: none;
+}
+
+#layout-menu .menu-header:first-child {
+    padding-top: 0.35rem;
+}
+
+#layout-menu .menu-header-text {
+    display: block;
+    font-size: 11px !important;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sneat-muted);
+    line-height: 1.4;
+}
+
+#layout-menu .menu-header:has(+ .menu-header),
+#layout-menu .menu-header:last-child {
+    display: none;
+}
+
+/* ---- Navbar ---- */
+
+.layout-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 100vh;
+    background: var(--sneat-bg);
+}
+
+.layout-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    min-height: 3.875rem;
+    margin: 1rem 1.5rem 0;
+    padding: 0 1.25rem;
+    background: var(--sneat-paper);
+    border-radius: var(--sneat-radius);
+    box-shadow: var(--sneat-shadow);
+    z-index: 1070;
+    flex: 0 0 auto;
+}
+
+.layout-navbar .layout-menu-toggle {
+    display: none;
+    color: var(--sneat-heading);
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+    text-decoration: none;
+}
+
+.layout-navbar .navbar-left,
+.layout-navbar .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.layout-navbar .navbar-page-title {
+    font-family: var(--sneat-font);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--sneat-heading);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.layout-navbar .navbar-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.25rem 0.15rem 0.25rem 0.25rem;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--sneat-heading);
+    font-family: var(--sneat-font);
+}
+
+.layout-navbar .navbar-user-btn img {
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.layout-navbar .navbar-user-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layout-navbar .navbar-user-email {
+    font-size: 0.75rem;
+    color: var(--sneat-muted);
+    font-weight: 400;
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layout-navbar .dropdown-menu {
+    font-family: var(--sneat-font);
+    border: 1px solid var(--sneat-border);
+    border-radius: var(--sneat-radius);
+    box-shadow: var(--sneat-shadow-lg);
+    min-width: 14rem;
+    padding: 0.5rem 0;
+}
+
+.layout-navbar .dropdown-menu .dropdown-item {
+    font-size: 0.875rem;
+    color: var(--sneat-heading);
+    padding: 0.45rem 1.15rem;
+}
+
+.layout-navbar .dropdown-menu .dropdown-item:hover {
+    background: var(--sneat-primary-hover);
+    color: var(--sneat-primary);
+}
+
+/* ---- Content / breadcrumb ---- */
+
+.layout-page .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 1.5rem 0 0;
+}
+
+.sneat-shell #kt_wrapper,
+.sneat-shell .wrapper {
+    padding-left: 0 !important;
+    padding-top: 0 !important;
+    background: transparent !important;
+}
+
+.sneat-shell .content#kt_content,
+.sneat-shell .content,
+.sneat-shell #kt_content {
+    margin-top: 0 !important;
+    padding: 0 1.5rem 1.5rem !important;
+    background: transparent !important;
+}
+
+.sneat-shell .subheader,
+.sneat-shell #kt_subheader {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 0 1rem !important;
+    position: static !important;
+    top: auto !important;
+}
+
+.sneat-shell .subheader .breadcrumb {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0.15rem 0 0 !important;
+}
+
+.sneat-shell .subheader h5 {
+    font-family: var(--sneat-font);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--sneat-heading);
+}
+
+.sneat-shell .footer,
+.sneat-shell #kt_footer {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 1.25rem 1.5rem 1.5rem !important;
+    font-family: var(--sneat-font);
+    color: var(--sneat-muted);
+}
+
+.sneat-shell #kt_header_mobile {
+    display: none !important;
+}
+
+@media (min-width: 1200px) {
+    #layout-menu-close {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    #layout-menu {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+    }
+
+    body.layout-menu-expanded #layout-menu {
+        transform: translateX(0);
+    }
+
+    .layout-navbar .layout-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .layout-navbar .navbar-user-meta {
+        display: none;
+    }
+
+    .layout-navbar {
+        margin: 0.75rem 1rem 0;
+    }
+
+    .layout-page .content-wrapper {
+        padding-top: 1.25rem;
+    }
+
+    .sneat-shell .content#kt_content,
+    .sneat-shell .content,
+    .sneat-shell #kt_content {
+        padding: 0 1rem 1.25rem !important;
+    }
+}
+
+/* Modals must sit above sidebar (1080) and navbar (1070). Bootstrap default is 1050.
+   Those shell z-indexes also create stacking contexts, so drop them while a modal is open. */
+body.sneat-shell.modal-open #layout-menu,
+body.sneat-shell.modal-open .layout-navbar,
+body.sneat-shell.modal-open .layout-overlay {
+    z-index: auto !important;
+}
+
+body.sneat-shell .modal-backdrop {
+    z-index: 1100 !important;
+}
+
+body.sneat-shell .modal {
+    z-index: 1110 !important;
+}
+
+body.sneat-shell .modal-backdrop + .modal-backdrop {
+    z-index: 1115 !important;
+}
+
+body.sneat-shell #modal_edit_sold_by {
+    z-index: 1120 !important;
+}
+
+body.sneat-shell .select2-container--open,
+body.sneat-shell .select2-dropdown,
+body.sneat-shell .daterangepicker,
+body.sneat-shell .datepicker,
+body.sneat-shell .bootstrap-datetimepicker-widget {
+    z-index: 1130 !important;
+}
+
+/* Readable type: filters, placeholders, and table heads match Sneat body (~15px). */
+body.sneat-shell .form-control,
+body.sneat-shell .form-control::placeholder,
+body.sneat-shell input::placeholder,
+body.sneat-shell textarea::placeholder {
+    font-size: 0.9375rem;
+}
+
+body.sneat-shell .form-control::placeholder,
+body.sneat-shell input::placeholder,
+body.sneat-shell textarea::placeholder {
+    color: #a1acb8;
+    opacity: 1;
+}
+
+body.sneat-shell .select2-container--default .select2-selection--single .select2-selection__rendered,
+body.sneat-shell .select2-container--default .select2-selection--single .select2-selection__placeholder,
+body.sneat-shell .select2-container--default .select2-selection--multiple .select2-selection__placeholder,
+body.sneat-shell .select2-container--default .select2-search--inline .select2-search__field,
+body.sneat-shell .select2-container--default .select2-search--inline .select2-search__field::placeholder {
+    font-size: 0.9375rem !important;
+}
+
+body.sneat-shell .filterouterdiv label,
+body.sneat-shell .sneat-filter-row label,
+body.sneat-shell .sneat-filter-row .control-label {
+    font-size: 0.875rem;
+}
+
+body.sneat-shell .sneat-datatable table.dataTable thead th,
+body.sneat-shell table.dataTable thead th,
+body.sneat-shell .table thead th,
+body.sneat-shell .datatable-head .datatable-cell > span {
+    font-size: 0.9375rem !important;
+    letter-spacing: 0.01em;
+    text-transform: none;
+}

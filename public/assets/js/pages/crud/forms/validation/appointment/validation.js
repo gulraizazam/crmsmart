@@ -378,13 +378,6 @@ var EditTreatmentValidation = function () {
                             }
                         }
                     },
-                    machine_id: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The machine field is required'
-                            }
-                        }
-                    },
                     scheduled_date: {
                         validators: {
                             notEmpty: {
@@ -484,13 +477,6 @@ var AppointPlanValidation = function () {
                         validators: {
                             notEmpty: {
                                 message: 'The location field is required'
-                            }
-                        }
-                    },
-                    machine_id: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The machine field is required'
                             }
                         }
                     },

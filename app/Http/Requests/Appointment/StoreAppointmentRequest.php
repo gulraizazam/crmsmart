@@ -15,10 +15,12 @@ class StoreAppointmentRequest extends FormRequest
     protected function prepareForValidation()
     {
         $isConsultation = false;
+        $isTreatment = false;
         
         if ($this->has('appointment_type')) {
             $appointmentTypeStr = strtolower($this->appointment_type);
             $isConsultation = ($appointmentTypeStr === 'consulting' || $appointmentTypeStr === 'consultancy');
+            $isTreatment = ($appointmentTypeStr === 'treatment' || $appointmentTypeStr === 'service');
             
             if (!$this->has('appointment_type_id')) {
                 $appointmentType = \App\Models\AppointmentTypes::where('account_id', Auth::user()->account_id)
@@ -53,10 +55,14 @@ class StoreAppointmentRequest extends FormRequest
             }
         }
         
-        if ($isConsultation) {
+        if ($isConsultation || $isTreatment) {
             $this->request->remove('resource_id');
-            $this->request->remove('resource_has_rota_day_id');
             $this->request->remove('resource_has_rota_day_id_for_machine');
+            $this->request->remove('machine_id');
+            $this->request->remove('resourceId');
+        }
+        if ($isConsultation) {
+            $this->request->remove('resource_has_rota_day_id');
         }
         
         if ($this->has('city_id') && ($this->city_id == 0 || $this->city_id === '0')) {

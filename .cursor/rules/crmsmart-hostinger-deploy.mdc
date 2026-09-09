@@ -1,0 +1,15 @@
+---
+description: Hostinger deploy path for crmsmart (crm.aestheticlinics.net)
+alwaysApply: true
+---
+
+# crmsmart Hostinger deploy
+
+When the user asks to deploy crmsmart:
+
+1. **Never commit** `.deploy/`, `.env`, or Hostinger passwords. The public GitHub repo is https://github.com/gulraizazam/crmsmart
+2. Read connection details from `c:\laragon\www\crmsmart\.deploy\hostinger.env` (gitignored).
+3. Git path (required): commit on `main` if asked → push `main` to `github` remote `https://github.com/gulraizazam/crmsmart.git` → on the server `git pull` from that repo. Do not hand-edit production files.
+4. SSH: `u744025943@82.29.81.4` port `65002`. Subdomain: `crm.aestheticlinics.net`.
+5. Writes on the live box (`.env` edits, `migrate`, cache rebuilds, composer) need explicit per-action approval unless the user asked to deploy in this turn.
+6. Keep `origin` as the old backup (`crm-portal-old`) unless the user asks to retarget it. Deploy remote name: `github`.

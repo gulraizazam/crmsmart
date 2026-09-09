@@ -222,13 +222,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="eb-footer">
-                <button type="button" class="eb-btn-cancel">Cancel</button>
-                <button id="EditBundleFinal" type="button" class="eb-btn-save spinner-button-edit-save">
-                    <span class="indicator-label">Save</span>
-                </button>
-            </div>
         </form>
 
         <div class="eb-history">
@@ -258,6 +251,12 @@
             </div>
         </div>
 
+    </div>
+    <div class="eb-footer">
+        <button type="button" class="eb-btn-cancel">Cancel</button>
+        <button id="EditBundleFinal" type="button" class="eb-btn-save spinner-button-edit-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

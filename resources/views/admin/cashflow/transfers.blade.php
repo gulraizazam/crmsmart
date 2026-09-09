@@ -1,14 +1,17 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow - Transfers')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Cash Transfers', 'title' => 'Transfers'])
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
-                <div class="card card-custom">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-exchange-alt mr-2"></i>Cash Transfers</h3>
+            <div class="container-fluid sneat-page">
+                <div class="card card-custom sneat-page-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Cash Transfers</h3>
                         </div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_transfer_create'))
@@ -19,7 +22,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-4">
+                        <div class="row mb-4 sneat-cf-filters">
                             <div class="col-md-2">
                                 <select id="filter-pool" class="form-control form-control-sm kt-select2-general">
                                     <option value="">All Pools</option>
@@ -76,7 +79,7 @@
     <!-- Transfer Modal -->
     <div class="modal fade" id="modal_transfer">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">New Cash Transfer</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -151,7 +154,7 @@
     <!-- Attachment Preview Modal -->
     <div class="modal fade" id="modal_preview" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header py-3" style="background:#F3F6F9;border-bottom:2px solid #E4E6EF;">
                     <h5 class="modal-title font-weight-bolder"><i class="la la-paperclip text-primary mr-2"></i>Attachment Preview</h5>
                     <div>
@@ -169,7 +172,7 @@
     <!-- Edit Transfer Modal -->
     <div class="modal fade" id="modal_edit_transfer">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Cash Transfer</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -248,7 +251,7 @@
     <!-- Audit Trail Modal -->
     <div class="modal fade" id="modal_audit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header py-3" style="background:#F3F6F9;border-bottom:2px solid #E4E6EF;">
                     <h5 class="modal-title font-weight-bolder"><i class="la la-history text-primary mr-2"></i>Audit Trail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="la la-times"></i></button>

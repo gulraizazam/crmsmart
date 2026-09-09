@@ -462,12 +462,8 @@ function setFilters(filter_values, active_filters) {
 }
 
 function hideShowAdvanceFilters(active_filters) {
-    if ((typeof active_filters.gender !== 'undefined' && active_filters.gender != '')
-        || (typeof active_filters.created_from !== 'undefined' && active_filters.created_from != '')
-        || (typeof active_filters.created_to !== 'undefined' && active_filters.created_to != '')) {
-
-        $(".advance-filters").show();
-        $(".advance-arrow").addClass("fa fa-caret-down");
+    if (window.SneatFilterPicker) {
+        window.SneatFilterPicker.syncAll();
     }
 }
 

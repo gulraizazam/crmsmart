@@ -1,0 +1,963 @@
+/* Sneat consultancies — list + calendar. Scoped so other appointment screens stay untouched. */
+
+.sneat-appt-page {
+    --s-primary: #696cff;
+    --s-primary-hover: #5f61e6;
+    --s-primary-soft: rgba(105, 108, 255, 0.16);
+    --s-success: #71dd37;
+    --s-success-soft: #e8fadf;
+    --s-info: #03c3ec;
+    --s-warning: #ffab00;
+    --s-danger: #ff3e1d;
+    --s-heading: #566a7f;
+    --s-body: #697a8d;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-paper: #fff;
+    --s-soft: #f5f5f9;
+    --s-slot: #f0f0ff;
+    --s-control-h: 38px;
+    --s-radius: 0.5rem;
+    --s-shadow: 0 0.125rem 0.5rem 0.0625rem rgba(161, 172, 184, 0.12);
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+    font-family: var(--s-font);
+    color: var(--s-body);
+}
+
+.sneat-appt-page .subheader,
+.sneat-appt-page #kt_subheader {
+    display: none !important;
+}
+
+.sneat-appt-page .sneat-page {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ---- Tabs (replaces Metronic horizontal-nav boxes) ---- */
+
+.sneat-appt-page .sneat-tabs-wrap {
+    margin-bottom: 1.25rem;
+}
+
+.sneat-appt-page .sneat-page-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem;
+    background: var(--s-paper);
+    border-radius: var(--s-radius);
+    box-shadow: var(--s-shadow);
+}
+
+.sneat-appt-page .sneat-page-tabs > li {
+    margin: 0;
+    width: auto !important;
+    border: 0 !important;
+    display: block;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.45rem;
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 2.5rem;
+    padding: 0.45rem 1rem !important;
+    border-radius: 0.375rem;
+    font-family: var(--s-font);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--s-heading) !important;
+    background: transparent !important;
+    text-decoration: none !important;
+    flex-direction: row !important;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab .fa_icon,
+.sneat-appt-page .sneat-page-tabs .change-tab .text-muted {
+    margin: 0 !important;
+    color: inherit !important;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab i {
+    font-size: 1.125rem !important;
+    color: inherit !important;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab p,
+.sneat-appt-page .sneat-page-tabs .change-tab .navi-text {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab:hover {
+    background: rgba(105, 108, 255, 0.08) !important;
+    color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab.nav-bar-active {
+    background: var(--s-primary) !important;
+    color: #fff !important;
+}
+
+.sneat-appt-page .sneat-page-tabs .change-tab.nav-bar-active i,
+.sneat-appt-page .sneat-page-tabs .change-tab.nav-bar-active span,
+.sneat-appt-page .sneat-page-tabs .change-tab.nav-bar-active p {
+    color: #fff !important;
+}
+
+/* ---- Card / toolbar ---- */
+
+.sneat-appt-page .card.card-custom,
+.sneat-appt-page .sneat-page-card {
+    background: var(--s-paper) !important;
+    border: 0 !important;
+    border-radius: var(--s-radius) !important;
+    box-shadow: var(--s-shadow) !important;
+    overflow: visible;
+}
+
+.sneat-appt-page .card-header,
+.sneat-appt-page .card.card-custom > .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    min-height: 0 !important;
+    padding: 1.15rem 1.5rem !important;
+    background: var(--s-paper) !important;
+    border-bottom: 1px solid var(--s-border) !important;
+}
+
+.sneat-appt-page .card-icon,
+.sneat-appt-page .svg-icon {
+    display: none !important;
+}
+
+.sneat-appt-page .sneat-page-title-wrap,
+.sneat-appt-page .card-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0 !important;
+}
+
+.sneat-appt-page .change-label,
+.sneat-appt-page .card-label {
+    margin: 0;
+    font-family: var(--s-font);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--s-heading);
+}
+
+.sneat-appt-page .consultancy-location-header-dropdown,
+.sneat-appt-page .treatment-location-header-dropdown {
+    min-width: 16rem;
+    margin: 0 !important;
+}
+
+.sneat-appt-page .consultancy-location-header-dropdown .form-control,
+.sneat-appt-page .consultancy-location-header-dropdown .select2-container,
+.sneat-appt-page .treatment-location-header-dropdown .form-control,
+.sneat-appt-page .treatment-location-header-dropdown .select2-container {
+    min-width: 16rem;
+}
+
+.sneat-appt-page .card-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+}
+
+.sneat-appt-page .export-appointments {
+    margin: 0;
+}
+
+.sneat-appt-page .btn,
+.sneat-appt-page .btn-primary,
+.sneat-appt-page .btn-info,
+.sneat-appt-page .btn-secondary {
+    font-family: var(--s-font);
+    font-weight: 500;
+    border-radius: 0.375rem;
+    box-shadow: none;
+    min-height: 2.375rem;
+    padding: 0.45rem 1rem;
+}
+
+.sneat-appt-page .btn-primary,
+.sneat-appt-page .btn-primary.font-weight-bolder {
+    background: var(--s-primary) !important;
+    border-color: var(--s-primary) !important;
+    color: #fff !important;
+}
+
+.sneat-appt-page .btn-primary:hover {
+    background: var(--s-primary-hover) !important;
+    border-color: var(--s-primary-hover) !important;
+}
+
+.sneat-appt-page .btn-info,
+.sneat-appt-page .btn-info.font-weight-bolder {
+    background: #fff !important;
+    border: 1px solid var(--s-border) !important;
+    color: var(--s-heading) !important;
+}
+
+.sneat-appt-page .btn-info:hover {
+    background: rgba(105, 108, 255, 0.08) !important;
+    border-color: var(--s-primary) !important;
+    color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .btn-secondary,
+.sneat-appt-page .btn-secondary--icon {
+    background: #fff !important;
+    border: 1px solid var(--s-border) !important;
+    color: var(--s-heading) !important;
+}
+
+.sneat-appt-page .card-body {
+    padding: 1.25rem 1.5rem 1.5rem !important;
+    background: var(--s-paper);
+}
+
+/* ---- Filters ---- */
+
+.sneat-appt-page .all-filters-wrapper,
+.sneat-appt-page .mt-2.mb-7 {
+    margin-top: 0 !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.sneat-appt-page .filterouterdiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    flex: 1 1 11rem;
+    min-width: 11rem;
+    max-width: 18rem;
+}
+
+.sneat-appt-page .filterouterdiv.patient-search-wider {
+    flex: 1 1 14rem;
+    min-width: 14rem;
+    max-width: 22rem;
+}
+
+.sneat-appt-page .filterouterdiv label {
+    display: flex;
+    align-items: center;
+    min-height: 1.25rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.25rem;
+    color: var(--s-muted);
+}
+
+.sneat-appt-page .filterouterdiv .form-control,
+.sneat-appt-page .filterouterdiv .select2,
+.sneat-appt-page .advance-filters .form-control,
+.sneat-appt-page .advance-filters .select2,
+.sneat-appt-page .advance-filters .select2-container,
+.sneat-appt-page .filterouterdiv.patient-search-wider .form-control,
+.sneat-appt-page .filterouterdiv.patient-search-wider .select2-container,
+.sneat-appt-page .filterouterdiv .select2-container {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    box-sizing: border-box !important;
+    border: 1px solid var(--s-border) !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.9375rem;
+    color: var(--s-heading);
+    background: #fff;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: calc(var(--s-control-h) - 2px) !important;
+}
+
+.sneat-appt-page .filterouterdiv .form-control::placeholder,
+.sneat-appt-page .advance-filters .form-control::placeholder,
+.sneat-appt-page .filterouterdiv input::placeholder {
+    font-size: 0.9375rem;
+    color: var(--s-muted);
+    opacity: 1;
+}
+
+.sneat-appt-page .filterouterdiv select.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto,
+.sneat-appt-page .advance-filters .created-at-field .datefromto {
+    width: 100% !important;
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    display: flex;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto .input-group-append {
+    display: none !important;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto .form-control,
+.sneat-appt-page .advance-filters .created-at-field .datefromto .form-control {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 1 1 0;
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: calc(var(--s-control-h) - 2px) !important;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto .form-control:first-child {
+    border-radius: 0.375rem 0 0 0.375rem !important;
+    border-right-width: 0 !important;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto .form-control:last-child {
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+}
+
+.sneat-appt-page .filterouterdiv .datefromto .input-group-append,
+.sneat-appt-page .filterouterdiv .datefromto .input-group-text {
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+}
+
+.sneat-appt-page .datefromto .input-group-text {
+    background: var(--s-soft);
+    border-color: var(--s-border);
+    color: var(--s-muted);
+}
+
+.sneat-appt-page .select2-container .select2-selection--single {
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    border: 1px solid var(--s-border) !important;
+    border-radius: 0.375rem !important;
+    box-sizing: border-box !important;
+}
+
+.sneat-appt-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: calc(var(--s-control-h) - 2px) !important;
+    height: calc(var(--s-control-h) - 2px) !important;
+    padding: 0 2rem 0 0.75rem !important;
+    color: var(--s-heading);
+    font-size: 0.9375rem;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.sneat-appt-page .select2-container--default .select2-selection--single .select2-selection__placeholder,
+.sneat-appt-page .select2-container--default .select2-selection--multiple .select2-selection__placeholder,
+.sneat-appt-page .select2-container--default .select2-search--inline .select2-search__field,
+.sneat-appt-page .select2-container--default .select2-search--inline .select2-search__field::placeholder {
+    font-size: 0.9375rem !important;
+    color: var(--s-muted) !important;
+}
+
+.sneat-appt-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(var(--s-control-h) - 2px) !important;
+    top: 0 !important;
+}
+
+.sneat-appt-page .sneat-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+}
+
+.sneat-appt-page .sneat-filter-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin: 0;
+    padding-top: 1.6rem;
+}
+
+.sneat-appt-page .sneat-filter-actions .input-icon {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.sneat-appt-page .sneat-filter-actions .btn.ml-3 {
+    margin-left: 0 !important;
+}
+
+.sneat-appt-page .sneat-filter-actions .btn {
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.sneat-appt-page .js-add-filter-wrap {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.sneat-appt-page .sneat-add-filter-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    height: var(--s-control-h) !important;
+    min-height: var(--s-control-h) !important;
+    padding: 0 0.85rem !important;
+    border: 1px dashed var(--s-primary) !important;
+    background: var(--s-primary-soft) !important;
+    color: var(--s-primary) !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    box-shadow: none !important;
+    line-height: 1;
+}
+
+.sneat-appt-page .sneat-add-filter-btn:hover,
+.sneat-appt-page .sneat-add-filter-btn:focus {
+    background: #fff !important;
+    color: var(--s-primary-hover) !important;
+    border-color: var(--s-primary-hover) !important;
+}
+
+.sneat-appt-page .sneat-add-filter-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 1080;
+    min-width: 12.5rem;
+    padding: 0.35rem 0;
+    background: #fff;
+    border: 1px solid var(--s-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--s-shadow);
+}
+
+.sneat-appt-page .sneat-add-filter-menu button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.9rem;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--s-heading);
+    cursor: pointer;
+}
+
+.sneat-appt-page .sneat-add-filter-menu button:hover,
+.sneat-appt-page .sneat-add-filter-menu button:focus {
+    background: var(--s-soft);
+    color: var(--s-primary);
+}
+
+.sneat-appt-page .js-filter-item label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.sneat-appt-page .sneat-filter-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--s-soft);
+    color: var(--s-muted);
+    font-size: 0.95rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sneat-appt-page .sneat-filter-remove:hover,
+.sneat-appt-page .sneat-filter-remove:focus {
+    background: #ffe0db;
+    color: var(--s-danger);
+}
+
+.sneat-appt-page .sneat-filter-item-hidden {
+    display: none !important;
+}
+
+.sneat-appt-page .mobile-filter-toggle .btn {
+    background: var(--s-primary) !important;
+    border-color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .input-icon {
+    width: auto !important;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.sneat-appt-page .sneat-filter-actions .input-icon {
+    margin-top: 0 !important;
+}
+
+/* ---- Datatable host ---- */
+
+.sneat-appt-page .datatable,
+.sneat-appt-page #kt_datatable {
+    border: 0 !important;
+}
+
+.sneat-appt-page .sneat-patient-cell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    padding: 0.15rem 0;
+}
+
+.sneat-appt-page .sneat-patient-avatar {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    background: rgba(105, 108, 255, 0.16);
+    color: #696cff;
+}
+
+.sneat-appt-page .sneat-patient-avatar--primary {
+    background: rgba(105, 108, 255, 0.16);
+    color: #696cff;
+}
+
+.sneat-appt-page .sneat-patient-avatar--info {
+    background: rgba(3, 195, 236, 0.16);
+    color: #03c3ec;
+}
+
+.sneat-appt-page .sneat-patient-avatar--success {
+    background: rgba(113, 221, 55, 0.18);
+    color: #3a9b1a;
+}
+
+.sneat-appt-page .sneat-patient-avatar--warning {
+    background: rgba(255, 171, 0, 0.18);
+    color: #d48b00;
+}
+
+.sneat-appt-page .sneat-patient-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+}
+
+.sneat-appt-page .sneat-patient-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--s-heading) !important;
+    line-height: 1.3;
+    text-decoration: none !important;
+    word-break: break-word;
+}
+
+.sneat-appt-page .sneat-patient-name:hover {
+    color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .sneat-patient-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.4rem;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--s-muted);
+}
+
+.sneat-appt-page .sneat-patient-id,
+.sneat-appt-page .sneat-patient-meta .clipboard {
+    color: var(--s-primary) !important;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: none !important;
+}
+
+.sneat-appt-page .sneat-patient-id:hover,
+.sneat-appt-page .sneat-patient-meta .clipboard:hover {
+    text-decoration: underline !important;
+}
+
+.sneat-appt-page .sneat-patient-sep::before {
+    content: "·";
+    color: var(--s-border);
+}
+
+/* ---- Calendar ---- */
+
+.sneat-appt-page .resource-calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.85rem 0 1rem;
+    background: transparent;
+    border: 0;
+    margin-bottom: 0.75rem;
+}
+
+.sneat-appt-page .resource-calendar-nav .current-date {
+    margin-right: 0;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.45rem 0.85rem;
+    background: var(--s-paper);
+    border-radius: 0.375rem;
+    border: 1px solid var(--s-border);
+    color: var(--s-heading);
+    display: inline-flex;
+    align-items: center;
+}
+
+.sneat-appt-page .resource-calendar-nav .current-date:hover {
+    border-color: var(--s-primary);
+    color: var(--s-primary);
+    background: #fff;
+    box-shadow: none;
+}
+
+.sneat-appt-page .resource-calendar-nav .btn-light {
+    background: #fff !important;
+    border: 1px solid var(--s-border) !important;
+    color: var(--s-heading) !important;
+}
+
+.sneat-appt-page .resource-calendar-nav .btn-primary {
+    background: var(--s-primary) !important;
+    border-color: var(--s-primary) !important;
+    color: #fff !important;
+}
+
+.sneat-appt-page .resource-calendar-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--s-border);
+    background: var(--s-paper);
+    min-height: 600px;
+    border-radius: var(--s-radius);
+    overflow: hidden;
+}
+
+.sneat-appt-page .resource-calendar-container * {
+    box-sizing: border-box;
+}
+
+.sneat-appt-page .resource-calendar-header {
+    display: flex;
+    border-bottom: 1px solid var(--s-border);
+    background: var(--s-soft);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sneat-appt-page .resource-calendar-header::-webkit-scrollbar {
+    width: 17px;
+    height: 0;
+}
+
+.sneat-appt-page .resource-calendar-header::-webkit-scrollbar-track,
+.sneat-appt-page .resource-calendar-header::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.sneat-appt-page .resource-calendar-header-doctors {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+}
+
+.sneat-appt-page .resource-time-column {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    flex: 0 0 80px;
+    border-right: 1px solid var(--s-border);
+    background: var(--s-soft);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--s-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 5px;
+}
+
+.sneat-appt-page .resource-doctor-header {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    background: var(--s-primary);
+    color: #fff;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.sneat-appt-page .resource-calendar-body {
+    display: flex;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 700px;
+}
+
+.sneat-appt-page .resource-time-slots {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    flex: 0 0 80px;
+    border-right: 1px solid var(--s-border);
+    background: var(--s-soft);
+    display: flex;
+    flex-direction: column;
+}
+
+.sneat-appt-page .resource-time-slot {
+    height: 60px;
+    min-height: 60px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--s-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--s-muted);
+    box-sizing: border-box;
+}
+
+.sneat-appt-page .resource-doctors-container {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: stretch;
+}
+
+.sneat-appt-page .resource-doctor-column {
+    flex: 1 1 0;
+    min-width: 0;
+    border-right: 1px solid var(--s-border);
+    position: relative;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.sneat-appt-page .resource-doctor-column.no-rota-column,
+.sneat-appt-page .resource-doctor-column.no-rota-column .resource-doctor-slot,
+.sneat-appt-page .resource-doctor-slot.no-rota-slot,
+.sneat-appt-page .resource-doctor-slot.non-working-day-slot {
+    background: var(--s-soft) !important;
+    cursor: not-allowed !important;
+}
+
+.sneat-appt-page .resource-doctor-slot {
+    height: 60px;
+    min-height: 60px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--s-border);
+    position: relative;
+    cursor: not-allowed;
+    transition: background 0.2s;
+    box-sizing: border-box;
+}
+
+.sneat-appt-page .resource-doctor-slot:hover {
+    background: #f7f7ff;
+}
+
+.sneat-appt-page .resource-doctor-slot.has-rota {
+    background: var(--s-slot);
+    cursor: pointer;
+}
+
+.sneat-appt-page .resource-doctor-slot.has-rota:hover {
+    background: var(--s-primary-soft);
+}
+
+.sneat-appt-page .resource-appointment {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    background: var(--s-primary);
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 0.375rem;
+    font-size: 11px;
+    overflow: hidden;
+    cursor: move;
+    border: 1px solid transparent;
+    border-left: 4px solid var(--s-primary-hover);
+    z-index: 5;
+    line-height: 1.4;
+    box-shadow: 0 0.125rem 0.5rem rgba(67, 89, 113, 0.16);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sneat-appt-page .resource-appointment:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.35rem 1rem rgba(67, 89, 113, 0.22);
+    z-index: 10;
+    filter: none;
+}
+
+.sneat-appt-page .resource-appointment.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    z-index: 20;
+}
+
+.sneat-appt-page .resource-doctor-slot.drag-over {
+    background: #fff8e1 !important;
+    border: 2px dashed var(--s-warning) !important;
+}
+
+.sneat-appt-page .resource-doctor-slot.time-off-slot-no-label {
+    background: transparent !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.sneat-appt-page .fc-center h2:hover,
+.sneat-appt-page .fc-toolbar-title:hover {
+    color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .fc-today-button.fc-button-active,
+.sneat-appt-page .fc-button-primary {
+    background-color: var(--s-primary) !important;
+    border-color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .fc-button-primary:not(:disabled).fc-button-active,
+.sneat-appt-page .fc-button-primary:not(:disabled):hover {
+    background-color: var(--s-primary-hover) !important;
+    border-color: var(--s-primary-hover) !important;
+}
+
+.sneat-appt-page .appointment-loader-base {
+    border-radius: var(--s-radius);
+}
+
+.sneat-appt-page .appointment-loader-base .blockui {
+    font-family: var(--s-font);
+    color: var(--s-heading);
+}
+
+@media (max-width: 991.98px) {
+    .sneat-appt-page .card-header,
+    .sneat-appt-page .card-body {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .sneat-appt-page .sneat-page-tabs {
+        width: 100%;
+    }
+
+    .sneat-appt-page .sneat-page-tabs .change-tab {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .sneat-appt-page .filterouterdiv,
+    .sneat-appt-page .filterouterdiv.patient-search-wider {
+        max-width: none;
+        min-width: 100%;
+        flex: 1 1 100%;
+        margin-right: 0 !important;
+    }
+
+    .sneat-appt-page .input-icon {
+        margin-top: 0.25rem;
+        width: 100% !important;
+    }
+
+    .sneat-appt-page .input-icon .btn {
+        flex: 1;
+    }
+
+    .sneat-appt-page .sneat-filter-actions,
+    .sneat-appt-page .js-add-filter-wrap,
+    .sneat-appt-page .sneat-add-filter-btn {
+        width: 100%;
+    }
+
+    .sneat-appt-page .sneat-add-filter-menu {
+        right: 0;
+        left: 0;
+        min-width: 0;
+    }
+}

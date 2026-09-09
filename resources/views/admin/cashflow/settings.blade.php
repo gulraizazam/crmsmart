@@ -1,22 +1,20 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow Settings')
 @section('content')
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
 
-    <!--begin::Content-->
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-
-        @include('admin.partials.breadcrumb', ['module' => 'Cash Flow Settings', 'title' => 'Settings'])
-
-        <!--begin::Entry-->
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <!--begin::Container-->
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!--begin::Settings Card-->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-cog mr-2"></i>General Settings</h3>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">General Settings</h3>
                         </div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_settings'))
@@ -104,10 +102,10 @@
                 </div>
 
                 <!--begin::Pools Card-->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-university mr-2"></i>Cash Pools</h3>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Cash Pools</h3>
                         </div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_pool_manage'))
@@ -147,9 +145,9 @@
 
                 <!--begin::Pending Requests Card-->
                 @if(Gate::allows('cashflow_category_manage') || Gate::allows('cashflow_vendor_manage'))
-                <div class="card card-custom mb-5 d-none" id="pending-requests-card">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-inbox mr-2 text-warning"></i>Pending Requests</h3></div>
+                <div class="card card-custom sneat-page-card mb-5 d-none" id="pending-requests-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Pending Requests</h3></div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -181,10 +179,10 @@
                 @endif
 
                 <!--begin::Categories Card-->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-tags mr-2"></i>Expense Categories</h3>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Expense Categories</h3>
                         </div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_category_manage'))
@@ -215,10 +213,10 @@
                 </div>
 
                 <!--begin::Payment Method Mapping Card-->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-credit-card mr-2"></i>Payment Method → Pool Mapping</h3>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Payment Method → Pool Mapping</h3>
                         </div>
                         <div class="card-toolbar">
                             @if(Gate::allows('cashflow_settings'))
@@ -235,9 +233,9 @@
                 </div>
 
                 <!-- Advance-Eligible Staff (Sec 27.5) -->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-user-check mr-2"></i>Advance-Eligible Staff</h3></div>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Advance-Eligible Staff</h3></div>
                     </div>
                     <div class="card-body">
                         <p class="text-muted font-size-sm mb-3">Only users marked as eligible can receive cash advances. Toggle the checkbox to change eligibility.</p>
@@ -253,10 +251,10 @@
                 </div>
 
                 <!--begin::Audit Trail Card-->
-                <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-history mr-2"></i>Audit Trail</h3>
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Audit Trail</h3>
                         </div>
                         <div class="card-toolbar">
                             <select id="audit-entity-filter" class="form-control form-control-sm kt-select2-general mr-2" style="width:150px;">
@@ -272,7 +270,7 @@
                                 <option value="settings">Settings</option>
                                 <option value="period_lock">Period Lock</option>
                             </select>
-                            <button id="btn-load-audit" class="btn btn-light-primary"><i class="la la-search"></i> Load</button>
+                            <button id="btn-load-audit" class="btn btn-info"><i class="la la-search"></i> Load</button>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -308,7 +306,7 @@
     <!-- Add Pool Modal -->
     <div class="modal fade" id="modal_add_pool">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Cash Pool</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -343,7 +341,7 @@
     <!-- Edit Pool Modal -->
     <div class="modal fade" id="modal_edit_pool" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Cash Pool</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -381,7 +379,7 @@
     <!-- Add Category Modal -->
     <div class="modal fade" id="modal_add_category">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title" id="category-modal-title">Add Category</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>

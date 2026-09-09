@@ -2491,9 +2491,6 @@ class PlanService
                 $this->updateLeadStatusToConverted($latestArrivedConsultation, $accountId, $location, $service, $paymentAmount);
             }
 
-            // Send Meta event
-            $this->sendMetaConvertedEventOptimized($latestArrivedConsultation, $packageId, $paymentAmount);
-
         } catch (\Exception $e) {
             \Log::error('Mark Appointment As Converted Error: ' . $e->getMessage());
         }
@@ -2518,50 +2515,6 @@ class PlanService
         if ($convertedLeadStatus) {
             $lead->update(['lead_status_id' => $convertedLeadStatus->id]);
             ActivityLogger::logLeadConverted($lead, $appointment, $location, $service, $paymentAmount);
-        }
-    }
-
-    /**
-     * Send Meta converted event (optimized)
-     */
-    protected function sendMetaConvertedEventOptimized($appointment, int $packageId, float $paymentAmount): void
-    {
-        if (!$appointment || !$appointment->lead_id) {
-            return;
-        }
-
-        $lead = Leads::find($appointment->lead_id);
-        if (!$lead) {
-            return;
-        }
-
-        // Check if already sent
-        $alreadySent = DB::table('appointments')
-            ->where('lead_id', $lead->id)
-            ->where('meta_purchase_sent', 1)
-            ->exists();
-
-        if ($alreadySent) {
-            return;
-        }
-
-        try {
-            $metaService = new \App\Services\MetaConversionApiService();
-            $eventLeadId = $lead->meta_lead_id ?? 'apt_' . $appointment->id;
-            
-            $metaService->sendLeadStatus(
-                $lead->phone,
-                'converted',
-                $eventLeadId,
-                $lead->email,
-                'PKR',
-                $paymentAmount ?? 0
-            );
-
-            $appointment->update(['meta_purchase_sent' => 1]);
-
-        } catch (\Exception $e) {
-            \Log::error('Meta CAPI converted event failed: ' . $e->getMessage());
         }
     }
 

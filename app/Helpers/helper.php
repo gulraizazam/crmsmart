@@ -74,25 +74,51 @@ function checkFilters($filters, $key): bool
     return $apply_filter;
 }
 
-function openMenu($routes, $class = 'menu-item-open')
+function menuRouteIsCurrent(string $route): bool
 {
-    if (in_array(request()->route()->getName(), $routes)) {
-        return $class;
+    $current = optional(request()->route())->getName();
+    if (! $current) {
+        return false;
+    }
+    if ($current === $route) {
+        return true;
+    }
+
+    $prefix = preg_replace('/\.(index|edit|create|show|preview|sort|card|detail)$/', '', $route);
+    if ($prefix === $route) {
+        return false;
+    }
+
+    return strpos($current, $prefix.'.') === 0;
+}
+
+function openMenu($routes, $class = 'open menu-item-open')
+{
+    foreach ((array) $routes as $route) {
+        if (menuRouteIsCurrent((string) $route)) {
+            return $class;
+        }
     }
 
     return '';
 }
 
-function activeMenu($route, $class = 'menu-item-active', $queryString = null)
+function activeMenu($route, $class = 'active menu-item-active', $queryString = null)
 {
+    $current = optional(request()->route())->getName();
+    if (! $current) {
+        return '';
+    }
 
     if ($queryString && request('tab') != null && request('tab') != '') {
-
-        if (request()->route()->getName() == $route && request('tab') == $queryString) {
-
+        if ($current == $route && request('tab') == $queryString) {
             return $class;
         }
-    } elseif (request()->route()->getName() == $route) {
+
+        return '';
+    }
+
+    if (menuRouteIsCurrent((string) $route)) {
         return $class;
     }
 

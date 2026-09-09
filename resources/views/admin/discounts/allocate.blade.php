@@ -1,27 +1,17 @@
 <!--begin::Modal content-->
-<div class="modal-content">
-    <!--begin::Modal header-->
-    <div class="modal-header" id="kt_modal_password_header">
-        <!--begin::Modal title-->
+<div class="modal-content disc-modal">
+    <div class="modal-header disc-modal-header" id="kt_modal_password_header">
         <h2 class="fw-bolder">Allocation <span id="allocate_discount_name" class="text-primary"></span> Discount</h2>
-        <!--end::Modal title-->
-        <!--begin::Close-->
         <div class="btn btn-icon btn-sm btn-active-icon-primary popup-close" data-kt-users-modal-action="close">
-            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
             <span class="svg-icon svg-icon-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
                     <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
                 </svg>
             </span>
-            <!--end::Svg Icon-->
         </div>
-        <!--end::Close-->
     </div>
-    <!--end::Modal header-->
-    <!--begin::Modal body-->
-    <div class="modal-body scroll-y mx-3 my-5">
-        <!--begin::Form-->
+    <div class="modal-body disc-modal-body scroll-y">
         <form id="modal_allocate_discounts_form" method="post" action="">
             <input type="hidden" name="id" id="discount_id">
             <input type="hidden" name="discount_type" id="discount_type_hidden">
@@ -111,12 +101,9 @@
                 </thead>
             </table>
         </div>
-
-        <!--end::Form-->
     </div>
-    <!--end::Modal body-->
+    <div class="disc-footer">
+        <button type="button" class="btn btn-light popup-close" data-kt-users-modal-action="cancel">Close</button>
+    </div>
 </div>
 <!--end::Modal content-->
-
-
-

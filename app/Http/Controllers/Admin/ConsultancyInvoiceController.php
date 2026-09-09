@@ -25,7 +25,6 @@ use App\Models\PaymentModes;
 use App\Models\Services;
 use App\Models\User;
 use App\Models\Accounts;
-use App\Services\MetaConversionApiService;
 use App\Helpers\ActivityLogger;
 use Auth;
 use Config;
@@ -552,33 +551,6 @@ class ConsultancyInvoiceController extends Controller
                 'lead_id' => $leadRecord ? $leadRecord->id : null,
                 'new_status_id' => $arrivedLeadStatus->id,
             ]);
-            
-            // Send Meta CAPI event for arrived status
-            if ($leadRecord) {
-                \Log::info('Sending Meta CAPI arrived event', [
-                    'lead_id' => $leadRecord->id,
-                    'phone' => $leadRecord->phone,
-                    'meta_lead_id' => $leadRecord->meta_lead_id,
-                    'email' => $leadRecord->email,
-                ]);
-                try {
-                    $metaService = new MetaConversionApiService();
-                    $metaService->sendLeadStatus(
-                        $leadRecord->phone,
-                        'arrived',
-                        $leadRecord->meta_lead_id,
-                        $leadRecord->email
-                    );
-                    \Log::info('Meta CAPI arrived event sent successfully', [
-                        'lead_id' => $leadRecord->id,
-                    ]);
-                } catch (\Exception $e) {
-                    \Log::error('Meta CAPI arrived event failed: ' . $e->getMessage(), [
-                        'lead_id' => $leadRecord->id,
-                        'exception' => $e->getTraceAsString(),
-                    ]);
-                }
-            }
             
             // Also update lead_services
             if ($appointmentinfo->lead_id) {

@@ -1,10 +1,13 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow Dashboard')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Cash Flow Dashboard', 'title' => 'Dashboard'])
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!-- Quick-Action Bar -->
                 <div class="card card-custom mb-5">
@@ -46,9 +49,9 @@
                 <div class="row mb-5 d-none" id="pending-list-row">
                     <div class="col-lg-12">
                         <div class="card card-custom">
-                            <div class="card-header py-3">
-                                <div class="card-title"><h3 class="card-label"><i class="la la-hourglass-half mr-2 text-warning"></i>Pending Approval</h3></div>
-                            </div>
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Pending Approval</h3></div>
+                    </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th class="px-4">Date</th><th class="px-4">Description</th><th class="px-4">Category</th><th class="text-right px-4">Amount</th><th class="px-4">By</th><th class="px-4">Attach</th><th class="text-center px-4" style="width:120px">Actions</th></tr></thead><tbody id="pending-list-tbody"></tbody></table></div>
                             </div>
@@ -84,8 +87,8 @@
 
                 <!-- Pool Balance Cards -->
                 <div class="card card-custom mb-5">
-                    <div class="card-header py-3">
-                        <div class="card-title"><h3 class="card-label"><i class="la la-wallet mr-2"></i>Pool Balances</h3></div>
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Pool Balances</h3></div>
                         <div class="card-toolbar d-flex align-items-center" style="gap:16px;">
                             <span style="font-size:11px;color:#7E8299;">Cash Total</span>
                             <span class="font-weight-bolder font-size-h5 text-primary" id="pool-total-cash">PKR 0</span>
@@ -107,14 +110,14 @@
                     <!-- Daily Trend -->
                     <div class="col-lg-8">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-chart-line mr-2"></i>Daily Inflows vs Outflows</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">Daily Inflows vs Outflows</h3></div></div>
                             <div class="card-body"><canvas id="chart-daily-trend" height="250"></canvas></div>
                         </div>
                     </div>
                     <!-- Category Breakdown -->
                     <div class="col-lg-4">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-chart-pie mr-2"></i>By Category</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">By Category</h3></div></div>
                             <div class="card-body"><canvas id="chart-category-pie" height="250"></canvas></div>
                         </div>
                     </div>
@@ -124,9 +127,9 @@
                 <div class="row mb-5">
                     <div class="col-lg-6">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3">
-                                <div class="card-title"><h3 class="card-label"><i class="la la-file-invoice-dollar mr-2"></i>Vendor Outstanding (Top 10)</h3></div>
-                                <div class="card-toolbar"><a href="{{ route('admin.cashflow.vendors') }}" class="btn btn-sm btn-light-primary">View All</a></div>
+                            <div class="card-header">
+                                <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Vendor Outstanding (Top 10)</h3></div>
+                                <div class="card-toolbar"><a href="{{ route('admin.cashflow.vendors') }}" class="btn btn-sm btn-info">View All</a></div>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th>Vendor</th><th class="text-right">Balance</th><th>Terms</th></tr></thead><tbody id="vendor-outstanding-tbody"></tbody></table></div>
@@ -135,8 +138,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3">
-                                <div class="card-title"><h3 class="card-label"><i class="la la-calendar-check mr-2"></i>Upcoming Vendor Payments Due</h3></div>
+                            <div class="card-header">
+                                <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Upcoming Vendor Payments Due</h3></div>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th class="px-4">Vendor</th><th class="text-right px-4">Balance</th><th class="px-4">Terms</th><th class="px-4">Due</th><th class="px-4">Status</th></tr></thead><tbody id="vendor-due-tbody"></tbody></table></div>
@@ -149,7 +152,7 @@
                 <div class="row mb-5">
                     <div class="col-lg-6">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-user-clock mr-2"></i>Staff Advances Outstanding</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">Staff Advances Outstanding</h3></div></div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th>Staff</th><th class="text-right">Outstanding</th><th>Days</th><th>Status</th></tr></thead><tbody id="staff-advances-tbody"></tbody></table></div>
                             </div>
@@ -157,7 +160,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card card-custom h-100">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-receipt mr-2"></i>Recent Staff Expenses (Top 10)</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">Recent Staff Expenses (Top 10)</h3></div></div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th>Date</th><th>Staff</th><th>Description</th><th class="text-right">Amount</th><th>Status</th></tr></thead><tbody id="staff-expenses-tbody"></tbody></table></div>
                             </div>
@@ -177,8 +180,8 @@
                 <div class="row mb-5">
                     <div class="col-lg-6 d-none" id="voided-alerts-col">
                         <div class="card card-custom border-left border-danger border-3 h-100">
-                            <div class="card-header py-3">
-                                <div class="card-title"><h3 class="card-label text-danger"><i class="la la-exclamation-triangle mr-2"></i>Voided (Last 7 Days)</h3></div>
+                            <div class="card-header">
+                                <div class="card-title sneat-page-title-wrap"><h3 class="card-label text-danger">Voided (Last 7 Days)</h3></div>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th class="px-4">Date</th><th class="px-4">Description</th><th class="text-right px-4">Amount</th><th class="px-4">Reason</th></tr></thead><tbody id="voided-alerts-tbody"></tbody></table></div>
@@ -187,8 +190,8 @@
                     </div>
                     <div class="col-lg-6 d-none" id="flagged-alerts-col">
                         <div class="card card-custom border-left border-warning border-3 h-100">
-                            <div class="card-header py-3">
-                                <div class="card-title"><h3 class="card-label text-warning"><i class="la la-flag mr-2"></i>Flagged Entries</h3></div>
+                            <div class="card-header">
+                                <div class="card-title sneat-page-title-wrap"><h3 class="card-label text-warning">Flagged Entries</h3></div>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th class="px-4">Date</th><th class="px-4">Description</th><th class="text-right px-4">Amount</th><th class="px-4">Flag Reason</th></tr></thead><tbody id="flagged-alerts-tbody"></tbody></table></div>
@@ -201,7 +204,7 @@
                 <div class="row mb-5">
                     <div class="col-lg-8">
                         <div class="card card-custom">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-clock mr-2"></i>Recent Entries</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">Recent Entries</h3></div></div>
                             <div class="card-body p-0">
                                 <div class="table-responsive"><table class="table table-sm table-head-custom mb-0"><thead><tr><th>Date</th><th>Category</th><th class="text-right">Amount</th><th>Pool</th><th>By</th></tr></thead><tbody id="recent-entries-tbody"></tbody></table></div>
                             </div>
@@ -210,7 +213,7 @@
                     <div class="col-lg-4">
                         @can('cashflow_settings')
                         <div class="card card-custom">
-                            <div class="card-header py-3"><div class="card-title"><h3 class="card-label"><i class="la la-balance-scale mr-2"></i>Reconciliation</h3></div></div>
+                            <div class="card-header"><div class="card-title sneat-page-title-wrap"><h3 class="card-label">Reconciliation</h3></div></div>
                             <div class="card-body text-center">
                                 <p class="text-muted font-size-sm mb-3">Compare cached pool balances against calculated totals.</p>
                                 <button id="btn-reconcile" class="btn btn-outline-primary btn-sm"><i class="la la-check-circle"></i> Run Reconciliation Check</button>

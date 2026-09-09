@@ -1,23 +1,53 @@
 var table_url = route('admin.patients.datatable');
 
+function sneatPatientInitials(name) {
+    if (!name) {
+        return '?';
+    }
+    var parts = String(name).trim().split(/\s+/);
+    if (!parts.length || !parts[0]) {
+        return '?';
+    }
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
+
+function sneatPatientAvatarTone(id) {
+    var tones = ['primary', 'info', 'success', 'warning'];
+    var n = parseInt(id, 10);
+    if (isNaN(n)) {
+        n = 0;
+    }
+    return tones[Math.abs(n) % tones.length];
+}
+
 var table_columns = [
     {
-        field: 'patient_id',
-        title: 'Patient ID',
-        width: 'auto',
-        sortable: false,
-        template: function (data) {
-
-            return makePatientId(data.id);
-        }
-    }, {
         field: 'name',
-        title: 'Name',
-        width: 90,
+        title: 'Patient',
+        width: 220,
         sortable: false,
         template: function (data) {
             var view_url = route('admin.patients.card', { id: data.id });
-            return '<a href="' + view_url + '" class="text-primary font-weight-bold">' + data.name + '</a>';
+            var initials = sneatPatientInitials(data.name);
+            var tone = sneatPatientAvatarTone(data.id);
+            var phoneData = {
+                id: data.id,
+                phone: permissions.contact ? data.phone : '***********'
+            };
+            return '<div class="sneat-patient-cell">' +
+                '<span class="sneat-patient-avatar sneat-patient-avatar--' + tone + '" aria-hidden="true">' + initials + '</span>' +
+                '<div class="sneat-patient-copy">' +
+                    '<a class="sneat-patient-name" href="' + view_url + '">' + (data.name || 'N/A') + '</a>' +
+                    '<div class="sneat-patient-meta">' +
+                        '<a href="' + view_url + '" class="sneat-patient-id">' + makePatientId(data.id) + '</a>' +
+                        '<span class="sneat-patient-sep" aria-hidden="true"></span>' +
+                        phoneClip(phoneData) +
+                    '</div>' +
+                '</div>' +
+            '</div>';
         }
     }, {
         field: 'membership',
@@ -27,25 +57,14 @@ var table_columns = [
         template: function (data) {
 
             if (data.membership == null) {
-                return 'No Membership';
+                return '<span class="sneat-membership-none">No Membership</span>';
             }
             // If membership is not active, show No Membership
             if (data.membership.active != 1) {
-                return 'No Membership';
+                return '<span class="sneat-membership-none">No Membership</span>';
             }
             var prefix = data.membership.is_referral == 1 ? 'Ref: ' : '';
-            return prefix + data.membership.code + ' - Active';
-        }
-    }, {
-        field: 'phone',
-        title: 'Phone',
-        width: 90,
-        sortable: false,
-        template: function (data) {
-            if (permissions.contact) {
-                return data.phone;
-            }
-            return '***********';
+            return '<span class="label label-lg label-light-success label-inline">' + prefix + data.membership.code + ' - Active</span>';
         }
     }, {
         field: 'gender',
@@ -479,16 +498,9 @@ function setFilters(filter_values, active_filters) {
 }
 
 function hideShowAdvanceFilters(active_filters) {
-
-    if ((typeof active_filters.created_at !== 'undefined' && active_filters.created_at != '')
-        || (typeof active_filters.status !== 'undefined' && active_filters.status != '')
-        || (typeof active_filters.gender !== 'undefined' && active_filters.gender != '')
-    ) {
-
-        $(".advance-filters").show();
-        $(".advance-arrow").removeClass("fa fa-caret-right").addClass("fa fa-caret-down");
+    if (window.SneatFilterPicker) {
+        window.SneatFilterPicker.syncAll();
     }
-
 }
 
 

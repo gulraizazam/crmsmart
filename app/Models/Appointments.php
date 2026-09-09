@@ -179,8 +179,11 @@ class Appointments extends Model
             $appointment_data['first_scheduled_at'] = null;
         }
         if (isset($appointment_data['resourceId'])) {
-            $appointment_data['resource_id'] = $appointment_data['resourceId'];
+            unset($appointment_data['resourceId']);
         }
+        unset($appointment_data['machine_id']);
+        $appointment_data['resource_id'] = null;
+        $appointment_data['resource_has_rota_day_id_for_machine'] = null;
 
         $record = self::where([
             'id' => $id,
@@ -453,10 +456,6 @@ class Appointments extends Model
 
         if ($request->doctor_id && !$skip_doctor) {
             $query->where('doctor_id', $request->doctor_id);
-        }
-        
-        if ($request->machine_id) {
-            $query->where('resource_id', $request->machine_id);
         }
 
         return $query->get();

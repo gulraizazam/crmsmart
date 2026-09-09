@@ -2,56 +2,33 @@
 @section('title', 'Leads')
 @section('content')
 
-    <!--begin::Content-->
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=4" rel="stylesheet" type="text/css" />
+    @endpush
 
-    @include('admin.partials.breadcrumb', ['module' => 'Leads List', 'title' => 'Leads'])
-
-    <!--begin::Entry-->
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-leads-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <!--begin::Container-->
-            <div class="container">
-
-                <!--begin::Card-->
-                <div class="card card-custom">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <span class="card-icon">
-                                <span class="svg-icon svg-icon-md svg-icon-primary">
-                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Chart-bar1.svg-->
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24" />
-                                            <rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13" rx="1.5" />
-                                            <rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8" rx="1.5" />
-                                            <path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6" rx="1.5" />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
-                            </span>
-                            <h3 class="card-label">{{\Illuminate\Support\Str::title(request('type'))}} Leads</h3>
-
+            <div class="container-fluid sneat-page">
+                <div class="card card-custom sneat-page-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">{{ request('type') ? \Illuminate\Support\Str::title(request('type')) . ' Leads' : 'Leads' }}</h3>
                         </div>
-
                         <div class="card-toolbar">
-                            <!--begin::Dropdown-->
                             @if(request('type') != 'junk')
                                 @if(Gate::allows('leads_import'))
-                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#modal_import_leads" class="btn btn-primary pull-right margin-r-5">
+                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#modal_import_leads" class="btn btn-info">
                                         <i class="fa fa-upload"></i>
-                                        <span class="hidden-xs"> Import </span>
+                                        Import
                                     </a>
                                 @endif
-                                &nbsp;&nbsp;
                                 @if(Gate::allows('leads_export'))
-                                    <a href="#" id="export-leads" data-href="{{route('admin.leads.export.excel')}}" class="btn btn-primary">
+                                    <a href="#" id="export-leads" data-href="{{route('admin.leads.export.excel')}}" class="btn btn-info">
                                         <i class="fa fa-download"></i>
-                                        <span class="hidden-xs"> Export </span>
+                                        Export
                                     </a>
                                 @endif
-                                &nbsp;&nbsp;
                                 @if(Gate::allows('leads_create'))
                                     <a href="javascript:void(0);" id="create_lead" onclick="createLead('{{ route('admin.leads.create') }}');" class="btn btn-primary" data-toggle="modal" data-target="#modal_add_leads">
                                         <i class="la la-plus"></i>
@@ -59,88 +36,52 @@
                                     </a>
                                 @endif
                             @endif
-
-                        <!--end::Button-->
                         </div>
-
                     </div>
 
                     <div class="card-body">
-                        <!--begin::Search Form-->
                         @include('admin.leads.filters')
-                        <!--end::Search Form-->
-
-                        <!--begin: Datatable-->
                         <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
-                        <!--end: Datatable-->
                     </div>
                 </div>
-                <!--end::Card-->
             </div>
-            <!--end::Container-->
         </div>
-        <!--end::Entry-->
     </div>
-    <!--end::Content-->
 
     <div class="modal fade" id="modal_change_status" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered form-popup" id="leads_change_status">
-
             @include('admin.leads.change-status')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="modal_view_lead" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mediam-modal" id="leads_view_lead">
-
             @include('admin.leads.view')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="modal_convert_lead" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mediam-modal" id="convert_lead">
-
             @include('admin.leads.convert')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="modal_add_leads" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered form-popup" id="leads_add">
-
             @include('admin.leads.create')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="modal_edit_leads" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered form-popup" id="edit_leads">
-
             @include('admin.leads.edit')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="modal_import_leads" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered form-popup" id="import_leads">
-
             @include('admin.leads.import')
-
         </div>
-        <!--end::Modal dialog-->
     </div>
 
     @push('js')
@@ -198,7 +139,7 @@
                 },1000);
             }
         </script>
-        <script src="{{asset('assets/js/pages/leads/leads.js')}}"></script>
+        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=1"></script>
 
         <script>
             jQuery(document).ready( function () {
@@ -208,8 +149,9 @@
                 @if(request('from') != '' && request('to') != '')
                     setTimeout( function () {
                         $("#date_range").val("{{request('from')}}");
-                        //$("#search_created_from").val("{{request('from')}}");
-                        //$("#search_created_to").val("{{request('to')}}");
+                        if (window.SneatFilterPicker) {
+                            window.SneatFilterPicker.syncAll();
+                        }
                         $("#apply-filters").click();
 
                     }, 800);

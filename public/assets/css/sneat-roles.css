@@ -1,0 +1,137 @@
+/* Sneat roles list + create/edit/duplicate. */
+
+.sneat-roles-page {
+    --s-primary: #696cff;
+    --s-primary-hover: #5f61e6;
+    --s-heading: #566a7f;
+    --s-body: #697a8d;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-paper: #fff;
+    --s-soft: #f5f5f9;
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+}
+
+.sneat-roles-page .sneat-role-perm-card {
+    margin-bottom: 1.25rem;
+}
+
+.sneat-roles-page .sneat-role-perm-card .card-body {
+    padding-top: 0.5rem !important;
+}
+
+.sneat-roles-page .sneat-role-perm-card .form-group.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--s-border);
+}
+
+.sneat-roles-page .sneat-role-perm-card .form-group.row:last-child {
+    border-bottom: 0;
+}
+
+.sneat-roles-page .sneat-role-perm-card .col-form-label {
+    color: var(--s-heading);
+    font-size: 13px;
+    padding-top: 0.35rem;
+}
+
+.sneat-roles-page .sneat-role-perm-card .col-form-label strong {
+    font-weight: 600;
+    color: var(--s-heading);
+}
+
+.sneat-roles-page .checkbox-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.25rem;
+}
+
+.sneat-roles-page .permission_checkbox {
+    width: auto !important;
+    min-width: 8.5rem;
+    max-width: 100%;
+    margin: 0 0.75rem 0.35rem 0 !important;
+    min-height: 44px;
+    align-items: center;
+}
+
+.sneat-roles-page label.checkbox {
+    font-family: var(--s-font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--s-heading);
+}
+
+.sneat-roles-page .checkbox > span {
+    border: 1px solid var(--s-border) !important;
+    background: var(--s-paper) !important;
+    border-radius: 0.25rem !important;
+}
+
+.sneat-roles-page .checkbox > input:checked ~ span {
+    background: var(--s-primary) !important;
+    border-color: var(--s-primary) !important;
+}
+
+.sneat-roles-page .checkbox > input:checked ~ span:after {
+    border-color: #fff !important;
+}
+
+.sneat-roles-page .sneat-commission-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.sneat-roles-page .sneat-commission-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.sneat-roles-page .sneat-commission-group .input-group-text {
+    background: var(--s-soft);
+    border: 1px solid var(--s-border);
+    border-left: 0;
+    color: var(--s-heading);
+    font-weight: 600;
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.sneat-roles-page .sneat-role-save {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    padding: 1rem 0 0.25rem;
+}
+
+.sneat-roles-page .percentage-align {
+    float: none;
+    margin-top: 0;
+}
+
+@media (max-width: 991px) {
+    .sneat-roles-page .all-filters-wrapper {
+        display: none;
+    }
+
+    .sneat-roles-page .mobile-filter-toggle {
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .sneat-roles-page .mobile-filter-toggle {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .sneat-roles-page .sneat-role-perm-card .col-2,
+    .sneat-roles-page .sneat-role-perm-card .col-9 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

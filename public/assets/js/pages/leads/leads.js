@@ -2,23 +2,51 @@ var table_url = route('admin.leads.datatable');
 if (typeof lead_type !== 'undefined' && lead_type != '') {
     table_url = route('admin.leads.datatable', {type: lead_type});
 }
+
+function sneatPatientInitials(name) {
+    if (!name) {
+        return '?';
+    }
+    var parts = String(name).trim().split(/\s+/);
+    if (!parts.length || !parts[0]) {
+        return '?';
+    }
+    if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
+
+function sneatPatientAvatarTone(id) {
+    var tones = ['primary', 'info', 'success', 'warning'];
+    var n = parseInt(id, 10);
+    if (isNaN(n)) {
+        n = 0;
+    }
+    return tones[Math.abs(n) % tones.length];
+}
+
 var table_columns = [{
-    field: 'lead_id',
-    title: 'ID',
-    sortable: false,
-    width: 60,
-}, {
     field: 'name',
-    title: 'Full Name',
+    title: 'Lead',
     sortable: false,
-    width: 110,
-}, {
-    field: 'phone',
-    title: 'Phone',
-    sortable: false,
-    width: 90,
+    width: 220,
+    autoHide: false,
     template: function (data) {
-        return phoneClip(data);
+        var display_url = route('admin.leads.detail', { id: data.lead_id });
+        var initials = sneatPatientInitials(data.name);
+        var tone = sneatPatientAvatarTone(data.lead_id);
+        return '<div class="sneat-patient-cell">' +
+            '<span class="sneat-patient-avatar sneat-patient-avatar--' + tone + '" aria-hidden="true">' + initials + '</span>' +
+            '<div class="sneat-patient-copy">' +
+                '<a class="sneat-patient-name" href="javascript:void(0);" onclick="viewLead(`' + display_url + '`);">' + (data.name || 'N/A') + '</a>' +
+                '<div class="sneat-patient-meta">' +
+                    '<span class="sneat-patient-id">' + data.lead_id + '</span>' +
+                    '<span class="sneat-patient-sep" aria-hidden="true"></span>' +
+                    phoneClip(data) +
+                '</div>' +
+            '</div>' +
+        '</div>';
     }
 }, {
     field: 'city_id',
@@ -125,16 +153,6 @@ var table_columns = [{
     title: 'Created By',
     sortable: false,
     width: 70,
-},{
-    field: 'actions',
-    title: 'Actions',
-    sortable: false,
-    width: 70,
-    overflow: 'visible',
-    autoHide: false,
-    template: function(data) {
-        return actions(data);
-    }
 }, {
     field: 'created_at',
     title: 'Created At',
@@ -151,6 +169,16 @@ var table_columns = [{
         }else{
             return '<span class="text text-danger">Empty</span>';
         }
+    }
+}, {
+    field: 'actions',
+    title: 'Actions',
+    sortable: false,
+    width: 125,
+    overflow: 'visible',
+    autoHide: false,
+    template: function(data) {
+        return actions(data);
     }
 }];
 
@@ -236,56 +264,54 @@ function updateLeadStatus() {
 }
 
 function actions(data) {
-    if (typeof data.id !== 'undefined') {
-        let id = data.lead_id;
-        let edit_url = route('admin.leads.edit', { id: id });
-        let display_url = route('admin.leads.detail', { id: id });
-        let delete_url = route('admin.leads.destroy', { id: id });
-        let convert_url = route('admin.leads.convert', { id: id });
-        if (permissions.create || permissions.edit) {
-            let actions = '<div class="dropdown dropdown-inline action-dots">';
-            if (permissions.convert && lead_type === 'junk') {
-                actions += '<a title="Remove From Junk" href="javascript:void(0);" onclick="removeFromJunk(`' + id + '`);" class="btn btn-icon btn-success btn-sm">\
-                        <span class="navi-icon"><i class="la la-recycle"></i></span>\
-                    </a>';
-            }
-        actions += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
-            <i class="ki ki-bold-more-hor" aria-hidden="true"></i>\
-        </a>\
-        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-            <ul class="navi flex-column navi-hover py-2">\
-                <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">\
-                    Choose an action: \
-                    </li>';
-            actions += '<li class="navi-item">\
-                    <a href="javascript:void(0);" onclick="viewLead(`' + display_url + '`);" class="navi-link">\
-                        <span class="navi-icon"><i class="la la-eye"></i></span>\
-                        <span class="navi-text">View</span>\
-                    </a>\
+    if (typeof data.id === 'undefined') {
+        return '';
+    }
+
+    let id = data.lead_id;
+    let edit_url = route('admin.leads.edit', { id: id });
+    let display_url = route('admin.leads.detail', { id: id });
+    let delete_url = route('admin.leads.destroy', { id: id });
+    let html = '<div class="dropdown dropdown-inline action-dots">';
+    if (permissions.convert && lead_type === 'junk') {
+        html += '<a title="Remove From Junk" href="javascript:void(0);" onclick="removeFromJunk(`' + id + '`);" class="btn btn-icon btn-success btn-sm">\
+                <span class="navi-icon"><i class="la la-recycle"></i></span>\
+            </a>';
+    }
+    html += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
+        <i class="ki ki-bold-more-hor" aria-hidden="true"></i>\
+    </a>\
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+        <ul class="navi flex-column navi-hover py-2">\
+            <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">\
+                Choose an action: \
                 </li>';
-            if (permissions.edit) {
-                actions += '<li class="navi-item">\
-                    <a href="javascript:void(0);" onclick="editRow(`' + edit_url + '`, '+id+');" class="navi-link">\
-                        <span class="navi-icon"><i class="la la-pencil"></i></span>\
-                        <span class="navi-text">Edit</span>\
-                    </a>\
-                </li>';
-            }
-            if (permissions.delete) {
-                actions += '<li class="navi-item">\
-                        <a href="javascript:void(0);" onclick="deleteRow(`' + delete_url + '`);" class="navi-link">\
-                        <span class="navi-icon"><i class="la la-trash"></i></span>\
-                        <span class="navi-text">Delete</span>\
-                        </a>\
-                     </li>';
-            }
-            actions += '</ul>\
+    html += '<li class="navi-item">\
+            <a href="javascript:void(0);" onclick="viewLead(`' + display_url + '`);" class="navi-link">\
+                <span class="navi-icon"><i class="la la-eye"></i></span>\
+                <span class="navi-text">View</span>\
+            </a>\
+        </li>';
+    if (permissions.edit) {
+        html += '<li class="navi-item">\
+            <a href="javascript:void(0);" onclick="editRow(`' + edit_url + '`, '+id+');" class="navi-link">\
+                <span class="navi-icon"><i class="la la-pencil"></i></span>\
+                <span class="navi-text">Edit</span>\
+            </a>\
+        </li>';
+    }
+    if (permissions.delete) {
+        html += '<li class="navi-item">\
+                <a href="javascript:void(0);" onclick="deleteRow(`' + delete_url + '`);" class="navi-link">\
+                <span class="navi-icon"><i class="la la-trash"></i></span>\
+                <span class="navi-text">Delete</span>\
+                </a>\
+             </li>';
+    }
+    html += '</ul>\
         </div>\
     </div>';
-            return actions;
-        }
-    }
-    return '';
+    return html;
 }
 
 function createLead(url) {

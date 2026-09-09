@@ -20,9 +20,11 @@ use App\Models\Locations;
 use App\Exports\ExportLead;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -90,7 +92,7 @@ class LeadsController extends Controller
                 ->get();
 
             // Get lookup data with caching
-            $users = $this->getCachedUsers($accountId);
+            $users = $this->getUsersForLeads($leads, $accountId);
             $regions = $this->getCachedRegions($accountId);
             $leadStatuses = $this->getCachedLeadStatuses($accountId);
 
@@ -116,25 +118,38 @@ class LeadsController extends Controller
             $records['permissions'] = $this->getPermissions();
 
             return ApiHelper::apiDataTable($records);
-        } catch (\Exception $e) {
-            return ApiHelper::apiException($e);
+        } catch (\Throwable $e) {
+            Log::error('leads.datatable failed', [
+                'event' => 'leads.datatable',
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            if ($e instanceof \Exception) {
+                return ApiHelper::apiException($e);
+            }
+            throw $e;
         }
     }
 
     /**
-     * Get cached users lookup
+     * Resolve created-by names for the current page only.
+     * Loading every account user (patients included) exhausts PHP memory on this DB.
      */
-    protected function getCachedUsers(int $accountId): array
+    protected function getUsersForLeads(Collection $leads, int $accountId): array
     {
-        return \Illuminate\Support\Facades\Cache::remember(
-            "datatable_users_{$accountId}",
-            300, // 5 minutes
-            fn() => User::where('account_id', $accountId)
-                ->select('id', 'name')
-                ->get()
-                ->keyBy('id')
-                ->toArray()
-        );
+        $userIds = $leads->pluck('created_by')->filter()->unique()->values()->all();
+        if ($userIds === []) {
+            return [];
+        }
+
+        return User::query()
+            ->where('account_id', $accountId)
+            ->whereIn('id', $userIds)
+            ->select('id', 'name')
+            ->get()
+            ->keyBy('id')
+            ->toArray();
     }
 
     /**

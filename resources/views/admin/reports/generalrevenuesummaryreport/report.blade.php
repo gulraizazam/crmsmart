@@ -111,17 +111,17 @@
                                 <td>{{number_format($reportRow['in_hand'],2)}}</td>
                             </tr>
                         @endforeach
-                        <tr style="background: #364150; color: #fff;">
-                            <td style="font-weight: bold;color: #fff;">Total</td>
+                        <tr class="sn-row-total">
+                            <td style="font-weight: bold;">Total</td>
                             
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_cash_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_card_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_bank_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_card_in + $total_revenue_bank_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_refund,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_male_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format($total_revenue_female_in,2)}}</td>
-                            <td style="font-weight: bold;color: #fff;">{{number_format(($total_revenue_cash_in+$total_revenue_card_in+$total_revenue_bank_in)-$total_refund,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_cash_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_card_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_bank_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_card_in + $total_revenue_bank_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_refund,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_male_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format($total_revenue_female_in,2)}}</td>
+                            <td style="font-weight: bold;">{{number_format(($total_revenue_cash_in+$total_revenue_card_in+$total_revenue_bank_in)-$total_refund,2)}}</td>
 
                         </tr>
                     @else

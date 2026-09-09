@@ -6,6 +6,46 @@
 (function() {
     'use strict';
 
+    window.Apex = Object.assign({}, window.Apex || {}, {
+        chart: {
+            fontFamily: 'Public Sans, Segoe UI, sans-serif',
+            toolbar: { show: false },
+            foreColor: '#697a8d'
+        },
+        colors: ['#696cff', '#71dd37', '#03c3ec', '#ffab00', '#ff3e1d', '#8592a3'],
+        legend: { fontFamily: 'Public Sans, Segoe UI, sans-serif' },
+        grid: { borderColor: '#d9dee3', strokeDashArray: 4 }
+    });
+
+    var sneatPieColors = ['#696cff', '#71dd37', '#03c3ec', '#ffab00', '#ff3e1d', '#8592a3', '#233d4d', '#a8aaae'];
+
+    function sneatGooglePieOptions(colors) {
+        return {
+            pieHole: 0.48,
+            pieSliceText: 'percentage',
+            pieSliceTextStyle: { color: '#fff', fontSize: 12, fontName: 'Public Sans' },
+            legend: {
+                position: 'right',
+                alignment: 'center',
+                textStyle: { color: '#566a7f', fontSize: 12, fontName: 'Public Sans' }
+            },
+            chartArea: { left: 16, top: 20, width: '88%', height: '82%' },
+            backgroundColor: 'transparent',
+            colors: (colors && colors.length) ? colors : sneatPieColors,
+            tooltip: { text: 'both' }
+        };
+    }
+
+    function drawSneatPie(elementId, table, colors) {
+        if (!document.getElementById(elementId) || !table || table.length < 2) {
+            return;
+        }
+        var data = google.visualization.arrayToDataTable(table);
+        var chart = new google.visualization.PieChart(document.getElementById(elementId));
+        chart.draw(data, sneatGooglePieOptions(colors));
+        $('#' + elementId).css('height', '420px');
+    }
+
     // Global variable for centre wise arrival chart
     var centre_wise_arrival = null;
 
@@ -13,6 +53,9 @@
      * Doctor Upselling Functions
      */
     function initDoctorUpselling() {
+        if (!$('#doctor_upselling_centre_select').length) {
+            return;
+        }
         // Auto-load data on page load if a centre is pre-selected
         const initialCentreId = $('#doctor_upselling_centre_select').val();
         const initialPeriod = $('#dr_wise_upselling_period').val();
@@ -102,7 +145,7 @@
     }
 
     function generateDoctorUpsellingChart(data) {
-        const primary = '#7A8B6A';
+        const primary = '#696cff';
         
         let doctorNames = data.map(function(doctor) { return doctor.doctor_name; });
         let upsellingAmounts = data.map(function(doctor) { return parseFloat(doctor.total_upselling_amount || 0); });
@@ -129,19 +172,10 @@
             }],
             chart: {
                 type: 'bar',
-                height: 350,
+                height: 420,
                 width: dynamicWidth,
                 toolbar: {
-                    show: true,
-                    tools: {
-                        download: true,
-                        selection: false,
-                        zoom: false,
-                        zoomin: false,
-                        zoomout: false,
-                        pan: false,
-                        reset: false
-                    }
+                    show: false
                 }
             },
             plotOptions: {
@@ -312,14 +346,8 @@
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(pie);
-            var options = { colors: colors };
-            var chart = new google.visualization.PieChart(document.getElementById('treatment_by_status'));
-            chart.draw(data, options);
+            drawSneatPie('treatment_by_status', pie, colors);
         });
-        if (pie && pie.length > 1) {
-            $("#treatment_by_status").css("height", "500px");
-        }
     };
 
     window.ConsultancyByStatus = function(pie, colors) {
@@ -327,14 +355,8 @@
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(pie);
-            var options = { colors: colors };
-            var chart = new google.visualization.PieChart(document.getElementById('consultancy_by_status'));
-            chart.draw(data, options);
+            drawSneatPie('consultancy_by_status', pie, colors);
         });
-        if (pie && pie.length > 1) {
-            $("#consultancy_by_status").css("height", "500px");
-        }
     };
 
     window.collectionCentreChart = function(pie) {
@@ -342,13 +364,8 @@
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(pie);
-            var chart = new google.visualization.PieChart(document.getElementById('collection-by-centre'));
-            chart.draw(data);
+            drawSneatPie('collection-by-centre', pie);
         });
-        if (pie && pie.length > 1) {
-            $("#collection-by-centre").css("height", "500px");
-        }
     };
 
     window.revenueCentreChart = function(pie) {
@@ -356,13 +373,8 @@
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(pie);
-            var chart = new google.visualization.PieChart(document.getElementById('revenue-centre'));
-            chart.draw(data);
+            drawSneatPie('revenue-centre', pie);
         });
-        if (pie && pie.length > 1) {
-            $("#revenue-centre").css("height", "500px");
-        }
     };
 
     window.revenueByService = function(service, colors) {
@@ -370,34 +382,32 @@
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(service);
-            var options = { colors: colors };
-            var chart = new google.visualization.PieChart(document.getElementById('revenue-service'));
-            chart.draw(data, options);
+            drawSneatPie('revenue-service', service, colors);
         });
-        if (typeof service !== 'undefined' && service.length > 1) {
-            $("#revenue-service").css("height", "500px");
-        }
     };
 
-    window.CollectionByServiceCategory = function(service) {
+    window.CollectionByServiceCategory = function(service, colors) {
         google.load('visualization', '1', {
             packages: ['corechart', 'bar', 'line']
         });
         google.setOnLoadCallback(function() {
-            var data = google.visualization.arrayToDataTable(service);
-            var chart = new google.visualization.PieChart(document.getElementById('revenue-service-collection'));
-            chart.draw(data);
+            drawSneatPie('revenue-service-collection', service, colors);
         });
-        if (typeof service !== 'undefined' && service.length > 1) {
-            $("#revenue-service-collection").css("height", "500px");
-        }
+    };
+
+    window.RevenueByServiceCategory = function(service, colors) {
+        google.load('visualization', '1', {
+            packages: ['corechart', 'bar', 'line']
+        });
+        google.setOnLoadCallback(function() {
+            drawSneatPie('revenue-service-category', service, colors);
+        });
     };
 
     window.BarChart = function(service) {
-        const primary = '#7A8B6A';
-        const success = '#C4A265';
-        const warning = '#D4956A';
+        const primary = '#696cff';
+        const success = '#71dd37';
+        const warning = '#ffab00';
         
         // Process locations
         var locations = service.data.bar;
@@ -450,9 +460,9 @@
             }],
             chart: {
                 type: 'bar',
-                height: 400,
+                height: 420,
                 stacked: false,
-                toolbar: { show: true }
+                toolbar: { show: false }
             },
             plotOptions: {
                 bar: {

@@ -1,0 +1,509 @@
+/* Sneat dashboard — chart-first widgets. Scoped to .sneat-dashboard */
+
+.sneat-dashboard {
+    --s-primary: #696cff;
+    --s-success: #71dd37;
+    --s-info: #03c3ec;
+    --s-warning: #ffab00;
+    --s-danger: #ff3e1d;
+    --s-heading: #566a7f;
+    --s-body: #697a8d;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-paper: #fff;
+    --s-soft: rgba(105, 108, 255, 0.12);
+    --s-radius: 0.5rem;
+    --s-shadow: 0 0.125rem 0.5rem 0.0625rem rgba(161, 172, 184, 0.12);
+    --s-font: "Public Sans", "Segoe UI", sans-serif;
+    font-family: var(--s-font);
+}
+
+.sneat-dashboard .dash-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sneat-dashboard .subheader,
+.sneat-dashboard #kt_subheader {
+    display: none;
+}
+
+.sneat-dashboard .dash-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.sneat-dashboard .dash-toolbar h2 {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--s-heading);
+}
+
+.sneat-dashboard .dash-range {
+    margin: 0.25rem 0 0;
+    color: var(--s-muted);
+    font-size: 0.9375rem;
+}
+
+.sneat-dashboard .dash-period {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.sneat-dashboard .dash-period__btn {
+    height: 2.375rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--s-border);
+    border-radius: 0.375rem;
+    background: var(--s-paper);
+    color: var(--s-heading);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--s-font);
+    cursor: pointer;
+}
+
+.sneat-dashboard .dash-period__btn:hover {
+    border-color: var(--s-primary);
+    color: var(--s-primary);
+}
+
+.sneat-dashboard .dash-period__btn.is-active {
+    background: var(--s-primary);
+    border-color: var(--s-primary);
+    color: #fff;
+}
+
+.sneat-dashboard .dash-filter {
+    height: 2.375rem;
+    min-width: 10rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--s-border);
+    border-radius: var(--s-radius);
+    background: var(--s-paper);
+    color: var(--s-heading);
+    font-size: 0.9375rem;
+    font-family: var(--s-font);
+}
+
+.sneat-dashboard .dash-kpi-row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+}
+
+.sneat-dashboard .dash-kpi-row > [class*="col-"] {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sneat-dashboard .dash-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: var(--s-paper);
+    border-radius: var(--s-radius);
+    box-shadow: var(--s-shadow);
+    padding: 1.15rem 1.25rem 1rem;
+    min-height: 8.5rem;
+    height: 100%;
+    border-top: 3px solid var(--s-primary);
+}
+
+.sneat-dashboard .dash-kpi__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+}
+
+.sneat-dashboard .dash-kpi__copy {
+    min-width: 0;
+}
+
+.sneat-dashboard .dash-kpi__icon {
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #fff;
+    background: var(--s-primary);
+}
+
+.sneat-dashboard .dash-kpi--success { border-top-color: var(--s-success); }
+.sneat-dashboard .dash-kpi--success .dash-kpi__icon { background: var(--s-success); }
+.sneat-dashboard .dash-kpi--primary { border-top-color: var(--s-primary); }
+.sneat-dashboard .dash-kpi--primary .dash-kpi__icon { background: var(--s-primary); }
+.sneat-dashboard .dash-kpi--info { border-top-color: var(--s-info); }
+.sneat-dashboard .dash-kpi--info .dash-kpi__icon { background: var(--s-info); }
+.sneat-dashboard .dash-kpi--warning { border-top-color: var(--s-warning); }
+.sneat-dashboard .dash-kpi--warning .dash-kpi__icon { background: var(--s-warning); color: #fff; }
+.sneat-dashboard .dash-kpi--danger { border-top-color: var(--s-danger); }
+.sneat-dashboard .dash-kpi--danger .dash-kpi__icon { background: var(--s-danger); }
+.sneat-dashboard .dash-kpi--secondary { border-top-color: #8592a3; }
+.sneat-dashboard .dash-kpi--secondary .dash-kpi__icon { background: #8592a3; }
+.sneat-dashboard .dash-kpi--dark { border-top-color: #566a7f; }
+.sneat-dashboard .dash-kpi--dark .dash-kpi__icon { background: #566a7f; }
+
+.sneat-dashboard .dash-kpi--sales .dash-kpi__icon { background: var(--s-primary); }
+.sneat-dashboard .dash-kpi--revenue .dash-kpi__icon { background: var(--s-success); }
+.sneat-dashboard .dash-kpi--consult .dash-kpi__icon { background: var(--s-info); }
+.sneat-dashboard .dash-kpi--treat .dash-kpi__icon { background: var(--s-warning); color: #fff; }
+
+.sneat-dashboard .dash-kpi__value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--s-heading);
+    word-break: break-word;
+}
+
+.sneat-dashboard .dash-kpi__label {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--s-muted);
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 1;
+}
+
+.sneat-dashboard .dash-kpi__delta {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #eceef1;
+    color: var(--s-heading);
+}
+
+.sneat-dashboard .dash-kpi__delta.is-up {
+    background: rgba(113, 221, 55, 0.16);
+    color: #3a9b1a;
+}
+
+.sneat-dashboard .dash-kpi__delta.is-down {
+    background: rgba(255, 62, 29, 0.12);
+    color: #ff3e1d;
+}
+
+.sneat-dashboard .dash-kpi__hint {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--s-muted);
+    line-height: 1.35;
+}
+
+.sneat-dashboard .dash-chart-card {
+    overflow: visible !important;
+}
+
+.sneat-dashboard .dash-chart-card .card-header {
+    padding: 1.05rem 1.25rem 0.35rem !important;
+}
+
+.sneat-dashboard .dash-chart-card .card-header .card-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--s-heading);
+}
+
+.sneat-dashboard .dash-chart-card .card-body {
+    padding: 0.35rem 0.75rem 1rem !important;
+}
+
+.sneat-dashboard .dash-chart-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    color: var(--s-muted);
+    font-size: 0.9375rem;
+}
+
+.sneat-dashboard .dash-kpi .skeleton-loader {
+    background: #eceef1;
+    color: transparent;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 4rem;
+}
+
+.sneat-dashboard .row > [class*="col-"] {
+    margin-bottom: 1.25rem;
+}
+
+.sneat-dashboard .dash-widget,
+.sneat-dashboard .card.card-custom,
+.sneat-dashboard .card.dash-widget,
+.sneat-dashboard .card.card-stretch,
+.sneat-dashboard .card.card-stretch-half {
+    background: var(--s-paper) !important;
+    border: 0 !important;
+    border-radius: var(--s-radius) !important;
+    box-shadow: var(--s-shadow) !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.sneat-dashboard .card .card {
+    box-shadow: none !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.sneat-dashboard .gutter-b {
+    margin-bottom: 0 !important;
+}
+
+.sneat-dashboard .dash-widget-head,
+.sneat-dashboard .card-spacer2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem !important;
+    border-bottom: 1px solid var(--s-border);
+    background: var(--s-paper) !important;
+}
+
+.sneat-dashboard .dashboard-counter,
+.sneat-dashboard .dash-widget-title,
+.sneat-dashboard .dashboard-counter.text-uppercase {
+    font-size: 1.0625rem !important;
+    font-weight: 600 !important;
+    color: var(--s-heading) !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+.sneat-dashboard .dash-widget-head .form-control,
+.sneat-dashboard .card-spacer2 .form-control,
+.sneat-dashboard .date_action_dropdown .form-control,
+.sneat-dashboard .action-style .form-control,
+.sneat-dashboard .btndropdown,
+.sneat-dashboard select.form-control {
+    height: 2.25rem;
+    border: 1px solid var(--s-border);
+    border-radius: var(--s-radius);
+    font-size: 0.9375rem;
+    color: var(--s-heading);
+    background: #fff;
+    box-shadow: none;
+    max-width: 12rem;
+}
+
+.sneat-dashboard .btn_Report {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sneat-dashboard .nav-tabs {
+    border: 0 !important;
+    float: none;
+    margin: 0;
+    background: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sneat-dashboard .nav-tabs > li {
+    float: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.sneat-dashboard .card-header {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 1rem 1.25rem 0.65rem !important;
+}
+
+.sneat-dashboard .card-header .card-title {
+    margin: 0;
+}
+
+.sneat-dashboard .card-header .text-dark,
+.sneat-dashboard .card-header .font-weight-bolder {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--s-heading) !important;
+}
+
+.sneat-dashboard .card-header .text-muted {
+    color: var(--s-muted) !important;
+    font-size: 0.75rem !important;
+    margin-top: 0.2rem !important;
+}
+
+.sneat-dashboard .card-body {
+    padding: 0 !important;
+}
+
+.sneat-dashboard #collection-by-centre,
+.sneat-dashboard #revenue-centre,
+.sneat-dashboard #revenue-service-category,
+.sneat-dashboard #revenue-service,
+.sneat-dashboard #revenue-service-collection,
+.sneat-dashboard #consultancy_by_status,
+.sneat-dashboard #treatment_by_status,
+.sneat-dashboard #centre_wise_arrival,
+.sneat-dashboard #doc_wise_conversion,
+.sneat-dashboard #doc_wise_feedback_data,
+.sneat-dashboard #doctor_upselling_chart {
+    min-height: 420px !important;
+    height: 420px !important;
+    width: 100%;
+}
+
+.sneat-dashboard .custom_tabs_style,
+.sneat-dashboard [id$="-section"],
+.sneat-dashboard #staff_wise_arrival,
+.sneat-dashboard #doctor_wise_conversion_section,
+.sneat-dashboard #activitydiv {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+.sneat-dashboard #activities-container {
+    max-height: none !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sneat-dashboard #activities-body {
+    padding: 0.25rem 0 0.75rem !important;
+    overflow-y: auto;
+    max-height: 470px;
+}
+
+.sneat-dashboard .timeline {
+    padding: 0 1.25rem 1rem;
+}
+
+.sneat-dashboard .table {
+    color: var(--s-body);
+    font-size: 0.9375rem;
+    margin-bottom: 0;
+}
+
+.sneat-dashboard .table thead th,
+.sneat-dashboard .table-cols {
+    color: var(--s-heading) !important;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    border-bottom: 1px solid var(--s-border) !important;
+    background: #fff !important;
+    white-space: nowrap;
+    padding: 0.7rem 1rem;
+}
+
+.sneat-dashboard .table tbody td {
+    padding: 0.7rem 1rem;
+    color: var(--s-body);
+    border-color: var(--s-border);
+    vertical-align: middle;
+}
+
+.sneat-dashboard .table tbody tr:hover {
+    background: #f5f5f9;
+}
+
+.sneat-dashboard #unattended-payments-scroll,
+.sneat-dashboard #overdue-treatments-scroll {
+    max-height: 420px;
+    overflow-y: auto;
+    border-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+.sneat-dashboard .custom_loader,
+.sneat-dashboard .loader-img,
+.sneat-dashboard .loader-img-unattended,
+.sneat-dashboard .loader-img-attended,
+.sneat-dashboard .loader-img-overdue,
+.sneat-dashboard .loader-img-upselling {
+    display: block;
+    margin: 2rem auto;
+    max-height: 48px;
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+}
+
+.sneat-dashboard .table-responsive {
+    height: auto !important;
+    max-height: 420px;
+}
+
+.sneat-dashboard .pt-7 {
+    padding-top: 1rem !important;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.sneat-dashboard .action-style {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+@media (max-width: 991.98px) {
+    .sneat-dashboard #collection-by-centre,
+    .sneat-dashboard #revenue-centre,
+    .sneat-dashboard #revenue-service-category,
+    .sneat-dashboard #revenue-service,
+    .sneat-dashboard #revenue-service-collection,
+    .sneat-dashboard #consultancy_by_status,
+    .sneat-dashboard #treatment_by_status,
+    .sneat-dashboard #centre_wise_arrival,
+    .sneat-dashboard #doc_wise_conversion,
+    .sneat-dashboard #doc_wise_feedback_data,
+    .sneat-dashboard #doctor_upselling_chart {
+        min-height: 320px !important;
+        height: 320px !important;
+    }
+
+    .sneat-dashboard #activities-body {
+        max-height: 360px;
+    }
+
+    .sneat-dashboard .dash-kpi__value {
+        font-size: 1.125rem;
+    }
+
+    .sneat-dashboard .dash-period {
+        width: 100%;
+    }
+}

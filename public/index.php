@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+require __DIR__.'/../bootstrap/php84-compat.php';
+
 
 /*
 |--------------------------------------------------------------------------

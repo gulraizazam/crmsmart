@@ -254,12 +254,12 @@
             </div>
         </div>
 
-        <div class="ap-footer">
-            <button type="button" class="ap-btn-cancel" onclick="resetVoucherAdd(event)">Cancel</button>
-            <button id="AddPackageFinal" type="submit" class="ap-btn-save spinner-button-save">
-                <span class="indicator-label">Save</span>
-            </button>
-        </div>
+    </div>
+    <div class="ap-footer">
+        <button type="button" class="ap-btn-cancel" onclick="resetVoucherAdd(event)">Cancel</button>
+        <button id="AddPackageFinal" type="submit" class="ap-btn-save spinner-button-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

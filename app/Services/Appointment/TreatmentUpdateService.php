@@ -443,10 +443,12 @@ class TreatmentUpdateService
             );
             
             if (count($rotaDay)) {
-                $data['resource_id'] = $resource->id;
                 $data['resource_has_rota_day_id'] = $rotaDay['id'];
             }
         }
+
+        $data['resource_id'] = null;
+        $data['resource_has_rota_day_id_for_machine'] = null;
 
         // Track who updated - compare dates and times in same format
         $dateChanged = false;

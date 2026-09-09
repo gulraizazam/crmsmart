@@ -977,7 +977,7 @@ select2-container--default .select2-selection--single .select2-selection__render
 }
 
 #kt_content {
-    margin-top: -70px;
+    margin-top: 0;
 }
 
 .menu_section {
@@ -1076,7 +1076,7 @@ select2-container--default .select2-selection--single .select2-selection__render
     }
 
     #kt_content {
-        margin-top: 15px;
+        margin-top: 0;
     }
 
     .custom_tabs_style .card-body>div.d-flex {

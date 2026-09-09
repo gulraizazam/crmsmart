@@ -124,15 +124,15 @@
 
                         @endphp
 
-                        <tr style="background:#2fa0d3;color: #fff;">
-                                <td style="color: #fff;">{{$reportlocation['name']}}</td>
-                                <td style="color: #fff;">{{$reportlocation['city']}}</td>
-                                <td style="color: #fff;">{{$reportlocation['region']}}</td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"></td>
+                        <tr class="sn-row-group">
+                                <td>{{$reportlocation['name']}}</td>
+                                <td>{{$reportlocation['city']}}</td>
+                                <td>{{$reportlocation['region']}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             @foreach($reportlocation['revenue_data'] as $reportRow)
 
                                 @php
@@ -191,16 +191,16 @@
                                 $total_refund_card_location +=$total_refund_card_location1;
                                 $total_refund_bank_location +=$total_refund_bank_location1;
                                 @endphp
-                                <tr style="background:#364150;color: #fff;">
-                                <td style="color: #fff;"> {{$reportlocation['name']}}</td>
-                                <td style="color: #fff;">Total</td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"></td>
-                                <td style="color: #fff;"> {{number_format($t_cash,2)}}</td>
-                                <td style="color: #fff;"> {{number_format($t_card,2)}}</td>
-                                <td style="color: #fff;"> {{number_format( $t_bank,2)}}</td>
+                                <tr class="sn-row-total">
+                                <td> {{$reportlocation['name']}}</td>
+                                <td>Total</td>
+                                <td></td>
+                                <td></td>
+                                <td> {{number_format($t_cash,2)}}</td>
+                                <td> {{number_format($t_card,2)}}</td>
+                                <td> {{number_format( $t_bank,2)}}</td>
 
-                                <td style="color: #fff;"></td>
+                                <td></td>
                             </tr>
 
                             @php

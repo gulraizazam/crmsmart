@@ -1,13 +1,19 @@
 @extends('admin.layouts.master')
 @section('title', 'Cash Flow - Reports')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        @include('admin.partials.breadcrumb', ['module' => 'Cash Flow Reports', 'title' => 'Reports'])
+    @push('css')
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
+    @endpush
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!-- Report Selector -->
-                <div class="card card-custom mb-5">
+                <div class="card card-custom sneat-page-card mb-5">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap"><h3 class="card-label">Cash Flow Reports</h3></div>
+                    </div>
                     <div class="card-body py-3">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="d-flex align-items-center">
@@ -33,8 +39,8 @@
                             </div>
                             <div>
                                 @can('cashflow_reports_export')
-                                <button id="btn-export-csv" class="btn btn-light-success"><i class="la la-file-excel"></i> Export Excel</button>
-                                <button id="btn-export-pdf" class="btn btn-light-danger ml-2"><i class="la la-file-pdf"></i> Export PDF</button>
+                                <button id="btn-export-csv" class="btn btn-info"><i class="la la-file-excel"></i> Export Excel</button>
+                                <button id="btn-export-pdf" class="btn btn-info ml-2"><i class="la la-file-pdf"></i> Export PDF</button>
                                 @endcan
                             </div>
                         </div>
@@ -43,7 +49,7 @@
 
                 <!-- Report Output -->
                 <div id="report-output">
-                    <div class="card card-custom">
+                    <div class="card card-custom sneat-page-card">
                         <div class="card-body text-center py-10">
                             <i class="la la-chart-bar icon-4x text-muted mb-4"></i>
                             <h5 class="text-muted">Select a report and click Generate</h5>

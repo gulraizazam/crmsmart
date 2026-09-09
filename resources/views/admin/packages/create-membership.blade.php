@@ -283,12 +283,12 @@
             </div>
         </div>
 
-        <div class="am-footer">
-            <button type="button" class="am-btn-cancel" onclick="resetVoucherAddMembership(event)">Cancel</button>
-            <button id="AddPackageFinalMembership" type="submit" class="am-btn-save spinner-button-save">
-                <span class="indicator-label">Save</span>
-            </button>
-        </div>
+    </div>
+    <div class="am-footer">
+        <button type="button" class="am-btn-cancel" onclick="resetVoucherAddMembership(event)">Cancel</button>
+        <button id="AddPackageFinalMembership" type="submit" class="am-btn-save spinner-button-save">
+            <span class="indicator-label">Save</span>
+        </button>
     </div>
 </div>
 <!--end::Modal content-->

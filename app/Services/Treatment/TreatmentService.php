@@ -22,8 +22,6 @@ use App\Models\Patients;
 use App\Models\Resources;
 use App\Models\LeadStatuses;
 use App\Models\LeadsServices;
-use App\Models\MachineTypeHasServices;
-use App\Models\DoctorHasServices;
 use App\Models\ResourceHasRota;
 use App\Models\ResourceHasRotaDays;
 use App\Helpers\ActivityLogger;
@@ -642,16 +640,6 @@ class TreatmentService
             $baseServiceId = $service->parent_id;
         }
 
-        // Find machine (resource) for this service
-        $resourceId = $request->resource_id;
-        if (!$resourceId && $request->location_id) {
-            $resourceId = $this->findMachineForService($request->service_id, $baseServiceId, $request->location_id);
-        }
-
-        if (!$resourceId) {
-            throw new TreatmentException('Machine not found. Please select a valid machine or ensure the location has an available machine for this service.', 422);
-        }
-
         // Get location info (single query)
         $location = Locations::find($request->location_id);
         if (!$location) {
@@ -670,10 +658,10 @@ class TreatmentService
         }
 
         // Prepare appointment data
-        $appointmentData = $this->prepareAppointmentData($request, $service, $baseServiceId, $resourceId, $location, $accountId);
+        $appointmentData = $this->prepareAppointmentData($request, $service, $baseServiceId, $location, $accountId);
 
         // Validate rota and availability
-        $rotaValidation = $this->validateRotaAndAvailability($request, $resourceId, $service, $appointmentData);
+        $rotaValidation = $this->validateRotaAndAvailability($request, $service, $appointmentData);
         if (!$rotaValidation['valid']) {
             throw new TreatmentException($rotaValidation['message'], 422);
         }
@@ -765,45 +753,6 @@ class TreatmentService
     }
 
     /**
-     * Find machine for service - checks child service first, then parent
-     */
-    protected function findMachineForService(int $serviceId, ?int $baseServiceId, int $locationId): ?int
-    {
-        // First, try to find machine type using child service (service_id)
-        $machineTypeService = MachineTypeHasServices::where('service_id', $serviceId)->first();
-
-        if ($machineTypeService) {
-            // Check if machine exists at this location
-            $resource = Resources::where('location_id', $locationId)
-                ->where('machine_type_id', $machineTypeService->machine_type_id)
-                ->where('active', 1)
-                ->first();
-
-            if ($resource) {
-                return $resource->id;
-            }
-        }
-
-        // If no machine found with child service, try with parent service (base_service_id)
-        if ($baseServiceId) {
-            $machineTypeService = MachineTypeHasServices::where('service_id', $baseServiceId)->first();
-
-            if ($machineTypeService) {
-                $resource = Resources::where('location_id', $locationId)
-                    ->where('machine_type_id', $machineTypeService->machine_type_id)
-                    ->where('active', 1)
-                    ->first();
-
-                if ($resource) {
-                    return $resource->id;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Validate doctor can perform this service at the given location
      */
     protected function validateDoctorService(int $doctorId, int $serviceId, ?int $baseServiceId, int $locationId): bool
@@ -834,7 +783,7 @@ class TreatmentService
     /**
      * Prepare appointment data array
      */
-    protected function prepareAppointmentData(Request $request, Services $service, ?int $baseServiceId, int $resourceId, Locations $location, int $accountId): array
+    protected function prepareAppointmentData(Request $request, Services $service, ?int $baseServiceId, Locations $location, int $accountId): array
     {
         $user = Auth::user();
         $phone = $request->phone;
@@ -843,6 +792,12 @@ class TreatmentService
         }
 
         $data = $request->all();
+        unset(
+            $data['machine_id'],
+            $data['resourceId'],
+            $data['resource_id'],
+            $data['resource_has_rota_day_id_for_machine']
+        );
         $data['phone'] = GeneralFunctions::cleanNumber($phone);
         $data['account_id'] = $accountId;
         $data['created_by'] = $user->id;
@@ -851,7 +806,8 @@ class TreatmentService
         $data['city_id'] = $location->city_id;
         $data['region_id'] = $location->region_id;
         $data['base_service_id'] = $baseServiceId;
-        $data['resource_id'] = $resourceId;
+        $data['resource_id'] = null;
+        $data['resource_has_rota_day_id_for_machine'] = null;
         $data['user_type_id'] = 3;
         $data['created_at'] = Filters::getCurrentTimeStamp();
         $data['updated_at'] = Filters::getCurrentTimeStamp();
@@ -874,7 +830,7 @@ class TreatmentService
     /**
      * Validate rota and availability for doctor only (machine rota check removed)
      */
-    protected function validateRotaAndAvailability(Request $request, int $resourceId, Services $service, array $appointmentData): array
+    protected function validateRotaAndAvailability(Request $request, Services $service, array $appointmentData): array
     {
         if (!$request->start) {
             return ['valid' => true, 'data' => [], 'message' => ''];
@@ -1237,14 +1193,9 @@ class TreatmentService
         $data['scheduled_at_count'] = $appointment->scheduled_at_count;
         $data['reschedule'] = 1;
         $data['resource_has_rota_day_id'] = $doctorRota['resource_has_rota_day_id'];
-
-        // Handle resource/machine (machine rota check removed - only store resource_id)
-        if ($request->resourceId && !empty($request->resourceId)) {
-            $data['resource_id'] = $request->resourceId;
-        } else {
-            // Keep existing resource_id if not provided
-            $data['resource_id'] = $appointment->resource_id;
-        }
+        unset($data['machine_id'], $data['resourceId'], $data['resource_has_rota_day_id_for_machine']);
+        $data['resource_id'] = null;
+        $data['resource_has_rota_day_id_for_machine'] = null;
 
         // Use database transaction for data integrity
         return DB::transaction(function () use ($request, $data, $appointment, $accountId) {

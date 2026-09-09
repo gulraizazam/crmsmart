@@ -2,23 +2,13 @@
 @section('title', 'Cash Flow - Expenses')
 @section('content')
     @push('css')
-        <style>
-            .status-badge { font-size: 0.85rem; }
-            .expense-flagged { border-left: 3px solid #FFA800 !important; }
-            .expense-rejected { border-left: 3px solid #F64E60 !important; }
-            .expense-voided { border-left: 3px solid #F64E60 !important; opacity: 0.6; }
-            .amount-cell { font-weight: 600; white-space: nowrap; }
-        </style>
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-cashflow.css') }}?v=2" rel="stylesheet" type="text/css" />
     @endpush
 
-    <!--begin::Content-->
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-
-        @include('admin.partials.breadcrumb', ['module' => 'Cash Flow Expenses', 'title' => 'Expenses'])
-
-        <!--begin::Entry-->
+    <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-cashflow-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid sneat-page">
 
                 <!-- Status Count Cards -->
                 <div class="row mb-5" id="status-cards">
@@ -85,13 +75,13 @@
                 </div>
 
                 <!--begin::Card-->
-                <div class="card card-custom">
-                    <div class="card-header py-3">
-                        <div class="card-title">
-                            <h3 class="card-label"><i class="la la-receipt mr-2"></i>Expenses</h3>
+                <div class="card card-custom sneat-page-card">
+                    <div class="card-header">
+                        <div class="card-title sneat-page-title-wrap">
+                            <h3 class="card-label">Expenses</h3>
                         </div>
                         <div class="card-toolbar">
-                            <button id="btn-export-expenses" class="btn btn-light-success mr-2">
+                            <button id="btn-export-expenses" class="btn btn-info">
                                 <i class="la la-file-excel"></i> Export
                             </button>
                             @if(Gate::allows('cashflow_expense_create'))
@@ -102,8 +92,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Filters -->
-                        <div class="row mb-4">
+                        <div class="row mb-4 sneat-cf-filters">
                             <div class="col-md-2">
                                 <select id="filter-status" class="form-control form-control-sm kt-select2-general">
                                     <option value="">All Status</option>
@@ -177,7 +166,7 @@
     <!-- Create/View Expense Modal -->
     <div class="modal fade" id="modal_expense" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title" id="expense-modal-title">New Expense</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -280,7 +269,7 @@
     <!-- Vendor Request Modal (from expense form) -->
     <div class="modal fade" id="modal_vendor_request" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Request New Vendor</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -312,7 +301,7 @@
     <!-- Category Suggestion Modal (from expense form) -->
     <div class="modal fade" id="modal_category_request" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Suggest New Category</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -340,7 +329,7 @@
     <!-- Reject Modal -->
     <div class="modal fade" id="modal_reject" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Reject Expense</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -363,7 +352,7 @@
     <!-- Void Modal -->
     <div class="modal fade" id="modal_void" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Void Expense</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -387,7 +376,7 @@
     <!-- Admin Edit Modal -->
     <div class="modal fade" id="modal_admin_edit" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Expense (Admin)</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -454,7 +443,7 @@
     <!-- Audit Trail Modal -->
     <div class="modal fade" id="modal_audit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header" style="background:#F3F6F9;border-bottom:2px solid #E4E6EF;">
                     <h5 class="modal-title font-weight-bolder"><i class="la la-history text-primary mr-2"></i>Audit Trail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -477,7 +466,7 @@
     <!-- Attachment Preview Modal -->
     <div class="modal fade" id="modal_preview" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content cf-modal">
                 <div class="modal-header py-3" style="background:#F3F6F9;border-bottom:2px solid #E4E6EF;">
                     <h5 class="modal-title font-weight-bolder"><i class="la la-paperclip text-primary mr-2"></i>Attachment Preview</h5>
                     <div>
