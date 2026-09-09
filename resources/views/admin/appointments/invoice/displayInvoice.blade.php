@@ -1,37 +1,31 @@
 <!--begin::Modal content-->
 <style>
-    .di-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-    .di-modal-header { background: linear-gradient(135deg, #3D4A35 0%, #007bff 50%, #7A8B6A 100%); padding: 22px 28px; position: relative; overflow: hidden; }
-    .di-modal-header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
+    .di-modal .modal-content { border: none; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 0.25rem 1.125rem rgba(17, 24, 39, 0.12); }
+    .di-modal-header { background: #fff; border-bottom: 1px solid #d9dee3; padding: 1rem 1.5rem; }
     .di-modal-header-top { display: flex; align-items: center; justify-content: space-between; }
-    .di-modal-title { color: #fff; font-size: 1.1rem; font-weight: 600; margin: 0; }
-    .di-modal-title span { color: #C4A265; }
-    .di-modal-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-    .di-modal-close:hover { background: rgba(255,255,255,0.25); }
-    .di-invoice-brand { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; background: #F8F6F1; border-bottom: 1px solid #E8EDE5; }
+    .di-modal-title { color: #566a7f; font-size: 1.05rem; font-weight: 600; margin: 0; font-family: "Public Sans", "Segoe UI", sans-serif; }
+    .di-modal-title span { color: #696cff; }
+    .di-modal-close { background: #f5f5f9; border: 1px solid #d9dee3; color: #566a7f; width: 32px; height: 32px; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .di-modal-close:hover { background: #eceef1; }
+    .di-invoice-brand { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.5rem; background: #fff; border-bottom: 1px solid #e7e7e8; }
     .di-brand-left { display: flex; flex-direction: column; gap: 4px; }
-    .di-brand-logo { font-family: 'Georgia', serif; font-size: 22px; font-weight: 700; color: #3D4A35; letter-spacing: 1.5px; }
-    .di-brand-logo .amp { color: #C4A265; }
-    .di-brand-address { font-size: 12px; color: #6B7A60; margin-top: 2px; }
-    .di-brand-contact { font-size: 11px; color: #8A9580; margin-top: 4px; line-height: 1.5; }
-    .di-badge-invoice { background: linear-gradient(135deg, #3D4A35, #007bff); color: #fff; padding: 8px 22px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
-    .di-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 16px 28px; background: #fff; border-bottom: 1px solid #E8EDE5; }
-    .di-meta-item { font-size: 13px; color: #3D4A35; }
-    .di-meta-item strong { color: #007bff; font-weight: 700; }
-    .di-body { padding: 20px 28px 24px; background: #fff; }
-    .di-body .table { border-radius: 10px; overflow: hidden; border: 1px solid #E8EDE5; margin-bottom: 0; }
-    .di-body .table thead th { background: #F4F7F2; color: #3D4A35; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 14px; border-bottom: 2px solid #D5DDD0; border-right: 1px solid #E8EDE5; white-space: nowrap; }
-    .di-body .table thead th:last-child { border-right: none; }
-    .di-body .table tbody td { padding: 12px 14px; font-size: 13px; color: #4A5540; border-right: 1px solid #E8EDE5; vertical-align: middle; }
-    .di-body .table tbody td:last-child { border-right: none; }
-    .di-body .table tbody tr:hover { background: #FAFDF8; }
-    .di-total { text-align: right; padding: 14px 0 18px; font-size: 15px; color: #3D4A35; font-weight: 700; }
-    .di-total span { color: #007bff; }
-    .di-actions { display: flex; justify-content: center; gap: 12px; padding-top: 8px; }
-    .di-body .btn-success { background: linear-gradient(135deg, #007bff, #7A8B6A); border: none; border-radius: 10px; padding: 10px 22px; font-weight: 600; font-size: 13px; letter-spacing: 0.3px; transition: all 0.3s; color: #fff; }
-    .di-body .btn-success:hover { background: linear-gradient(135deg, #4A5540, #007bff); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(92,107,79,0.3); color: #fff; }
-    .di-body .btn-info { background: linear-gradient(135deg, #7B9BAD, #6A8A9C); border: none; border-radius: 10px; padding: 10px 22px; font-weight: 600; font-size: 13px; letter-spacing: 0.3px; transition: all 0.3s; color: #fff; }
-    .di-body .btn-info:hover { background: linear-gradient(135deg, #6A8A9C, #5A7A8C); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(123,155,173,0.3); color: #fff; }
+    .di-brand-address { font-size: 12px; color: #697a8d; margin-top: 2px; }
+    .di-brand-contact { font-size: 11px; color: #a1acb8; margin-top: 4px; line-height: 1.5; }
+    .di-badge-invoice { background: #f5f5f9; color: #566a7f; border: 1px solid #d9dee3; padding: 0.4rem 0.9rem; border-radius: 0.375rem; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .di-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 0.85rem 1.5rem; background: #fafafa; border-bottom: 1px solid #e7e7e8; }
+    .di-meta-item { font-size: 13px; color: #566a7f; }
+    .di-meta-item strong { color: #111827; font-weight: 700; }
+    .di-body { padding: 1.1rem 1.5rem 1.4rem; background: #fff; }
+    .di-body .table { border-radius: 0.375rem; overflow: hidden; border: 1px solid #e7e7e8; margin-bottom: 0; }
+    .di-body .table thead th { background: #f9fafb; color: #566a7f; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px; border-bottom: 1px solid #e7e7e8; white-space: nowrap; }
+    .di-body .table tbody td { padding: 10px 12px; font-size: 13px; color: #566a7f; vertical-align: middle; }
+    .di-total { text-align: right; padding: 14px 0 16px; font-size: 14px; color: #566a7f; font-weight: 600; }
+    .di-total span { color: #111827; }
+    .di-actions { display: flex; justify-content: center; gap: 10px; padding-top: 4px; }
+    .di-body .btn-success { background: #696cff; border: none; border-radius: 0.375rem; padding: 8px 18px; font-weight: 600; font-size: 13px; color: #fff; }
+    .di-body .btn-success:hover { background: #5f61e6; color: #fff; }
+    .di-body .btn-info { background: #fff; border: 1px solid #d9dee3; border-radius: 0.375rem; padding: 8px 18px; font-weight: 600; font-size: 13px; color: #566a7f; }
+    .di-body .btn-info:hover { background: #f5f5f9; color: #566a7f; }
 </style>
 <div class="modal-content di-modal">
     <!--begin::Modal header-->
