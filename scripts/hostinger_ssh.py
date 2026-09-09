@@ -60,11 +60,29 @@ def run(command: str, timeout: int = 120) -> tuple[int, str, str]:
         client.close()
 
 
+def upload(local_path: str, remote_path: str) -> None:
+    client = connect()
+    try:
+        sftp = client.open_sftp()
+        sftp.put(local_path, remote_path)
+        sftp.close()
+    finally:
+        client.close()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("command")
     parser.add_argument("--timeout", type=int, default=120)
+    parser.add_argument("--upload", nargs=2, metavar=("LOCAL", "REMOTE"))
+    parser.add_argument("command", nargs="?", default="")
     args = parser.parse_args()
+    if args.upload:
+        upload(args.upload[0], args.upload[1])
+        print(f"uploaded {args.upload[0]} -> {args.upload[1]}")
+        if not args.command:
+            return 0
+    if not args.command:
+        parser.error("command is required unless --upload is used")
     code, out, err = run(args.command, timeout=args.timeout)
     if out:
         sys.stdout.write(out)

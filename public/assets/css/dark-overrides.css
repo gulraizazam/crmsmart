@@ -404,31 +404,29 @@ a:hover {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: #495057 !important;
-    background: #ffffff !important;
-    border: 1px solid #dee2e6 !important;
-    border-radius: 4px !important;
-    margin: 0 2px !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #f1f3f5 !important;
-    color: #212529 !important;
-    border-color: #adb5bd !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    background: #007bff !important;
-    color: #ffffff !important;
-    border-color: #007bff !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
-    color: #adb5bd !important;
+    color: inherit !important;
     background: transparent !important;
-    border-color: #dee2e6 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination .page-item > .page-link:hover {
+    color: #696cff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination .page-item.active > .page-link,
+.dataTables_wrapper .dataTables_paginate .pagination .page-item.active > .page-link:hover {
+    background: #696cff !important;
+    color: #ffffff !important;
+    border-color: #696cff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination .page-item.disabled > .page-link,
+.dataTables_wrapper .dataTables_paginate .pagination .page-item.disabled > .page-link:hover {
+    color: #adb5bd !important;
+    background: #ffffff !important;
     cursor: not-allowed;
 }
 

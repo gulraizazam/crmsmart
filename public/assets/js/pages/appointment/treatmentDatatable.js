@@ -290,14 +290,13 @@ function actions(data) {
             if(!data.invoice) {
                 if (data.appointment_type == 2) {
                     actions += '<a title="Create Invoice" href="javascript:void(0);" onclick="createTreatmentInvoice(`' + invoice_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-warning btn-sm">\
-                            <span class="navi-icon"><i class="la la-file"></i></span>\
-                            <!--<span class="navi-text">Create Invoice</span>-->\
+                            <span class="navi-icon"><i class="la la-file-invoice"></i></span>\
                         </a>';
                 }
 
                 if(data.appointment_type == 1) {
                     actions += '<a title="Create Invoice" href="javascript:void(0);" onclick="createConsultancyInvoice(`' + consultancy_invoice_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-warning btn-sm">\
-                            <span class="navi-icon"><i class="la la-file"></i></span>\
+                            <span class="navi-icon"><i class="la la-file-invoice"></i></span>\
                         </a>';
                 }
             }
@@ -312,8 +311,8 @@ function actions(data) {
                         </a>';
             }
         }
-        actions += '<a href="javascript:void(0);" onclick="viewSmsLogs(`'+sms_logs_url+'`);" class="d-lg-inline-flex d-none btn btn-icon btn-success btn-sm ml-2">\
-                        <span class="navi-icon"><i class="la la-sms"></i></span>\
+        actions += '<a href="javascript:void(0);" onclick="viewSmsLogs(`'+sms_logs_url+'`);" class="d-lg-inline-flex d-none btn btn-icon btn-success btn-sm" title="SMS Logs">\
+                        <span class="navi-icon"><i class="la la-comments"></i></span>\
                         </a>';
 
         // Show WhatsApp icon only if appointment_status is NOT 2 and scheduled_date is today
@@ -342,8 +341,8 @@ function actions(data) {
 
         if (data.appointment_status != 2 && isToday ) {
             // Copy WhatsApp Message Button
-            actions += '<a href="javascript:void(0);" onclick="copyWhatsAppMessage(' + id + ');" class="d-lg-inline-flex d-none btn btn-icon btn-primary btn-sm ml-2" title="Copy Message">\
-                            <span class="navi-icon"><i class="la la-copy" style="color: white;"></i></span>\
+            actions += '<a href="javascript:void(0);" onclick="copyWhatsAppMessage(' + id + ');" class="d-lg-inline-flex d-none btn btn-icon btn-primary btn-sm" title="Copy Message">\
+                            <span class="navi-icon"><i class="la la-copy"></i></span>\
                         </a>';
 
             // Send WhatsApp Button
@@ -352,8 +351,8 @@ function actions(data) {
             //             </a>';
         } 
 
-        actions += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
-                        <i class="ki ki-bold-more-hor" aria-hidden="true"></i>\
+        actions += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" title="More actions">\
+                        <i class="la la-ellipsis-v" aria-hidden="true"></i>\
                     </a>';
 
         actions += '<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" style="overflow-y: scroll; height: 200px">\

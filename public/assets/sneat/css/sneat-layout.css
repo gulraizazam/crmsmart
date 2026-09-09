@@ -592,3 +592,186 @@ body.sneat-shell .datatable-head .datatable-cell > span {
     letter-spacing: 0.01em;
     text-transform: none;
 }
+
+/* DataTables pager — single Sneat chip per page, no nested li+a boxes */
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .paginate_button {
+    display: inline-flex !important;
+    float: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+    height: auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: inherit !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item > .page-link {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: var(--sneat-font);
+    font-size: 0.9375rem !important;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--sneat-heading) !important;
+    background: var(--sneat-paper) !important;
+    border: 1px solid var(--sneat-border) !important;
+    border-radius: var(--sneat-radius) !important;
+    box-shadow: none !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item > .page-link i {
+    font-size: 1.125rem;
+    line-height: 1;
+    color: inherit !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.previous > .page-link,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.next > .page-link,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.first > .page-link,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.last > .page-link {
+    font-size: 1.25rem !important;
+    font-weight: 600;
+    background: var(--sneat-paper) !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.active > .page-link,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.active > .page-link:hover {
+    color: #fff !important;
+    background: var(--sneat-primary) !important;
+    border-color: var(--sneat-primary) !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item:not(.active):not(.disabled) > .page-link:hover {
+    color: var(--sneat-primary) !important;
+    background: var(--sneat-primary-hover) !important;
+    border-color: var(--sneat-primary) !important;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.disabled > .page-link,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.disabled > .page-link:hover {
+    color: var(--sneat-muted) !important;
+    background: var(--sneat-paper) !important;
+    border-color: var(--sneat-border) !important;
+    opacity: 0.7;
+}
+
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.previous:not(.disabled) > .page-link:hover,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.next:not(.disabled) > .page-link:hover,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.first:not(.disabled) > .page-link:hover,
+body.sneat-shell .dataTables_wrapper .dataTables_paginate .pagination .page-item.last:not(.disabled) > .page-link:hover {
+    color: var(--sneat-primary) !important;
+    background: var(--sneat-primary-hover) !important;
+    border-color: var(--sneat-primary) !important;
+}
+
+/* Consultations + treatments row actions: Sneat label chips, not Metronic fill squares */
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning),
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success),
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info),
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-icon {
+    width: 2.375rem;
+    height: 2.375rem;
+    min-width: 2.375rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0.375rem !important;
+    box-shadow: none !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-icon .navi-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-icon .navi-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-icon .navi-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-icon .navi-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-icon i {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: inherit !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots > a.btn-icon.btn-warning {
+    background: #fff2d6 !important;
+    color: #ffab00 !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots > a.btn-icon.btn-success {
+    background: #d7f5fc !important;
+    color: #03c3ec !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots > a.btn-icon.btn-info {
+    background: #e7e7ff !important;
+    color: #696cff !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots > a.btn-icon.btn-primary {
+    background: #e7e7ff !important;
+    color: #696cff !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-clean.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-clean.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-clean.btn-icon,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-clean.btn-icon {
+    width: 2.375rem;
+    height: 2.375rem;
+    min-width: 2.375rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0.375rem !important;
+    background: transparent !important;
+    color: #a1acb8 !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-clean.btn-icon:hover,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-clean.btn-icon:hover,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-clean.btn-icon:hover,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-clean.btn-icon:hover {
+    background: rgba(67, 89, 113, 0.08) !important;
+    color: #566a7f !important;
+}
+
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-warning) > a.btn-clean.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-success) > a.btn-clean.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-info) > a.btn-clean.btn-icon i,
+body.sneat-shell .sneat-appt-page .action-dots:has(> a.btn-icon.btn-primary) > a.btn-clean.btn-icon i {
+    font-size: 1.25rem;
+    color: inherit;
+}

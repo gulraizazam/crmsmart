@@ -204,10 +204,10 @@
                 zeroRecords: 'No matching records found',
                 emptyTable: 'No data available',
                 paginate: {
-                    previous: '‹',
-                    next: '›',
-                    first: '«',
-                    last: '»',
+                    previous: '<i class="la la-angle-left" aria-hidden="true"></i>',
+                    next: '<i class="la la-angle-right" aria-hidden="true"></i>',
+                    first: '<i class="la la-angle-double-left" aria-hidden="true"></i>',
+                    last: '<i class="la la-angle-double-right" aria-hidden="true"></i>',
                 },
             },
             dom:

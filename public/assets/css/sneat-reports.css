@@ -590,13 +590,18 @@
     font-size: 0.9375rem;
 }
 
-.sneat-reports-page .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+.sneat-reports-page .dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: transparent !important;
+    border: 0 !important;
+}
+
+.sneat-reports-page .dataTables_wrapper .dataTables_paginate .pagination .page-item.active > .page-link {
     background: var(--s-primary) !important;
     border-color: var(--s-primary) !important;
     color: #fff !important;
 }
 
-.sneat-reports-page .dataTables_wrapper .dataTables_paginate .paginate_button {
+.sneat-reports-page .dataTables_wrapper .dataTables_paginate .pagination .page-item > .page-link {
     border-radius: 0.375rem !important;
     color: var(--s-heading) !important;
 }

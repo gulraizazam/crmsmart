@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
         <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-reports.css') }}?v=4" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-reports.css') }}?v=5" rel="stylesheet" type="text/css" />
         <style>
             .daterangepicker .drp-calendar th.month .monthselect,
             .daterangepicker .drp-calendar th.month .yearselect {

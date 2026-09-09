@@ -208,7 +208,7 @@ function consultationActionsShared(data, perms) {
     // Invoice buttons
     if (p.invoice && !data.invoice && data.appointment_type == 1) {
         actions += '<a title="Create Invoice" href="javascript:void(0);" onclick="createConsultancyInvoice(`' + consultancy_invoice_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-warning btn-sm">' +
-                '<span class="navi-icon"><i class="la la-file"></i></span>' +
+                '<span class="navi-icon"><i class="la la-file-invoice"></i></span>' +
             '</a>';
     }
 
@@ -219,18 +219,18 @@ function consultationActionsShared(data, perms) {
     }
     
     // SMS logs button
-    actions += '<a href="javascript:void(0);" onclick="viewSmsLogs(`' + sms_logs_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-success btn-sm ml-2">' +
-            '<span class="navi-icon"><i class="la la-sms"></i></span>' +
+    actions += '<a href="javascript:void(0);" onclick="viewSmsLogs(`' + sms_logs_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-success btn-sm" title="SMS Logs">' +
+            '<span class="navi-icon"><i class="la la-comments"></i></span>' +
         '</a>';
 
     // Copy WhatsApp button
-    actions += '<a href="javascript:void(0);" onclick="copyWhatsAppMessage(' + id + ');" class="d-lg-inline-flex d-none btn btn-icon btn-primary btn-sm ml-2" title="Copy Message">' +
-            '<span class="navi-icon"><i class="la la-copy" style="color: white;"></i></span>' +
+    actions += '<a href="javascript:void(0);" onclick="copyWhatsAppMessage(' + id + ');" class="d-lg-inline-flex d-none btn btn-icon btn-primary btn-sm" title="Copy Message">' +
+            '<span class="navi-icon"><i class="la la-copy"></i></span>' +
         '</a>';
 
     // Dropdown menu
-    actions += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">' +
-            '<i class="ki ki-bold-more-hor" aria-hidden="true"></i>' +
+    actions += '<a href="javascript:void(0);" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" title="More actions">' +
+            '<i class="la la-ellipsis-v" aria-hidden="true"></i>' +
         '</a>';
 
     actions += '<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">' +

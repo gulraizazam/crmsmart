@@ -379,7 +379,7 @@
 
     @push('datatable-js')
         <script src="{{asset('assets/js/pages/appointment/treatment-columns.js')}}?v=3"></script>
-        <script src="{{asset('assets/js/pages/appointment/treatmentDatatable.js?v=2')}}"></script>
+        <script src="{{asset('assets/js/pages/appointment/treatmentDatatable.js?v=3')}}"></script>
     @endpush
 
 @endsection
