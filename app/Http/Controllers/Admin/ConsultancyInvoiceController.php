@@ -55,12 +55,15 @@ class ConsultancyInvoiceController extends Controller
             return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
         }
 
-        $invoice_status = InvoiceStatuses::where('slug', '=', 'paid')->first();
+        $paidStatus = InvoiceStatuses::where('slug', '=', 'paid')->first();
 
-        $invoice = Invoices::where([
-            ['appointment_id', '=', $id],
-            ['invoice_status_id', '=', $invoice_status->id],
-        ])->first();
+        $invoice = null;
+        if ($paidStatus) {
+            $invoice = Invoices::where([
+                ['appointment_id', '=', $id],
+                ['invoice_status_id', '=', $paidStatus->id],
+            ])->first();
+        }
 
         if ($invoice == null) {
 
@@ -71,6 +74,9 @@ class ConsultancyInvoiceController extends Controller
             $price = 0;
 
             $appointment = Appointments::find($id);
+            if (! $appointment) {
+                return ApiHelper::apiResponse($this->error, 'Appointment not found.', false);
+            }
 
             $location_info = Locations::find($appointment->location_id);
 
@@ -83,7 +89,7 @@ class ConsultancyInvoiceController extends Controller
             /*End*/
             $price = $tax = $price_tax = $tax_amt = $cash = $balance = 0;
 
-            if ($appointment_type->name == Config::get('constants.Consultancy')) {
+            if ($appointment_type && $appointment_type->name == Config::get('constants.Consultancy') && $location_info) {
                 $serviceinfo = Services::where('id', '=', $appointment->service_id)->first();
                 if ($serviceinfo) {
 
@@ -400,6 +406,9 @@ class ConsultancyInvoiceController extends Controller
         }
         $paymentmode_settle = PaymentModes::where(['payment_type' => Config::get('constants.payment_type_settle')])->first();
         $invoicestatus = InvoiceStatuses::where(['slug' => 'paid'])->first();
+        if (! $invoicestatus || ! $paymentmode_settle) {
+            return ApiHelper::apiResponse($this->error, 'Invoice lookups are not configured.', false);
+        }
         $appointmentinfo = Appointments::find($request->appointment_id);
         // if (! Gate::allows('appointments_log_excel')) {
         //     if ($appointmentinfo->scheduled_date < date('Y-m-d') || $appointmentinfo->scheduled_date > date('Y-m-d')) {

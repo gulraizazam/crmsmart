@@ -1088,10 +1088,13 @@ class AppointmentsController extends Controller
             return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
         }
         $invoice_status = InvoiceStatuses::where('slug', '=', 'paid')->first();
-        $invoice = Invoices::where([
-            ['appointment_id', '=', $id],
-            ['invoice_status_id', '=', $invoice_status->id],
-        ])->first();
+        $invoice = null;
+        if ($invoice_status) {
+            $invoice = Invoices::where([
+                ['appointment_id', '=', $id],
+                ['invoice_status_id', '=', $invoice_status->id],
+            ])->first();
+        }
         if ($invoice) {
             $invoicearray[] = $invoice;
             $invoiceid = $invoicearray[0]['id'];
@@ -2947,10 +2950,13 @@ class AppointmentsController extends Controller
             return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
         }
         $invoice_status = InvoiceStatuses::where('slug', '=', 'paid')->first();
-        $invoice = Invoices::where([
-            ['appointment_id', '=', $id],
-            ['invoice_status_id', '=', $invoice_status->id],
-        ])->first();
+        $invoice = null;
+        if ($invoice_status) {
+            $invoice = Invoices::where([
+                ['appointment_id', '=', $id],
+                ['invoice_status_id', '=', $invoice_status->id],
+            ])->first();
+        }
         if ($invoice == null) {
             $price = 0;
             $packages = null;
