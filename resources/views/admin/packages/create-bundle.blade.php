@@ -37,7 +37,7 @@
 <div class="modal-content ab-modal">
     <div class="ab-modal-header" id="kt_modal_password_header">
         <div class="ab-modal-header-top">
-            <h2 class="ab-modal-title">Add Bundle</h2>
+            <h2 class="ab-modal-title">Sell Package</h2>
             <div class="ab-modal-close popup-close"
                  data-kt-users-modal-action="close"
                  onclick="resetVoucherAddBundle(event); return false;">

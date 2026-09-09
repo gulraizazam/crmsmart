@@ -3,7 +3,7 @@
 @section('content')
     @push('css')
         <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-plans.css') }}?v=2" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-plans.css') }}?v=3" rel="stylesheet" type="text/css" />
         <style>
             .form-control:disabled,
             .form-control[readonly] {
@@ -21,22 +21,17 @@
                         <div class="card-title sneat-page-title-wrap">
                             <h3 class="card-label">Plans</h3>
                         </div>
-                        <div class="card-toolbar">
+                        <div class="card-toolbar sneat-plans-actions">
                             @if (Gate::allows('plans_create'))
                                 <a href="javascript:void(0);" onclick="createPlan('{{ route('admin.packages.create') }}');" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modal_add_plan">
                                     <i class="la la-plus"></i>
-                                    Add Procedures
+                                    Sell Services
                                 </a>
                                 <a href="javascript:void(0);" onclick="createBundle('{{ route('admin.packages.create') }}');" class="btn btn-success" data-toggle="modal"
                                     data-target="#modal_add_bundle">
                                     <i class="la la-plus"></i>
-                                    Add Bundle
-                                </a>
-                                <a href="javascript:void(0);" onclick="createMembership('{{ route('admin.packages.create') }}');" class="btn btn-warning" data-toggle="modal"
-                                    data-target="#modal_add_membership">
-                                    <i class="la la-plus"></i>
-                                    Add Membership
+                                    Sell Package
                                 </a>
                             @endif
                         </div>

@@ -29,6 +29,7 @@
     <link href="{{ asset('assets/sneat/css/sneat-datatables.css') }}?v=2" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/sneat/css/sneat-layout.css') }}?v=7" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/sneat-appointment-modals.css') }}?v=7" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/sneat-toastr.css') }}?v=1" rel="stylesheet" type="text/css" />
     @stack('css')
 </head>
 <!--end::Head-->
@@ -118,6 +119,7 @@
     <!--end::Global Config-->
     <!--begin::Global Theme Bundle(used by all pages)-->
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/sneat-toastr.js') }}?v=1"></script>
     <script src="{{ asset('assets/plugins/custom/prismjs/prismjs.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>

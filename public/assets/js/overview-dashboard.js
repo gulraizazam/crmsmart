@@ -49,6 +49,8 @@
             },
             xaxis: {
                 labels: {
+                    rotate: 0,
+                    rotateAlways: true,
                     style: { colors: '#a1acb8', fontSize: '12px', fontFamily: 'Public Sans, Segoe UI, sans-serif' }
                 },
                 axisBorder: { show: false },
@@ -129,8 +131,8 @@
             xaxis: Object.assign(baseOptions().xaxis, {
                 categories: payload.labels,
                 labels: Object.assign({}, baseOptions().xaxis.labels, {
-                    rotate: horizontal ? 0 : -45,
-                    rotateAlways: !horizontal && payload.labels.some(function (l) { return String(l).length > 12; }),
+                    rotate: 0,
+                    rotateAlways: true,
                     trim: true,
                     hideOverlappingLabels: true
                 })

@@ -1,38 +1,19 @@
 
 @if(isset($toastr))
     <script>
-
-        toastr.options = {
-            "closeButton": true,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "showDuration": "300",
-            "hideDuration": "2000",
-            "timeOut": "6000",
-            "extendedTimeOut": "6000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
-
-
         @if(session()->has('success'))
-        toastr.success("{{session('success')}}");
-    @endif
-    @if(session()->has('error'))
-        toastr.error("{{session('error')}}");
-    @endif
-
-    @if(session()->has('warning'))
-        toastr.warning("{{session('warning')}}");
-    @endif
-    @if(session()->has('info'))
-    toastr.info("{{session('info')}}");
-    @endif
-</script>
+        toastr.success(@json(session('success')), 'Success');
+        @endif
+        @if(session()->has('error'))
+        toastr.error(@json(session('error')), 'Error');
+        @endif
+        @if(session()->has('warning'))
+        toastr.warning(@json(session('warning')), 'Warning');
+        @endif
+        @if(session()->has('info'))
+        toastr.info(@json(session('info')), 'Info');
+        @endif
+    </script>
 @endif
 
 @if(isset($message))

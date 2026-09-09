@@ -37,7 +37,7 @@
 <div class="modal-content ap-modal">
     <div class="ap-modal-header" id="kt_modal_password_header">
         <div class="ap-modal-header-top">
-            <h2 class="ap-modal-title">Add Procedures</h2>
+            <h2 class="ap-modal-title">Sell Services</h2>
             <div class="ap-modal-close popup-close" 
                  data-kt-users-modal-action="close" 
                  onclick="resetVoucherAdd(event); return false;">

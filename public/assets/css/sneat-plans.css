@@ -73,6 +73,19 @@
     color: var(--s-primary) !important;
 }
 
+.sneat-plans-page .card-toolbar,
+.sneat-plans-page .sneat-plans-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sneat-plans-page .card-toolbar .btn,
+.sneat-plans-page .card-toolbar a.btn {
+    margin: 0 !important;
+}
+
 .sneat-plans-page .card-toolbar .btn i,
 .sneat-plans-page .card-toolbar a.btn i {
     margin-right: 0.35rem;

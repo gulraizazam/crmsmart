@@ -269,7 +269,7 @@ window.dashboardConfig = {
     }
 };
 </script>
-<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=1"></script>
+<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=2"></script>
 <script src="{{ asset('assets/js/dashboard.js') }}?v={{ @filemtime(public_path('assets/js/dashboard.js')) }}"></script>
 <script src="{{ asset('assets/js/dashboard-charts.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-charts.js')) }}"></script>
 @endpush

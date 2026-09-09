@@ -1,0 +1,117 @@
+/* Sneat advanced toastr — light cards, titles, close, progress. */
+
+#toast-container {
+    z-index: 1095;
+}
+
+#toast-container > div {
+    width: 22.5rem;
+    max-width: calc(100vw - 1.5rem);
+    margin: 0 0 0.75rem;
+    padding: 0.9rem 2.35rem 0.95rem 3.65rem;
+    pointer-events: auto;
+    overflow: hidden;
+    opacity: 1 !important;
+    border-radius: 0.5rem;
+    border: 1px solid #d9dee3;
+    box-shadow: 0 0.25rem 1.125rem 0.0625rem rgba(105, 108, 255, 0.14) !important;
+    font-family: "Public Sans", "Segoe UI", sans-serif;
+    background-repeat: no-repeat;
+    background-position: 1.05rem 1.05rem;
+    background-size: 1.35rem 1.35rem;
+}
+
+#toast-container > div:hover {
+    opacity: 1 !important;
+    box-shadow: 0 0.35rem 1.25rem 0.08rem rgba(105, 108, 255, 0.2) !important;
+    cursor: default;
+}
+
+#toast-container .toast-title {
+    margin: 0 0 0.2rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+}
+
+#toast-container .toast-message {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.45;
+    opacity: 0.92;
+}
+
+#toast-container .toast-close-button {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.6rem;
+    float: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    font-size: 0 !important;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.45;
+    text-shadow: none;
+}
+
+#toast-container .toast-close-button:hover,
+#toast-container .toast-close-button:focus {
+    opacity: 0.9;
+    color: inherit;
+}
+
+#toast-container .toast-close-button:before {
+    content: "\00d7";
+    font-family: "Public Sans", "Segoe UI", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+}
+
+#toast-container .toast-progress {
+    height: 3px;
+    opacity: 1;
+    background-color: currentColor;
+}
+
+#toast-container .toast-success {
+    background-color: #e8fadf !important;
+    border-color: #c6f0a8;
+    color: #3a7a1c;
+}
+
+#toast-container .toast-error {
+    background-color: #ffe0db !important;
+    border-color: #ffc5bb;
+    color: #c01f08;
+}
+
+#toast-container .toast-warning {
+    background-color: #fff3cd !important;
+    border-color: #ffe29a;
+    color: #b37a00;
+}
+
+#toast-container .toast-info {
+    background-color: #d7f5fc !important;
+    border-color: #b3ebf7;
+    color: #028ba8;
+}
+
+@media (max-width: 575.98px) {
+    #toast-container.toast-top-right,
+    #toast-container.toast-bottom-right,
+    #toast-container.toast-top-left,
+    #toast-container.toast-bottom-left {
+        left: 0.75rem;
+        right: 0.75rem;
+        width: auto;
+    }
+
+    #toast-container > div {
+        width: 100%;
+    }
+}
