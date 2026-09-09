@@ -30,6 +30,11 @@ function calculatePlanTax(netAmount, taxPct, taxTreatmentTypeId, isExclusive) {
     return result;
 }
 
+function planAmountFixed(value) {
+    var n = parseFloat(value);
+    return (isFinite(n) ? n : 0).toFixed(2);
+}
+
 // Build a preview table row for plan services (no DB call)
 function buildPlanServiceRow(data, deleteHtml) {
     var soldByDisplay = data.soldByName || 'N/A';
@@ -1996,7 +2001,7 @@ function getServiceDiscount($this, type = '') {
 
                     $("#" + type + "add_discount_id").html(options);
 
-                    $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                     $("#net_amount_1").prop("disabled", true);
 
                 } else {
@@ -2005,7 +2010,7 @@ function getServiceDiscount($this, type = '') {
 
                     $("#add_discount_id").html(options);
 
-                    $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                     $("#net_amount_1").prop("disabled", true);
 
                 }
@@ -2093,7 +2098,7 @@ function getDiscountInfo($this) {
                     $("#add_discount_type").val('').trigger('change');
                     $("#discount_value_1").prop("disabled", true);
                     $("#discount_value_1").val('');
-                    $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                     $("#net_amount_1").prop("disabled", true);
 
                 } else {
@@ -2164,7 +2169,7 @@ function getDiscountInfo($this) {
                             }
                             $("#discount_value_1").val(resposne.data.discount_price);
                             $("#discount_value_1").prop("disabled", true);
-                            $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                            $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                             $("#net_amount_1").prop("disabled", true);
                             $("#slug_1").val('not_custom');
                             if (resposne.data.discount_type == 'Percentage') {
@@ -2378,7 +2383,7 @@ function editDiscountValue($this) {
                 success: function (resposne) {
                     console.log('Edit AJAX response:', resposne);
                     if (resposne.status) {
-                        $("#edit_net_amount_1").val(parseFloat(resposne.data.net_amount).toFixed(2));
+                        $("#edit_net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                         $("#edit_net_amount_1").prop("disabled", true);
                         $("#EditPackage").attr("disabled", false);
                         inputSpinner(false)
@@ -2434,7 +2439,7 @@ function changeDiscount($this) {
             },
             success: function (resposne) {
                 if (resposne.status) {
-                    $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                     $("#net_amount_1").prop("disabled", true);
                 } else {
                     $('#DiscountRange').show();
@@ -2693,7 +2698,7 @@ function editDiscountInfo($this) {
 
                             $("#edit_discount_value_1").val(resposne.data.discount_price);
                             $("#edit_discount_value_1").prop("disabled", true);
-                            $("#edit_net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                            $("#edit_net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                             $("#edit_net_amount_1").prop("disabled", true);
                             $("#edit_slug_1").val('not_custom');
                            
@@ -2811,7 +2816,7 @@ function getDiscountValue($this) {
             },
             success: function (resposne) {
                 if (resposne.status) {
-                    $("#net_amount_1").val(parseFloat(resposne.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                     $("#net_amount_1").prop("disabled", true);
                     $("#AddPackage").removeAttr('disabled');
                     inputSpinner(false)
@@ -2900,15 +2905,15 @@ function changeDiscount($this, type) {
                 if (resposne.status) {
                     if (type && type != 'undefined') {
                         if (type == 'edit') {
-                            $("#edit_net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                            $("#edit_net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                             $("#edit_net_amount_1").prop("disabled", true);
 
                         } else {
 
-                        } $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                        } $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                         $("#net_amount_1").prop("disabled", true);
                     } else {
-                        $("#net_amount_1").val((resposne.data.net_amount).toFixed(2));
+                        $("#net_amount_1").val(planAmountFixed(resposne.data.net_amount));
                         $("#net_amount_1").prop("disabled", true);
                     }
                 } else {

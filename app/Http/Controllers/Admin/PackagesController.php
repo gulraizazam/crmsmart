@@ -2500,9 +2500,9 @@ class PackagesController extends Controller
                     'discounts' => $discounts,
                     'checked_custom' => '0',
                     'dis_price_info' => $select_discount,
-                    'net_amount' => $service->price,
+                    'net_amount' => (float) ($service->price ?? 0),
                     'tax_treatment_type_id' => $service->tax_treatment_type_id,
-                    'location_tax_percentage' => $location_information->tax_percentage ?? 0,
+                    'location_tax_percentage' => (float) ($location_information->tax_percentage ?? 0),
                     'service_name' => $service->name,
                 ]);
             } else {
@@ -2511,9 +2511,9 @@ class PackagesController extends Controller
                 return ApiHelper::apiResponse($this->success, 'Records found.', true, [
                     'discounts' => $discounts,
                     'checked_custom' => '1',
-                    'net_amount' => $service->price,
+                    'net_amount' => (float) ($service->price ?? 0),
                     'tax_treatment_type_id' => $service->tax_treatment_type_id,
-                    'location_tax_percentage' => $location_information->tax_percentage ?? 0,
+                    'location_tax_percentage' => (float) ($location_information->tax_percentage ?? 0),
                     'service_name' => $service->name,
                 ]);
             }
@@ -2521,9 +2521,9 @@ class PackagesController extends Controller
         
         $location_information = Locations::find($request->location_id);
         return ApiHelper::apiResponse($this->success, 'Records found.', false, [
-            'net_amount' => $service->price,
+            'net_amount' => (float) ($service->price ?? 0),
             'tax_treatment_type_id' => $service->tax_treatment_type_id,
-            'location_tax_percentage' => $location_information->tax_percentage ?? 0,
+            'location_tax_percentage' => (float) ($location_information->tax_percentage ?? 0),
             'service_name' => $service->name,
         ]);
     }

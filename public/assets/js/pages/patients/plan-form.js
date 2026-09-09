@@ -754,7 +754,7 @@ function getServiceDiscountBundle(element) {
             },
             success: function (response) {
                 if (response.data && response.data.net_amount !== undefined) {
-                    var netAmount = parseFloat(response.data.net_amount).toFixed(2);
+                    var netAmount = (parseFloat(response.data.net_amount) || 0).toFixed(2);
                     $("#net_amount_bundle").val(netAmount);
                     $("#net_amount_bundle").prop("disabled", true);
                     // Update Total and Cash Received Remain fields
@@ -3389,7 +3389,7 @@ function getServiceDiscountForPatient($this) {
                     }
                     
                     $("#add_discount_id").html(options);
-                    $("#net_amount_1").val((response.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val((parseFloat(response.data.net_amount) || 0).toFixed(2));
                     $("#net_amount_1").prop("disabled", true);
                     
                     // Reset discount fields
@@ -3399,7 +3399,7 @@ function getServiceDiscountForPatient($this) {
                     $("#add_discount_value").prop("disabled", true);
                 } else {
                     $("#add_discount_id").html('<option value="">Select Discount</option>');
-                    $("#net_amount_1").val((response.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val((parseFloat(response.data.net_amount) || 0).toFixed(2));
                     $("#net_amount_1").prop("disabled", true);
                 }
             },
@@ -3438,7 +3438,7 @@ function getDiscountInfoForPatient($this) {
                     $("#add_discount_type").val('').trigger('change');
                     $("#add_discount_value").prop("disabled", true);
                     $("#add_discount_value").val('');
-                    $("#net_amount_1").val((response.data.net_amount).toFixed(2));
+                    $("#net_amount_1").val((parseFloat(response.data.net_amount) || 0).toFixed(2));
                     $("#net_amount_1").prop("disabled", true);
                 }
             }
@@ -3460,7 +3460,7 @@ function getDiscountInfoForPatient($this) {
                         $("#add_discount_type").prop("disabled", true);
                         $("#add_discount_value").val(response.data.discount_price);
                         $("#add_discount_value").prop("disabled", true);
-                        $("#net_amount_1").val((response.data.net_amount).toFixed(2));
+                        $("#net_amount_1").val((parseFloat(response.data.net_amount) || 0).toFixed(2));
                         $("#net_amount_1").prop("disabled", true);
                     } else {
                         // Custom discount - allow user to enter values
