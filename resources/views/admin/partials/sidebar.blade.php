@@ -455,6 +455,8 @@
                 </li>
                 @endif
 
+                {{-- Admin Settings menu hidden --}}
+                @if(false)
                 <li class="menu-header">
                     <span class="menu-header-text">Settings</span>
                 </li>
@@ -776,6 +778,7 @@
 
                     
                 </li>
+                @endif
                 @endif
                 {{-- Inventory menu hidden --}}
                 {{--
@@ -1208,6 +1211,8 @@
                     @endcan -->
                 </li>
 
+                {{-- Cash Flow menu hidden --}}
+                @if(false)
                 <li class="menu-header">
                     <span class="menu-header-text">Finance</span>
                 </li>
@@ -1293,6 +1298,7 @@
                     </div>
                 </li>
                 @endcan
+                @endif
 
             </ul>
 </aside>
