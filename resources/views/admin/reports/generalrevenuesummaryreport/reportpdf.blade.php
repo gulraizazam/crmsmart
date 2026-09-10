@@ -59,7 +59,7 @@
                 <table>
                     <tr>
                         <td>
-                            <div style="font-family: Georgia, serif;"><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: inline-block;"></div>
+                            <div style="font-family: Georgia, serif;"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: inline-block;"></div>
                         </td>
                     </tr>
                 </table>

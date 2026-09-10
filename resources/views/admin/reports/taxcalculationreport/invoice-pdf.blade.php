@@ -77,7 +77,7 @@
     <table>
         <tr>
             <td>
-                <div><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: block;"></div>
+                <div><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: block;"></div>
                 <p class="logo_caption">{{ $location->address }}.</p>
                 <p class="logo_caption logo_caption2">Phone. {{ $location->fdo_phone }} &nbsp; | &nbsp; https://aestheticlinics.net &nbsp; | &nbsp; NTN. {{ $location->ntn }} &nbsp; | &nbsp; STN. {{ $location->stn }}</p>
             </td>

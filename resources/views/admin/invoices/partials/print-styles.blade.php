@@ -27,10 +27,13 @@
         border-bottom: 1px solid #d1d5db;
     }
     .cinv-brand img {
-        height: {{ $compact ? '48px' : '56px' }};
+        height: {{ $compact ? '52px' : '62px' }};
         width: auto;
-        max-width: 220px;
+        max-width: 260px;
         display: block;
+        background: #161310;
+        padding: 6px 10px;
+        border-radius: 4px;
     }
     .cinv-brand-sub {
         margin-top: 6px;

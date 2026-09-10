@@ -343,7 +343,7 @@
                     <tbody>
                     <tr class="data-split-wrap">
                         <td>
-                            <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:60px;width:auto;max-width:240px;display:block;"/>
+                            <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height:60px;width:auto;max-width:240px;display:block;"/>
                         </td>
                         <td>
                             <p class="order-date text-right">#{{ $thisId }} / {{ date('M d, Y') }}</p>

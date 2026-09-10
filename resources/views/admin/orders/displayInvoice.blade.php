@@ -28,7 +28,7 @@
         <table style="margin-top: 20px;">
             <tr>
                 <td>
-                    <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
+                    <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
                     <p class="logo_caption">{{ $location_info->address }}.</p>
                     <p class="logo_caption logo_caption2">Phone. {{ $location_info->fdo_phone }} &nbsp; | &nbsp; Email.
                         {{ $account->email }} &nbsp; | &nbsp; https://aestheticlinics.net &nbsp; | &nbsp; NTN.

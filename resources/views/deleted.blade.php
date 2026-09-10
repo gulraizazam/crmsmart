@@ -59,7 +59,7 @@
 
             <div class="row">
                 <div class="col-md-2">
-                    <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:inline-block;"/>
+                    <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:inline-block;"/>
                 </div>
                 <div class="col-md-6">&nbsp;</div>
                 

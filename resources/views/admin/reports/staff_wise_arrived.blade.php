@@ -18,7 +18,7 @@
         <div class="sn-table-head">
             <div class="row">
                 <div class="col-md-2">
-                    <div style="font-family: Georgia, serif;"><img src="{{ asset('logoClarity.jpg') }}?v=2" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: inline-block;"></div>
+                    <div style="font-family: Georgia, serif;"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 70px; max-width: 260px; width: auto; display: inline-block;"></div>
                 </div>
                 <div class="col-md-6">&nbsp;</div>
             </div>

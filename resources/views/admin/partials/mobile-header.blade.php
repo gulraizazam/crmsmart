@@ -3,7 +3,7 @@
 <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
     <!--begin::Logo-->
     <a href="{{route('admin.home')}}">
-        <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics" style="height:34px;width:auto;max-width:180px;display:inline-block;"/>
+        <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height:34px;width:auto;max-width:180px;display:inline-block;"/>
     </a>
     <!--end::Logo-->
     <!--begin::Toolbar-->

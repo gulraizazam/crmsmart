@@ -338,7 +338,7 @@
 
         <!-- Header -->
         <div class="cf-brand-wrap">
-            <img class="cf-brand-logo" src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics">
+            <img class="cf-brand-logo" src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics">
             <div class="cf-brand-tag">Aesthetic &middot; Wellness &middot; Confidence</div>
         </div>
 

@@ -15,7 +15,7 @@
 
     <div class="cinv-head">
         <div class="cinv-brand">
-            <img src="{{ asset('logoClarity.jpg') }}" alt="Smart Aesthetics">
+            <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics">
             <div class="cinv-brand-sub">{{ $location_info->name ?? 'Smart Aesthetics' }}</div>
         </div>
         <div class="cinv-doc-type">
