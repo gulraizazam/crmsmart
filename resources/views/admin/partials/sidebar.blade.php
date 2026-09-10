@@ -1070,6 +1070,8 @@
                         </ul>
                     </div>
                     @endcan
+                    {{-- Activity Logs report hidden --}}
+                    @if(false)
                     @can('appointment_reports_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
@@ -1086,6 +1088,7 @@
                         </ul>
                     </div>
                     @endcan
+                    @endif
                     <!-- @can('staff_wise_arrival_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
