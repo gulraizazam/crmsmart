@@ -33,7 +33,7 @@
                 </li>
 
                 <li class="menu-header">
-                    <span class="menu-header-text">Users</span>
+                    <span class="menu-header-text">People</span>
                 </li>
                 @if (Gate::allows('permissions_manage') ||
                 Gate::allows('roles_manage') ||
@@ -44,7 +44,7 @@
                         <span class="svg-icon menu-icon">
                             <i class="font-icon la la-user"></i>
                         </span>
-                        <span class="menu-text">User Management</span>
+                        <span class="menu-text">People &amp; Authorization</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -255,7 +255,7 @@
                 <li class="menu-item {{ activeMenu('admin.packages.index') }}" aria-haspopup="true">
                     <a href="{{ route('admin.packages.index') }}" class="menu-link">
                         <span class="svg-icon menu-icon"><i class="font-icon la la-cog"></i></span>
-                        <span class="menu-text">@lang('global.packages.title')</span>
+                        <span class="menu-text">Patient History</span>
                     </a>
                 </li>
                 @endif
@@ -275,7 +275,7 @@
                         <span class="svg-icon menu-icon fa_icon">
                             <i class="font-icon la la-clock-o"></i>
                         </span>
-                        <span class="menu-text">Services</span>
+                        <span class="menu-text">Catalog</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">

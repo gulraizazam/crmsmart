@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Plans')
+@section('title', 'Patient History')
 @section('content')
     @push('css')
         <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
@@ -19,7 +19,7 @@
                 <div class="card card-custom sneat-page-card">
                     <div class="card-header">
                         <div class="card-title sneat-page-title-wrap">
-                            <h3 class="card-label">Plans</h3>
+                            <h3 class="card-label">Patient History</h3>
                         </div>
                         <div class="card-toolbar sneat-plans-actions">
                             @if (Gate::allows('plans_create'))
