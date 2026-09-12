@@ -16,18 +16,18 @@
         var patientCardID = "{{request('id')}}";
         var patientCardPermissions = {
             edit: {{ Gate::allows('appointments_edit') ? 'true' : 'false' }},
-            delete: {{ Gate::allows('appointments_delete') ? 'true' : 'false' }},
-            status: {{ Gate::allows('appointments_status') ? 'true' : 'false' }},
-            consultancy: {{ Gate::allows('consultancy_manage') ? 'true' : 'false' }},
+            delete: {{ Gate::allows('appointments_destroy') ? 'true' : 'false' }},
+            status: {{ Gate::allows('appointments_appointment_status') ? 'true' : 'false' }},
+            consultancy: {{ Gate::allows('appointments_consultancy') ? 'true' : 'false' }},
             treatment: {{ Gate::allows('treatments_manage') ? 'true' : 'false' }},
-            invoice: {{ Gate::allows('consultancy_invoice') ? 'true' : 'false' }},
-            invoice_display: {{ Gate::allows('consultancy_invoice_display') ? 'true' : 'false' }},
+            invoice: {{ Gate::allows('appointments_invoice') ? 'true' : 'false' }},
+            invoice_display: {{ Gate::allows('appointments_invoice_display') ? 'true' : 'false' }},
             log: {{ Gate::allows('appointments_log') ? 'true' : 'false' }},
             image_manage: {{ Gate::allows('appointments_image_manage') ? 'true' : 'false' }},
             measurement_manage: {{ Gate::allows('appointments_measurement_manage') ? 'true' : 'false' }},
             medical_form_manage: {{ Gate::allows('appointments_medical_form_manage') ? 'true' : 'false' }},
             plans_create: {{ Gate::allows('plans_create') ? 'true' : 'false' }},
-            patient_card: {{ Gate::allows('patient_card') ? 'true' : 'false' }},
+            patient_card: {{ Gate::allows('appointments_patient_card') ? 'true' : 'false' }},
             contact: {{ Gate::allows('contact') ? 'true' : 'false' }},
         };
         initPatientCardContext(patientCardID, patientCardPermissions);

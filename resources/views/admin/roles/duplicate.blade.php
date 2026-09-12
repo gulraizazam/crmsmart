@@ -54,6 +54,12 @@
                         </div>
                     </div>
 
+                    @include('admin.roles.partials.permission-card', [
+                        'cardTitle' => 'Consultancies & Treatments',
+                        'groups' => $appointment_permissions ?? [],
+                        'allowed' => $allowed_permissions ?? [],
+                    ])
+
                     <div class="card card-custom sneat-page-card sneat-role-perm-card">
                         <div class="card-header">
                             <div class="card-title sneat-page-title-wrap">

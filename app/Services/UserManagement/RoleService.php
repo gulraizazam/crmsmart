@@ -4,7 +4,6 @@ namespace App\Services\UserManagement;
 
 use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -12,9 +11,6 @@ use Spatie\Permission\Models\Role;
 
 class RoleService
 {
-    private const CACHE_TTL = 3600; // 1 hour
-    private const CACHE_KEY_PERMISSIONS_MAPPING = 'roles.permissions_mapping';
-
     /**
      * Get paginated roles for datatable
      */
@@ -67,11 +63,7 @@ class RoleService
      */
     public function getAllPermissionsMapping(): array
     {
-        $cacheKey = self::CACHE_KEY_PERMISSIONS_MAPPING . '.' . (Auth::user()->hasRole('Super-Admin') ? 'super' : 'normal');
-        
-        return Cache::remember($cacheKey, self::CACHE_TTL, function () {
-            return $this->buildPermissionsMapping();
-        });
+        return $this->buildPermissionsMapping();
     }
 
     /**
@@ -80,12 +72,13 @@ class RoleService
     private function buildPermissionsMapping(): array
     {
         $notInArray = [
-            'dashboard_manage', 'leads_reports_manage', 'feedbacks_report_manage', 
-            'appointment_reports_manage', 'operations_reports_manage', 'centers_reports_manage', 
-            'Hr_reports_manage', 'finance_general_revenue_reports_manage', 
-            'finance_revenue_breakup_reports_manage', 'finance_ledger_reports_manage', 
-            'staff_listing_reports_manage', 'staff_revenue_reports_manage', 
-            'marketing_reports_manage', 'conversion_report_manage', 'staff_wise_arrival_manage', 
+            'dashboard_manage', 'appointments_manage', 'treatments_manage',
+            'leads_reports_manage', 'feedbacks_report_manage',
+            'appointment_reports_manage', 'operations_reports_manage', 'centers_reports_manage',
+            'Hr_reports_manage', 'finance_general_revenue_reports_manage',
+            'finance_revenue_breakup_reports_manage', 'finance_ledger_reports_manage',
+            'staff_listing_reports_manage', 'staff_revenue_reports_manage',
+            'marketing_reports_manage', 'conversion_report_manage', 'staff_wise_arrival_manage',
             'non_converted_customers_manage', 'follow_up_manage', 'followuppatient_manage'
         ];
         
@@ -105,9 +98,9 @@ class RoleService
         // General permissions
         $permissions = $this->buildPermissionGroup($notInArray, $notInNamesArray, $isSuperAdmin, false);
         
-        // Dashboard permissions
+        // Dashboard permissions — parent may be status=0 while children stay assignable
         $dashboardWhereIn = ['dashboard_manage'];
-        $dashboard_permissions = $this->buildPermissionGroup($dashboardWhereIn, [], $isSuperAdmin, true);
+        $dashboard_permissions = $this->buildPermissionGroup($dashboardWhereIn, [], $isSuperAdmin, true, false);
         
         // Reports permissions
         $reportsWhereIn = [
@@ -121,9 +114,13 @@ class RoleService
         ];
         $reports_permissions = $this->buildPermissionGroup($reportsWhereIn, [], $isSuperAdmin, true);
 
+        $appointmentWhereIn = ['appointments_manage', 'treatments_manage'];
+        $appointment_permissions = $this->buildPermissionGroup($appointmentWhereIn, [], $isSuperAdmin, true);
+
         return [
             'permissions' => $permissions,
             'dashboard_permissions' => $dashboard_permissions,
+            'appointment_permissions' => $appointment_permissions,
             'reports_permissions' => $reports_permissions,
         ];
     }
@@ -131,9 +128,12 @@ class RoleService
     /**
      * Build a permission group with parent-child structure
      */
-    private function buildPermissionGroup(array $filterArray, array $notInNamesArray, bool $isSuperAdmin, bool $useWhereIn): array
+    private function buildPermissionGroup(array $filterArray, array $notInNamesArray, bool $isSuperAdmin, bool $useWhereIn, bool $requireActiveParent = true): array
     {
-        $baseQuery = Permission::where(['main_group' => 1, 'status' => 1]);
+        $baseQuery = Permission::where('main_group', 1);
+        if ($requireActiveParent) {
+            $baseQuery->where('status', 1);
+        }
         
         if ($useWhereIn) {
             $baseQuery->whereIn('name', $filterArray);
@@ -207,8 +207,6 @@ class RoleService
         
         $role = Role::create($data);
         $role->givePermissionTo($permissions);
-        
-        $this->clearCache();
 
         return $role;
     }
@@ -225,8 +223,6 @@ class RoleService
         
         $role->update($data);
         $role->syncPermissions($permissions);
-        
-        $this->clearCache();
 
         return $role;
     }
@@ -241,8 +237,6 @@ class RoleService
         
         $role = Role::create($data);
         $role->givePermissionTo($permissions);
-        
-        $this->clearCache();
 
         return $role;
     }
@@ -258,10 +252,7 @@ class RoleService
             return false;
         }
         
-        $deleted = $role->delete();
-        $this->clearCache();
-
-        return $deleted;
+        return $role->delete();
     }
 
     /**
@@ -283,10 +274,6 @@ class RoleService
             }
         }
         
-        if ($deleted > 0) {
-            $this->clearCache();
-        }
-
         return [
             'deleted' => $deleted,
             'skipped' => $skipped,
@@ -307,15 +294,6 @@ class RoleService
     public function findOrFail(int $id): Role
     {
         return Role::findOrFail($id);
-    }
-
-    /**
-     * Clear role-related cache
-     */
-    private function clearCache(): void
-    {
-        Cache::forget(self::CACHE_KEY_PERMISSIONS_MAPPING . '.super');
-        Cache::forget(self::CACHE_KEY_PERMISSIONS_MAPPING . '.normal');
     }
 
 }

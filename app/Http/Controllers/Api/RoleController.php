@@ -120,6 +120,7 @@ class RoleController extends Controller
             return ApiHelper::makeResponse([
                 'permissions' => $mapping['permissions'],
                 'dashboard_permissions' => $mapping['dashboard_permissions'],
+                'appointment_permissions' => $mapping['appointment_permissions'],
                 'reports_permissions' => $mapping['reports_permissions'],
                 'allowed_permissions' => $allowedPermissions,
             ], 'admin.roles.create');
@@ -167,6 +168,7 @@ class RoleController extends Controller
                 'allowed_permissions' => $allowedPermissions,
                 'permissions' => $mapping['permissions'],
                 'dashboard_permissions' => $mapping['dashboard_permissions'],
+                'appointment_permissions' => $mapping['appointment_permissions'],
                 'reports_permissions' => $mapping['reports_permissions'],
             ], 'admin.roles.edit');
         } catch (\Exception $e) {
@@ -213,6 +215,7 @@ class RoleController extends Controller
                 'allowed_permissions' => $allowedPermissions,
                 'permissions' => $mapping['permissions'],
                 'dashboard_permissions' => $mapping['dashboard_permissions'],
+                'appointment_permissions' => $mapping['appointment_permissions'],
                 'reports_permissions' => $mapping['reports_permissions'],
             ]);
         } catch (\Exception $e) {
