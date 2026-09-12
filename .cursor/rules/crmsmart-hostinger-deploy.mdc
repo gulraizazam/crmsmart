@@ -1,15 +1,39 @@
 ---
-description: Hostinger deploy path for crmsmart (crm.aestheticlinics.net)
+description: Hostinger deploy paths for crmsmart (aestheticlinics + smartaesthetics)
 alwaysApply: true
 ---
 
 # crmsmart Hostinger deploy
 
-When the user asks to deploy crmsmart:
+Two release lines. Do not mix them.
 
-1. **Never commit** `.deploy/`, `.env`, or Hostinger passwords. The public GitHub repo is https://github.com/gulraizazam/crmsmart
-2. Read connection details from `c:\laragon\www\crmsmart\.deploy\hostinger.env` (gitignored).
-3. Git path (required): commit on `main` if asked → push `main` to `github` remote `https://github.com/gulraizazam/crmsmart.git` → on the server `git pull` from that repo. Do not hand-edit production files.
-4. SSH: `u744025943@82.29.81.4` port `65002`. Subdomain: `crm.aestheticlinics.net`.
-5. Writes on the live box (`.env` edits, `migrate`, cache rebuilds, composer) need explicit per-action approval unless the user asked to deploy in this turn.
-6. Keep `origin` as the old backup (`crm-portal-old`) unless the user asks to retarget it. Deploy remote name: `github`.
+## Branches
+
+- **`main`** = smartaesthetics (`crm.smartaesthetics.pk`). Only merge aestheticlinics work into `main` when the user asks to ship the same change there.
+- **`aestheticlinics`** = aestheticlinics (`crm.aestheticlinics.net`). All aestheticlinics-only work stays on this branch.
+
+## Shared rules
+
+1. Never commit `.deploy/`, `.env`, or Hostinger passwords. Public repo: https://github.com/gulraizazam/crmsmart (`github` remote).
+2. Deploy by git push, then `git pull` on the box. Do not hand-edit production files.
+3. Writes on a live box (`.env`, `migrate`, cache rebuilds, composer) need an explicit yes unless the user asked to deploy in that turn.
+
+## crm.aestheticlinics.net
+
+- Branch: `aestheticlinics`
+- Secrets: `c:\laragon\www\crmsmart\.deploy\hostinger.env`
+- SSH: `u744025943@82.29.81.4` port `65002`
+- App: `/home/u744025943/crmsmart`
+- Web: `/home/u744025943/domains/aestheticlinics.net/public_html/crm`
+- After push: `git pull origin aestheticlinics`, then `bash /home/u744025943/crmsmart/scripts/hostinger-remote-deploy.sh`
+- Keep `scripts/hostinger-web-index.php` as the web `index.php`
+
+## crm.smartaesthetics.pk
+
+- Branch: `main`
+- Secrets: `c:\laragon\www\crmsmart\.deploy\hostinger-smartaesthetics.env`
+- SSH: `u941750079@45.13.255.150` port `65002`
+- App: `/home/u941750079/crmsmart`
+- Web: `/home/u941750079/domains/smartaesthetics.pk/public_html/crm`
+- After push: `git pull origin main`. Do not overwrite WordPress in `public_html`. After any public copy, restore `scripts/hostinger-web-index.php` as `.../public_html/crm/index.php`.
+- No artisan migrate unless the user explicitly asks. SSH helper: `python scripts/hostinger_ssh.py --env hostinger-smartaesthetics.env "..."`.

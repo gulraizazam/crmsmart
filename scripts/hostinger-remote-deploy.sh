@@ -1,13 +1,13 @@
 #!/bin/bash
-# Run on Hostinger after pushing to GitHub: bash scripts/hostinger-remote-deploy.sh
+# Run on aestheticlinics Hostinger after pushing branch aestheticlinics.
 set -euo pipefail
-APP=/home/u744025943/crmsmart
-WEB=/home/u744025943/domains/aestheticlinics.net/public_html/crm
+APP="${HOSTINGER_APP:-/home/u744025943/crmsmart}"
+WEB="${HOSTINGER_WEB:-/home/u744025943/domains/aestheticlinics.net/public_html/crm}"
 PHP="php -d disable_functions="
 COMPOSER=/usr/local/bin/composer
 
 cd "$APP"
-git pull origin main || git pull github main || git pull
+git pull origin aestheticlinics || git pull github aestheticlinics || git pull
 
 $PHP $COMPOSER install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
