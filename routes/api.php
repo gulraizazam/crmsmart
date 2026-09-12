@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\ResourcesController;
 use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\CustomFormsController;
 use App\Http\Controllers\Admin\LeadSourcesController;
+use App\Http\Controllers\Api\LeadDepartmentsController;
 use App\Http\Controllers\Admin\MachineTypeController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -215,6 +216,10 @@ Route::middleware('auth.common')->name('admin.')->group(function () {
     // Cities Routes End
 
     // Lead Sources Routes Start
+    Route::get('lead-departments', [LeadDepartmentsController::class, 'index'])->name('lead_departments.index');
+    Route::post('lead-departments', [LeadDepartmentsController::class, 'store'])->name('lead_departments.store');
+    Route::put('lead-departments/{id}', [LeadDepartmentsController::class, 'update'])->name('lead_departments.update');
+    Route::delete('lead-departments/{id}', [LeadDepartmentsController::class, 'destroy'])->name('lead_departments.destroy');
     Route::post('lead_sources/datatable', [LeadSourcesController::class, 'datatable'])->name('lead_sources.datatable');
     Route::post('lead_sources', [LeadSourcesController::class, 'store'])->name('lead_sources.store');
     Route::get('lead_sources/{id}/edit', [LeadSourcesController::class, 'edit'])->name('lead_sources.edit');
@@ -544,6 +549,8 @@ Route::get('packages/deleteplanrowtem', [PackagesController::class, 'deleteplanr
         // POST routes
         Route::post('datatable', [LeadsController::class, 'datatable'])->name('datatable');
         Route::post('junk-datatable', [LeadsController::class, 'datatable'])->name('junk_datatable');
+        Route::post('kanban', [LeadsController::class, 'kanban'])->name('kanban');
+        Route::post('kanban/column', [LeadsController::class, 'kanbanColumn'])->name('kanban.column');
         Route::post('/', [LeadsController::class, 'store'])->name('store');
         Route::post('status', [LeadsController::class, 'status'])->name('status');
         Route::post('load_child_services', [LeadsController::class, 'loadChildServices'])->name('load_child_services');
@@ -560,6 +567,8 @@ Route::get('packages/deleteplanrowtem', [PackagesController::class, 'deleteplanr
         Route::get('lead_statuses', [LeadsController::class, 'loadLeadStatuses'])->name('lead_statuses');
         Route::get('treatments', [LeadsController::class, 'loadTreatments'])->name('treatments');
         Route::get('lead_sources', [LeadsController::class, 'loadLeadSources'])->name('lead_sources');
+        Route::get('departments-by-location', [LeadsController::class, 'departmentsByLocation'])->name('departments_by_location');
+        Route::get('csr-users', [LeadsController::class, 'csrUsers'])->name('csr_users');
         Route::get('cities', [LeadsController::class, 'loadCities'])->name('cities');
         Route::get('leadstatus_popup_checks', [LeadsController::class, 'leadStatusesPopCheck'])->name('leadstatus_popup_checks');
         Route::get('leadstatuschild_popup_checks', [LeadsController::class, 'leadStatusChildPopCheck'])->name('leadstatuschild_popup_checks');
@@ -571,6 +580,7 @@ Route::get('packages/deleteplanrowtem', [PackagesController::class, 'deleteplanr
         
         // PUT routes
         Route::put('storeleadstatus', [LeadsController::class, 'storeLeadStatuses'])->name('storeleadstatus');
+        Route::put('assign', [LeadsController::class, 'assign'])->name('assign');
         Route::put('save_city', [LeadsController::class, 'saveCity'])->name('save_city');
         
         // PATCH routes

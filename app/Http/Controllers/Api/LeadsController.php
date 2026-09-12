@@ -84,6 +84,8 @@ class LeadsController extends Controller
                     'leads.location_id',
                     'leads.lead_status_id',
                     'leads.created_by',
+                    'leads.assigned_to',
+                    'leads.department_id',
                     'leads.created_at',
                 ])
                 ->limit($displayLength)
@@ -133,12 +135,214 @@ class LeadsController extends Controller
     }
 
     /**
+     * Kanban board: status columns with first card page (latest first).
+     */
+    public function kanban(Request $request): JsonResponse
+    {
+        try {
+            $filters = $this->extractLeadFilters($request);
+            $leadType = $request->get('type');
+            $accountId = Auth::user()->account_id;
+            $limit = $this->kanbanPageSize($request);
+            $filename = $leadType ? 'junk_leads' : 'leads';
+
+            $columns = $this->leadService->getKanbanColumns($leadType);
+            $counts = $this->leadService->countKanbanColumns($filters, $leadType, $columns);
+
+            $columnLeads = [];
+            $allLeads = collect();
+            foreach ($columns as $column) {
+                $pack = $this->leadService->getKanbanColumnQuery($filters, $leadType, $column['status_ids']);
+                $query = $this->constrainInactiveLeads($pack['query']);
+                $leads = $query
+                    ->select($this->kanbanLeadColumns())
+                    ->orderBy('leads.created_at', 'desc')
+                    ->limit($limit)
+                    ->offset(0)
+                    ->get();
+                $columnLeads[$column['id']] = $leads;
+                $allLeads = $allLeads->concat($leads);
+            }
+
+            $users = $this->getUsersForLeads($allLeads, $accountId);
+            $regions = $this->getCachedRegions($accountId);
+            $leadStatuses = $this->getCachedLeadStatuses($accountId);
+            $filterData = $this->leadService->getFilterData($filename);
+
+            $board = [];
+            foreach ($columns as $column) {
+                $total = (int) ($counts[$column['id']] ?? 0);
+                $leads = $columnLeads[$column['id']];
+                $transformed = $this->transformLeadsForDatatable($leads, $users, $regions, $leadStatuses);
+
+                $board[] = [
+                    'id' => $column['id'],
+                    'name' => $column['name'],
+                    'is_default' => $column['is_default'],
+                    'is_converted' => $column['is_converted'],
+                    'is_arrived' => $column['is_arrived'],
+                    'total' => $total,
+                    'offset' => $leads->count(),
+                    'has_more' => $total > $leads->count(),
+                    'leads' => $transformed['data'],
+                ];
+            }
+
+            return ApiHelper::apiResponse($this->success, 'Record found.', true, [
+                'columns' => $board,
+                'page_size' => $limit,
+                'filter_values' => $filterData['filter_values'],
+                'active_filters' => $filterData['active_filters'],
+                'permissions' => $this->getPermissions(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('leads.kanban failed', [
+                'event' => 'leads.kanban',
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            if ($e instanceof \Exception) {
+                return ApiHelper::apiException($e);
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Lazy-load more cards for one status column.
+     */
+    public function kanbanColumn(Request $request): JsonResponse
+    {
+        try {
+            $filters = $this->extractLeadFilters($request);
+            $leadType = $request->get('type');
+            $accountId = Auth::user()->account_id;
+            $statusId = (int) $request->get('status_id');
+            $offset = max(0, (int) $request->get('offset', 0));
+            $limit = $this->kanbanPageSize($request);
+
+            $columns = $this->leadService->getKanbanColumns($leadType);
+            $column = collect($columns)->firstWhere('id', $statusId);
+            if (!$column) {
+                return ApiHelper::apiResponse($this->error, 'Lead status column was not found.', false);
+            }
+
+            $pack = $this->leadService->getKanbanColumnQuery($filters, $leadType, $column['status_ids']);
+            $query = $this->constrainInactiveLeads($pack['query']);
+            $leads = $query
+                ->select($this->kanbanLeadColumns())
+                ->orderBy('leads.created_at', 'desc')
+                ->limit($limit)
+                ->offset($offset)
+                ->get();
+
+            $users = $this->getUsersForLeads($leads, $accountId);
+            $regions = $this->getCachedRegions($accountId);
+            $leadStatuses = $this->getCachedLeadStatuses($accountId);
+            $transformed = $this->transformLeadsForDatatable($leads, $users, $regions, $leadStatuses);
+            $loaded = $offset + $leads->count();
+
+            return ApiHelper::apiResponse($this->success, 'Record found.', true, [
+                'id' => $column['id'],
+                'total' => $pack['total'],
+                'offset' => $loaded,
+                'has_more' => $pack['total'] > $loaded,
+                'leads' => $transformed['data'],
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('leads.kanbanColumn failed', [
+                'event' => 'leads.kanbanColumn',
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            if ($e instanceof \Exception) {
+                return ApiHelper::apiException($e);
+            }
+            throw $e;
+        }
+    }
+
+    protected function extractLeadFilters(Request $request): array
+    {
+        $filters = getFilters($request->all());
+        if ($filters !== []) {
+            return $filters;
+        }
+
+        return array_filter(
+            $request->only([
+                'delete',
+                'lead_id',
+                'name',
+                'phone',
+                'city_id',
+                'location_id',
+                'region_id',
+                'service_id',
+                'gender_id',
+                'created_by',
+                'created_at',
+                'lead_status_id',
+                'department_id',
+                'assigned_to',
+                'filter',
+            ]),
+            fn ($value) => $value !== null
+        );
+    }
+
+    protected function kanbanPageSize(Request $request): int
+    {
+        $limit = (int) $request->get('limit', 20);
+
+        return max(10, min($limit, 50));
+    }
+
+    protected function constrainInactiveLeads($query)
+    {
+        if (!Gate::allows('view_inactive_leads')) {
+            $query->where('leads.active', 1);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function kanbanLeadColumns(): array
+    {
+        return [
+            'leads.id',
+            'leads.name',
+            'leads.phone',
+            'leads.gender',
+            'leads.active',
+            'leads.city_id',
+            'leads.region_id',
+            'leads.location_id',
+            'leads.lead_status_id',
+            'leads.created_by',
+            'leads.assigned_to',
+            'leads.department_id',
+            'leads.created_at',
+        ];
+    }
+
+    /**
      * Resolve created-by names for the current page only.
      * Loading every account user (patients included) exhausts PHP memory on this DB.
      */
     protected function getUsersForLeads(Collection $leads, int $accountId): array
     {
-        $userIds = $leads->pluck('created_by')->filter()->unique()->values()->all();
+        $userIds = $leads->pluck('created_by')
+            ->merge($leads->pluck('assigned_to'))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
         if ($userIds === []) {
             return [];
         }
@@ -205,6 +409,8 @@ class LeadsController extends Controller
                 'lead' => $this->getEmptyLeadObject(),
                 'leadServices' => null,
                 'employees' => $employees,
+                'csr_users' => $this->leadService->getCsrUsers(),
+                'departments' => $this->leadService->departmentsLookup(),
                 'edit_status' => 0,
                 'gender' => $formData['gender'],
             ]);
@@ -247,7 +453,10 @@ class LeadsController extends Controller
             $lead->phone = GeneralFunctions::prepareNumber4Call($lead->phone);
             $lead->gender = Config::get('constants.gender_array')[$lead->gender] ?? 'Unknown';
 
-            return ApiHelper::apiResponse($this->success, 'Record found.', true, ['lead' => $lead]);
+            return ApiHelper::apiResponse($this->success, 'Record found.', true, [
+                'lead' => $lead,
+                'activities' => $this->leadService->getLeadActivities((int) $lead->id),
+            ]);
         } catch (\Exception $e) {
             return ApiHelper::apiException($e);
         }
@@ -288,6 +497,8 @@ class LeadsController extends Controller
                 'lead_sources' => $formData['lead_sources'],
                 'lead_statuses' => $formData['lead_statuses'],
                 'employees' => $employees,
+                'csr_users' => $this->leadService->getCsrUsers(),
+                'departments' => $this->leadService->getDepartmentsForLocation($lead->location_id)->pluck('name', 'id'),
                 'edit_status' => 1,
                 'gender' => $formData['gender'],
             ]);
@@ -402,9 +613,19 @@ class LeadsController extends Controller
         ini_set('max_execution_time', 300);
         ini_set('memory_limit', '512M');
 
+        $storedPath = null;
+
         try {
-            $file = $request->file('leads_file');
-            $collections = (new FastExcel)->import($file);
+            $tempFolder = $this->ensureWritableTempFolder();
+            $this->useAppTempFolder($tempFolder);
+            $storedPath = $this->storeLeadImportFile($request->file('leads_file'));
+            $collections = (new FastExcel)
+                ->configureOptionsUsing(function ($options) use ($tempFolder) {
+                    if (method_exists($options, 'setTempFolder')) {
+                        $options->setTempFolder($tempFolder);
+                    }
+                })
+                ->import($storedPath);
 
             // Normalize column names
             $rows = [];
@@ -437,8 +658,62 @@ class LeadsController extends Controller
 
             return ApiHelper::apiResponse($this->success, $message);
         } catch (\Exception $e) {
-            return ApiHelper::apiResponse($this->error, $e->getMessage());
+            return ApiHelper::apiResponse($this->error, $e->getMessage(), false);
+        } finally {
+            if ($storedPath && is_file($storedPath)) {
+                @unlink($storedPath);
+            }
         }
+    }
+
+    protected function ensureWritableTempFolder(): string
+    {
+        $directory = storage_path('app/tmp');
+        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Could not create the import temp folder.');
+        }
+        if (!is_writable($directory)) {
+            throw new \RuntimeException('The import temp folder is not writable.');
+        }
+
+        return $directory;
+    }
+
+    protected function useAppTempFolder(string $directory): void
+    {
+        putenv('TMP=' . $directory);
+        putenv('TEMP=' . $directory);
+        putenv('TMPDIR=' . $directory);
+        ini_set('sys_temp_dir', $directory);
+    }
+
+    protected function storeLeadImportFile(\Illuminate\Http\UploadedFile $file): string
+    {
+        $directory = storage_path('app/imports');
+        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Could not create the import folder.');
+        }
+
+        $extension = strtolower($file->getClientOriginalExtension() ?: 'xlsx');
+        $filename = str_replace('.', '', uniqid('leads_', true)) . '.' . $extension;
+        $storedPath = $directory . DIRECTORY_SEPARATOR . $filename;
+        $source = $file->getRealPath() ?: $file->getPathname();
+
+        if (!($source && is_file($source) && @copy($source, $storedPath))) {
+            $contents = $file->get();
+            if ($contents === false || $contents === '') {
+                throw new \RuntimeException('Could not read the uploaded file. Please try again.');
+            }
+            if (file_put_contents($storedPath, $contents) === false) {
+                throw new \RuntimeException('Could not store the import file. Please try again.');
+            }
+        }
+
+        if (!is_file($storedPath) || filesize($storedPath) === 0) {
+            throw new \RuntimeException('The import file could not be read. Please try again.');
+        }
+
+        return $storedPath;
     }
 
     /**
@@ -724,10 +999,20 @@ class LeadsController extends Controller
                 return ApiHelper::apiResponse($this->success, 'Resource not found.', false);
             }
 
+            $previousCity = optional($lead->city)->name ?: '—';
             $lead->update([
                 'city_id' => $city->id,
                 'region_id' => $city->region_id,
             ]);
+            if ($previousCity !== $city->name) {
+                \App\Helpers\ActivityLogger::logLeadChange(
+                    $lead->fresh(),
+                    'City changed',
+                    'lead_city_changed',
+                    $previousCity,
+                    $city->name
+                );
+            }
 
             return ApiHelper::apiResponse($this->success, 'City updated successfully.', true, [
                 'city' => $city->name,
@@ -825,6 +1110,8 @@ class LeadsController extends Controller
 
             // Get lead status name (works with array format from cache)
             $statusName = '';
+            $status = [];
+            $parentId = 0;
             if (isset($leadStatuses[$lead->lead_status_id])) {
                 $status = $leadStatuses[$lead->lead_status_id];
                 $parentId = $status['parent_id'] ?? 0;
@@ -850,10 +1137,18 @@ class LeadsController extends Controller
                 'city_id' => $lead->city->name ?? '',
                 'region_id' => $regions[$lead->region_id]['name'] ?? 'N/A',
                 'lead_status_id' => $statusName,
+                'status_id' => (int) $lead->lead_status_id,
+                'parent_status_id' => $parentId == 0 ? (int) $lead->lead_status_id : (int) $parentId,
+                'status_name' => $statusName,
+                'child_status' => $parentId != 0 ? ($status['name'] ?? '') : '',
                 'service_id' => implode(',', $services),
                 'service_active' => implode(',', array_filter($activeServices)),
                 'created_at' => Carbon::parse($lead->created_at)->format('F j,Y h:i A'),
                 'created_by' => $users[$lead->created_by]['name'] ?? 'N/A',
+                'assigned_to' => $lead->assigned_to,
+                'assigned_to_name' => $lead->assignedTo->name ?? ($users[$lead->assigned_to]['name'] ?? ''),
+                'department_id' => $lead->department_id,
+                'department' => $lead->department->name ?? '',
                 'location' => $lead->towns->name ?? '',
                 'child_service' => implode(',', array_filter($childServices)),
             ];
@@ -876,7 +1171,58 @@ class LeadsController extends Controller
             'convert' => Gate::allows('leads_convert'),
             'contact' => Gate::allows('contact'),
             'update_status' => Gate::allows('leads_lead_status'),
+            'assign' => Gate::allows('leads_edit') || Gate::allows('leads_manage'),
         ];
+    }
+
+    public function assign(Request $request): JsonResponse
+    {
+        if (!Gate::allows('leads_edit') && !Gate::allows('leads_manage')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        $data = $request->validate([
+            'id' => 'required|integer|exists:leads,id',
+            'assigned_to' => 'required|integer|exists:users,id',
+        ]);
+
+        try {
+            $lead = $this->leadService->assignLead((int) $data['id'], (int) $data['assigned_to']);
+            return ApiHelper::apiResponse($this->success, 'Lead assigned successfully.', true, [
+                'lead_id' => $lead->id,
+                'assigned_to' => $lead->assigned_to,
+                'assigned_to_name' => optional($lead->assignedTo)->name,
+            ]);
+        } catch (LeadException $e) {
+            return ApiHelper::apiResponse($this->error, $e->getMessage());
+        } catch (\Exception $e) {
+            return ApiHelper::apiException($e);
+        }
+    }
+
+    public function csrUsers(): JsonResponse
+    {
+        if (!Gate::allows('leads_manage') && !Gate::allows('leads_edit')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        return ApiHelper::apiResponse($this->success, 'Record found.', true, [
+            'users' => $this->leadService->getCsrUsers(),
+        ]);
+    }
+
+    public function departmentsByLocation(Request $request): JsonResponse
+    {
+        if (!Gate::allows('leads_manage') && !Gate::allows('leads_create') && !Gate::allows('leads_edit')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        $locationId = $request->get('location_id') ? (int) $request->get('location_id') : null;
+        $departments = $this->leadService->getDepartmentsForLocation($locationId)->pluck('name', 'id');
+
+        return ApiHelper::apiResponse($this->success, 'Record found.', true, [
+            'departments' => $departments,
+        ]);
     }
 
     /**
@@ -935,6 +1281,8 @@ class LeadsController extends Controller
                 return ApiHelper::apiResponse($this->error, 'Lead not found.');
             }
 
+            $previousStatus = optional($lead->lead_status)->name ?: 'Junk';
+
             // Get the Open status
             $openStatus = \App\Helpers\LeadHelper::getDefaultStatus(Auth::user()->account_id);
             
@@ -952,6 +1300,14 @@ class LeadsController extends Controller
             \App\Models\LeadsServices::where('lead_id', $lead->id)
                 ->where('status', 1)
                 ->update(['lead_status_id' => $openStatus->id]);
+
+            \App\Helpers\ActivityLogger::logLeadChange(
+                $lead->fresh(),
+                'Removed from junk',
+                'lead_removed_from_junk',
+                $previousStatus,
+                $openStatus->name ?? 'Open'
+            );
 
             return ApiHelper::apiResponse($this->success, 'Lead has been removed from junk.');
         } catch (\Exception $e) {

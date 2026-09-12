@@ -690,7 +690,9 @@ function reInitTable(page = null) {
                 patientFilters();
             }
         } else if (page == "lead") {
-            if (typeof datatable !== 'undefined') {
+            if (typeof window.reloadLeadsKanban === 'function') {
+                window.reloadLeadsKanban('filter');
+            } else if (typeof datatable !== 'undefined') {
                 leadFilters();
             }
         } else if (page == "plan") {
@@ -755,6 +757,8 @@ function reInitTable(page = null) {
                 // In patient card context, reload the page to refresh datatable
                 // KTDatatable has issues with reload when pagination elements are null
                 location.reload();
+            } else if (typeof window.reloadLeadsKanban === 'function') {
+                window.reloadLeadsKanban('filter');
             } else if (typeof datatable !== 'undefined') {
                 datatable.reload();
             }
@@ -876,6 +880,10 @@ function patientFilters() {
     datatable.search(filters, 'search');
 }
 function leadFilters() {
+    if (typeof window.reloadLeadsKanban === 'function') {
+        window.reloadLeadsKanban('filter');
+        return;
+    }
     let filters = {
         delete: '',
         lead_id: $("#search_id").val(),
@@ -1067,16 +1075,24 @@ function reloadTable(table_class) {
 
 function resetFilters() {
     $(".filter-field").val('');
+    $('.datatable-input').val('');
+    $('.lead_search_filter').val('');
+    $('.suggesstion-box-leads').hide();
+    $('#search_id, #search_full_name, #search_phone, #date_range').val('');
+    $('.croxcli').hide();
+    if (typeof resetLeadKanbanFilters === 'function' && typeof window.reloadLeadsKanban === 'function') {
+        resetLeadKanbanFilters();
+        return;
+    }
     $(".select2").select2({
         placeholder: 'Select'
     });
     $(".select2").val('').trigger('change');
-    $('.datatable-input').val('');
-    // Reset lead search filter
-    $('.lead_search_filter').val('');
-    $('.suggesstion-box-leads').hide();
-    $('.croxcli').hide();
     KTApp.init(KTAppOptions);
+    if (typeof window.reloadLeadsKanban === 'function') {
+        window.reloadLeadsKanban('filter_cancel');
+        return;
+    }
     datatable.search('', 'datatable_reload');
 }
 

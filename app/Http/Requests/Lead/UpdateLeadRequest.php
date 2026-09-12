@@ -28,6 +28,8 @@ class UpdateLeadRequest extends FormRequest
             'old_service' => 'nullable|numeric',
             'location_id' => 'nullable|numeric|exists:locations,id',
             'referred_by' => 'nullable|numeric|exists:users,id',
+            'assigned_to' => 'nullable|numeric|exists:users,id',
+            'department_id' => 'nullable|numeric',
         ];
     }
 
@@ -39,5 +41,13 @@ class UpdateLeadRequest extends FormRequest
             'gender.required' => 'Gender is required.',
             'city_id.required' => 'City is required.',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'assigned_to' => $this->assigned_to ?: null,
+            'department_id' => $this->department_id ?: null,
+        ]);
     }
 }

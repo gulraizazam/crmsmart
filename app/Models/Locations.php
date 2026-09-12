@@ -69,6 +69,11 @@ class Locations extends BaseModal
         return $this->belongsTo('App\Models\Cities')->withTrashed();
     }
 
+    public function leadDepartments()
+    {
+        return $this->belongsToMany(LeadDepartment::class, 'lead_department_location', 'location_id', 'lead_department_id');
+    }
+
     /**
      * Get the Locations that owns the City.
      */

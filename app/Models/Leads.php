@@ -10,7 +10,7 @@ class Leads extends BaseModal
 {
     use SoftDeletes;
 
-    protected $fillable = ['patient_id', 'region_id', 'city_id', 'lead_status_id', 'lead_source_id', 'msg_count', 'active', 'created_by', 'updated_by', 'converted_by', 'town_id', 'created_at', 'updated_at', 'account_id', 'location_id', 'name', 'email', 'phone', 'gender', 'referred_by', 'meta_lead_id'];
+    protected $fillable = ['patient_id', 'region_id', 'city_id', 'lead_status_id', 'lead_source_id', 'msg_count', 'active', 'created_by', 'updated_by', 'converted_by', 'town_id', 'created_at', 'updated_at', 'account_id', 'location_id', 'name', 'email', 'phone', 'gender', 'referred_by', 'assigned_to', 'department_id', 'meta_lead_id'];
 
     protected static $_fillable = ['region_id', 'city_id', 'lead_status_id', 'lead_source_id', 'msg_count', 'service_id', 'town_id'];
 
@@ -82,6 +82,16 @@ class Leads extends BaseModal
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by')->withTrashed();
+    }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to')->withTrashed();
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(LeadDepartment::class, 'department_id');
     }
 
     /**

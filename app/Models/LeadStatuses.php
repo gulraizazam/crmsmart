@@ -436,22 +436,23 @@ class LeadStatuses extends BaseModal
 
     public static function getLeadStatuses($excludeIds = false)
     {
-        $where = [
-            ['account_id', '=', Auth::User()->account_id],
-            ['active', '=', '1'],
-            ['parent_id', '=', '0'],
-        ];
+        $query = self::query()
+            ->where('account_id', Auth::user()->account_id)
+            ->where('active', 1)
+            ->where(function ($q) {
+                $q->where('parent_id', 0)->orWhereNull('parent_id');
+            });
 
         if ($excludeIds && ! is_array($excludeIds)) {
             $excludeIds = [$excludeIds];
-        } else {
+        } elseif (! is_array($excludeIds)) {
             $excludeIds = [];
         }
 
         if (count($excludeIds)) {
-            return self::where($where)->whereNotIn('id', $excludeIds)->OrderBy('sort_no', 'asc')->get()->pluck('name', 'id');
-        } else {
-            return self::where($where)->OrderBy('sort_no', 'asc')->get()->pluck('name', 'id');
+            $query->whereNotIn('id', $excludeIds);
         }
+
+        return $query->orderBy('sort_no', 'asc')->pluck('name', 'id');
     }
 }

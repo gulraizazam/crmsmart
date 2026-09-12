@@ -9,6 +9,6 @@
     @if(isset($custom_reset) && $custom_reset != '')
         <button class="btn btn-secondary btn-secondary--icon ml-3" onclick="resetCustomFilters();" id="reset-filters">Reset</button>
     @else
-        <button class="btn btn-secondary btn-secondary--icon ml-3" onclick="resetFilters();" id="reset-filters">Reset</button>
+        <button type="button" class="btn btn-secondary btn-secondary--icon ml-3" onclick="resetFilters();" id="reset-filters">Reset</button>
     @endif
 </div>

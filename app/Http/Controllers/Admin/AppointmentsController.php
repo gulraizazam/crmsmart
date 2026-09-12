@@ -640,6 +640,10 @@ class AppointmentsController extends Controller
                         'appointment_id' => $find_cons->id,
                         'booked_status_id' => $bookedStatusId,
                     ]);
+                    $leadRecord = Leads::where(['phone' => $appointment_data['phone']])->orderBy('id', 'desc')->first();
+                    $previousLeadStatus = optional(optional($leadRecord)->lead_status)->name ?: '—';
+                    $previousLocation = optional(optional($leadRecord)->towns)->name ?: '—';
+                    $previousLocationId = $leadRecord->location_id ?? null;
                     $lead = Leads::where(['phone' => $appointment_data['phone']])->orderBy('id', 'desc')->update(['name' => $patient->name, 'lead_status_id' => $bookedStatusId, 'location_id' => $find_cons->location_id, 'patient_id' => $appointment_data['patient_id']]);
                     \Log::info('Lead status updated to Booked', [
                         'phone' => $appointment_data['phone'],
@@ -651,7 +655,16 @@ class AppointmentsController extends Controller
                     if ($leadRecord) {
                         $location = Locations::with('city')->find($find_cons->location_id);
                         $service = Services::find($find_cons->service_id);
-                        ActivityLogger::logLeadBooked($leadRecord, $find_cons, $location, $service);
+                        ActivityLogger::logLeadBooked($leadRecord, $find_cons, $location, $service, $previousLeadStatus);
+                        if ($previousLocationId && (int) $previousLocationId !== (int) $find_cons->location_id) {
+                            ActivityLogger::logLeadChange(
+                                $leadRecord,
+                                'Location updated',
+                                'lead_location_changed',
+                                $previousLocation,
+                                $location->name ?? '—'
+                            );
+                        }
                         
                         // Update patient_id on lead_created activities for this lead (by phone)
                         Activity::where('activity_type', 'lead_created')

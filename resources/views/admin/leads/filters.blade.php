@@ -49,8 +49,11 @@
             </div>
 
             @if(request('type') == '')
-            <div class="filterouterdiv mb-0 js-filter-item" data-filter="status" data-default="1">
-                <label>Lead Status:</label>
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="status" data-label="Lead Status">
+                <label>
+                    Lead Status:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Lead Status filter">&times;</button>
+                </label>
                 <select class="form-control filter-field select2" id="search_status_id"></select>
             </div>
             @endif
@@ -105,6 +108,26 @@
                 </div>
             </div>
 
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="department" data-label="Department">
+                <label>
+                    Department:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Department filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_department_id">
+                    <option value="">All</option>
+                </select>
+            </div>
+
+            <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="assigned_to" data-label="Assigned To">
+                <label>
+                    Assigned To:
+                    <button type="button" class="sneat-filter-remove js-remove-filter" aria-label="Remove Assigned To filter">&times;</button>
+                </label>
+                <select class="form-control filter-field select2" id="search_assigned_to">
+                    <option value="">All</option>
+                </select>
+            </div>
+
             <div class="filterouterdiv mb-0 js-filter-item is-filter-optional sneat-filter-item-hidden" data-filter="created_by" data-label="Created By">
                 <label>
                     Created By:
@@ -123,11 +146,11 @@
                     <div class="sneat-add-filter-menu js-filter-menu sneat-filter-item-hidden" role="menu">
                         <button type="button" class="js-filter-menu-item" data-filter="centre" role="menuitem">Centre</button>
                         <button type="button" class="js-filter-menu-item" data-filter="service" role="menuitem">Service</button>
-                        @if(request('type') != '')
                         <button type="button" class="js-filter-menu-item" data-filter="status" role="menuitem">Lead Status</button>
-                        @endif
                         <button type="button" class="js-filter-menu-item" data-filter="gender" role="menuitem">Gender</button>
                         <button type="button" class="js-filter-menu-item" data-filter="created_at" role="menuitem">Created At</button>
+                        <button type="button" class="js-filter-menu-item" data-filter="department" role="menuitem">Department</button>
+                        <button type="button" class="js-filter-menu-item" data-filter="assigned_to" role="menuitem">Assigned To</button>
                         <button type="button" class="js-filter-menu-item" data-filter="created_by" role="menuitem">Created By</button>
                     </div>
                 </div>
@@ -140,5 +163,5 @@
 </div>
 
 @push('js')
-    <script src="{{ asset('assets/sneat/js/sneat-filter-picker.js') }}?v=1"></script>
+    <script src="{{ asset('assets/sneat/js/sneat-filter-picker.js') }}?v=2"></script>
 @endpush

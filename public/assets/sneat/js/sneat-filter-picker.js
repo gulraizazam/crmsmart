@@ -22,8 +22,11 @@
     function refreshSelect2($item) {
         $item.find('select').each(function () {
             var $select = $(this);
-            if ($select.hasClass('select2-hidden-accessible')) {
-                $select.next('.select2-container').css('width', '100%');
+            if ($.fn.select2 && $select.hasClass('select2-hidden-accessible')) {
+                $select.select2('destroy');
+            }
+            if ($.fn.select2) {
+                $select.select2({ width: '100%', placeholder: 'All', allowClear: true });
             }
         });
     }

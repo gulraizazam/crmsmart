@@ -4,9 +4,81 @@ namespace App\Helpers;
 
 use App\Models\Activity;
 use Auth;
+use Illuminate\Support\Facades\Schema;
 
 class ActivityLogger
 {
+    /**
+     * Log a detailed lead activity with previous/new state, actor, and time.
+     */
+    public static function logLeadChange(
+        $lead,
+        string $action,
+        string $type,
+        $previous = null,
+        $new = null,
+        ?string $description = null
+    ) {
+        $actor = Auth::user()->name ?? 'System';
+        $leadName = $lead->name ?? 'Unknown';
+        $previousText = self::stringifyLeadState($previous);
+        $newText = self::stringifyLeadState($new);
+
+        if (!$description) {
+            $description = $actor.' '.$action.' for '.$leadName;
+            if ($previousText !== '—' || $newText !== '—') {
+                $description .= ' ('.$previousText.' → '.$newText.')';
+            }
+        }
+
+        $payload = [
+            'account_id' => Auth::user()->account_id ?? $lead->account_id ?? null,
+            'action' => $action,
+            'activity_type' => $type,
+            'description' => $description,
+            'patient' => $leadName,
+            'patient_id' => $lead->patient_id ?? null,
+            'lead_id' => $lead->id ?? null,
+            'lead_status' => is_string($new) ? $new : ($lead->lead_status->name ?? null),
+            'lead_status_id' => $lead->lead_status_id ?? null,
+            'location' => $lead->towns->name ?? null,
+            'centre_id' => $lead->location_id ?? null,
+            'created_by' => Auth::id() ?? $lead->updated_by ?? $lead->created_by ?? null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        return Activity::create(self::withLeadStates($payload, $previousText, $newText));
+    }
+
+    protected static function withLeadStates(array $payload, $previous = null, $new = null): array
+    {
+        if (Schema::hasColumn('activities', 'previous_state')) {
+            $payload['previous_state'] = self::stringifyLeadState($previous);
+            $payload['new_state'] = self::stringifyLeadState($new);
+        }
+
+        return $payload;
+    }
+
+    public static function stringifyLeadState($state): string
+    {
+        if ($state === null || $state === '') {
+            return '—';
+        }
+        if (is_array($state)) {
+            $parts = [];
+            foreach ($state as $key => $value) {
+                $value = ($value === null || $value === '') ? '—' : $value;
+                $parts[] = is_string($key) ? $key.': '.$value : (string) $value;
+            }
+
+            return $parts ? implode(' · ', $parts) : '—';
+        }
+
+        return (string) $state;
+    }
+
     /**
      * Log a lead created activity
      * Format: XYZ created a SERVICE_NAME lead for PATIENT_NAME in LOCATION_NAME
@@ -21,19 +93,22 @@ class ActivityLogger
         $serviceName = $service->name ?? '';
         $creatorName = Auth::user()->name ?? 'System';
         $patientName = $lead->name ?? 'Unknown';
+        $lead->loadMissing(['lead_source:id,name', 'lead_status:id,name']);
+        $sourceName = $lead->lead_source->name ?? '—';
+        $statusName = $lead->lead_status->name ?? 'Open';
         
         // Format: XYZ created a SERVICE_NAME lead for PATIENT_NAME in LOCATION_NAME
         $description = '<span class="highlight">' . $creatorName . '</span> created a <span class="highlight-orange">' . ($serviceName ?: 'Service') . '</span> lead for <span class="highlight-orange">' . $patientName . '</span>' . ($locationName ? ' in <span class="highlight">' . $locationName . '</span>' : '');
         
-        return Activity::create([
+        $payload = [
             'account_id' => Auth::user()->account_id ?? $lead->account_id,
-            'action' => 'Lead Created',
+            'action' => 'Lead created',
             'activity_type' => 'lead_created',
             'description' => $description,
             'patient' => $patientName,
             'patient_id' => $lead->patient_id ?? null,
             'lead_id' => $lead->id,
-            'lead_status' => 'Open',
+            'lead_status' => $statusName,
             'lead_status_id' => $lead->lead_status_id,
             'service' => $serviceName,
             'service_id' => $service->id ?? null,
@@ -42,14 +117,15 @@ class ActivityLogger
             'created_by' => Auth::user()->id ?? $lead->created_by,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ];
+        return Activity::create(self::withLeadStates($payload, $sourceName, $statusName));
     }
 
     /**
      * Log a lead status change to Booked (consultation created)
      * Format: SERVICE_NAME lead status changed to LEAD_STATUS_NAME against PATIENT_NAME in LOCATION_NAME
      */
-    public static function logLeadBooked($lead, $appointment = null, $location = null, $service = null)
+    public static function logLeadBooked($lead, $appointment = null, $location = null, $service = null, $previousStatus = null)
     {
         $locationName = '';
         if ($location) {
@@ -58,13 +134,14 @@ class ActivityLogger
         
         $serviceName = $service->name ?? '';
         $patientName = $lead->name ?? ($appointment->patient->name ?? 'Unknown');
+        $fromStatus = $previousStatus ?: 'Open';
         
         // Format: SERVICE_NAME lead status changed to LEAD_STATUS_NAME against PATIENT_NAME in LOCATION_NAME
         $description = '<span class="highlight-orange">' . ($serviceName ?: 'Service') . '</span> lead status changed to <span class="highlight-green">Booked</span> against <span class="highlight-orange">' . $patientName . '</span>' . ($locationName ? ' in <span class="highlight">' . $locationName . '</span>' : '');
         
-        return Activity::create([
+        return Activity::create(self::withLeadStates([
             'account_id' => Auth::user()->account_id ?? $lead->account_id,
-            'action' => 'Lead Booked',
+            'action' => 'Status updated',
             'activity_type' => 'lead_booked',
             'description' => $description,
             'patient' => $patientName,
@@ -82,7 +159,7 @@ class ActivityLogger
             'created_by' => Auth::user()->id ?? null,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ], $fromStatus, 'Booked'));
     }
 
     /**
@@ -103,9 +180,9 @@ class ActivityLogger
         // Format: SERVICE_NAME lead status changed to LEAD_STATUS_NAME for PATIENT_NAME in LOCATION_NAME
         $description = '<span class="highlight-orange">' . ($serviceName ?: 'Service') . '</span> lead status changed to <span class="highlight-green">Arrived</span> for <span class="highlight-orange">' . $patientName . '</span>' . ($locationName ? ' in <span class="highlight">' . $locationName . '</span>' : '');
         
-        return Activity::create([
+        return Activity::create(self::withLeadStates([
             'account_id' => Auth::user()->account_id ?? $lead->account_id,
-            'action' => 'Lead Arrived',
+            'action' => 'Status updated',
             'activity_type' => 'lead_arrived',
             'description' => $description,
             'patient' => $patientName,
@@ -124,7 +201,7 @@ class ActivityLogger
             'created_by' => Auth::user()->id ?? null,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ], 'Booked', 'Arrived'));
     }
 
     /**
@@ -665,9 +742,9 @@ class ActivityLogger
             $description .= ' with payment of <span class="highlight-green">PKR ' . number_format($paymentAmount) . '</span>';
         }
         
-        return Activity::create([
+        return Activity::create(self::withLeadStates([
             'account_id' => Auth::user()->account_id ?? $lead->account_id,
-            'action' => 'Lead Converted',
+            'action' => 'Status updated',
             'activity_type' => 'lead_converted',
             'description' => $description,
             'patient' => $patientName,
@@ -683,7 +760,7 @@ class ActivityLogger
             'created_by' => Auth::user()->id ?? null,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ], 'Arrived', 'Converted'));
     }
 
     /**

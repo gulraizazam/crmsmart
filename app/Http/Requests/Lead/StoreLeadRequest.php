@@ -26,6 +26,8 @@ class StoreLeadRequest extends FormRequest
             'child_service_id' => 'nullable|numeric|exists:services,id',
             'location_id' => 'nullable|numeric|exists:locations,id',
             'referred_by' => 'nullable|numeric|exists:users,id',
+            'assigned_to' => 'nullable|numeric|exists:users,id',
+            'department_id' => 'nullable|numeric',
             'meta_lead_id' => 'nullable|string|max:255',
             'new_lead' => 'nullable|in:0,1',
         ];
@@ -49,5 +51,9 @@ class StoreLeadRequest extends FormRequest
         if ($this->phone === '***********' && $this->old_phone) {
             $this->merge(['phone' => $this->old_phone]);
         }
+        $this->merge([
+            'assigned_to' => $this->assigned_to ?: null,
+            'department_id' => $this->department_id ?: null,
+        ]);
     }
 }

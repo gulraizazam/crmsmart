@@ -4,7 +4,7 @@
 
     @push('css')
         <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=4" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=14" rel="stylesheet" type="text/css" />
     @endpush
 
     <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-leads-page" id="kt_content">
@@ -39,9 +39,11 @@
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body sneat-leads-card-body">
                         @include('admin.leads.filters')
-                        <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                        <div id="leads-kanban" class="sneat-leads-kanban" aria-live="polite">
+                            <div class="sneat-leads-kanban-boot">Loading leads…</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,8 +57,36 @@
     </div>
 
     <div class="modal fade" id="modal_view_lead" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mediam-modal" id="leads_view_lead">
+        <div class="modal-dialog modal-dialog-centered mediam-modal sneat-lead-detail-modal" id="leads_view_lead">
             @include('admin.leads.view')
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal_assign_lead" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="assign_lead_form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Assign Lead</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="assign_lead_id" value="">
+                        <div class="form-group mb-0">
+                            <label>Assign to CSR</label>
+                            <select id="assign_user_id" class="form-control">
+                                <option value="">Select a CSR</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -139,7 +169,8 @@
                 },1000);
             }
         </script>
-        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=1"></script>
+        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=11"></script>
+        <script src="{{asset('assets/js/pages/leads/leads-kanban.js')}}?v=7"></script>
 
         <script>
             jQuery(document).ready( function () {

@@ -454,6 +454,7 @@ class AppointmentService
                     $bookedStatus = \App\Models\LeadStatuses::where('account_id', $this->getAccountId())
                         ->where('name', 'Booked')
                         ->first();
+                    $previousLeadStatus = optional($lead->lead_status)->name ?: '—';
                     
                     if ($bookedStatus) {
                         if ($lead->lead_status_id != $bookedStatus->id) {
@@ -482,7 +483,7 @@ class AppointmentService
                     $service = \App\Models\Services::find($appointment->service_id);
                     
                     // Log lead booked activity
-                    ActivityLogger::logLeadBooked($lead, $appointment, $location, $service);
+                    ActivityLogger::logLeadBooked($lead, $appointment, $location, $service, $previousLeadStatus);
                 }
             }
 

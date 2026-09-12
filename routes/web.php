@@ -37,6 +37,7 @@ use App\Http\Controllers\ConversionReportController;
 use App\Http\Controllers\DashboardReportsController;
 use App\Http\Controllers\Admin\CustomFormsController;
 use App\Http\Controllers\Admin\LeadSourcesController;
+use App\Http\Controllers\Admin\LeadDepartmentsController;
 use App\Http\Controllers\Admin\MachineTypeController;
 use App\Http\Controllers\Api\PermissionController;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
@@ -264,6 +265,7 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
         // Lead Sources
         Route::get('lead_sources', [LeadSourcesController::class, 'index'])->name('lead_sources.index');
         Route::get('lead_sources/sort', [LeadSourcesController::class, 'sortOrder'])->name('lead_sources.sort');
+        Route::get('lead-departments', [LeadDepartmentsController::class, 'index'])->name('lead_departments.index');
 
         // Lead Statuses
         Route::get('lead_statuses', [LeadStatusesController::class, 'index'])->name('lead_statuses.index');

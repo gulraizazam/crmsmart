@@ -3,6 +3,9 @@
 namespace App\Services\Lead;
 
 use App\Models\Leads;
+use App\Models\LeadDepartment;
+use App\Models\RoleHasUsers;
+use App\Models\Activity;
 use App\Models\Cities;
 use App\Models\Services;
 use App\Models\Locations;
@@ -27,6 +30,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 
@@ -68,6 +72,130 @@ class LeadService
             'orderBy' => $orderBy,
             'order' => $order,
         ];
+    }
+
+    /**
+     * Parent lead statuses for Kanban columns (junk excluded on the main board).
+     */
+    public function getKanbanColumns(?string $leadType = null): array
+    {
+        $accountId = Auth::user()->account_id;
+        $junkStatus = $this->getJunkLeadStatus($accountId);
+
+        $parents = LeadStatuses::query()
+            ->where('account_id', $accountId)
+            ->where('active', 1)
+            ->where(function ($query) {
+                $query->where('parent_id', 0)->orWhereNull('parent_id');
+            })
+            ->orderBy('sort_no', 'asc');
+
+        if ($leadType) {
+            $parents->where('id', $junkStatus->id ?? 0);
+        } elseif ($junkStatus) {
+            $parents->where('id', '!=', $junkStatus->id);
+        }
+
+        $parents = $parents->get(['id', 'name', 'sort_no', 'is_default', 'is_converted', 'is_arrived', 'is_junk']);
+
+        $children = LeadStatuses::query()
+            ->where('account_id', $accountId)
+            ->where('active', 1)
+            ->where('parent_id', '>', 0)
+            ->get(['id', 'parent_id', 'name'])
+            ->groupBy('parent_id');
+
+        return $parents->map(function (LeadStatuses $parent) use ($children) {
+            $kids = $children->get($parent->id, collect());
+
+            return [
+                'id' => (int) $parent->id,
+                'name' => $parent->name,
+                'is_default' => (int) $parent->is_default,
+                'is_converted' => (int) $parent->is_converted,
+                'is_arrived' => (int) $parent->is_arrived,
+                'is_junk' => (int) $parent->is_junk,
+                'status_ids' => array_values(array_merge(
+                    [(int) $parent->id],
+                    $kids->pluck('id')->map(fn ($id) => (int) $id)->all()
+                )),
+            ];
+        })->values()->all();
+    }
+
+    /**
+     * Roll-up lead counts per Kanban column.
+     */
+    public function countKanbanColumns(array $filters, ?string $leadType, array $columns): array
+    {
+        $rows = $this->kanbanStatusCountMap($filters, $leadType);
+        $counts = [];
+
+        foreach ($columns as $column) {
+            $sum = 0;
+            foreach ($column['status_ids'] as $statusId) {
+                $sum += (int) ($rows[$statusId] ?? 0);
+            }
+            $counts[(int) $column['id']] = $sum;
+        }
+
+        return $counts;
+    }
+
+    /**
+     * Query + total for one Kanban column (parent status + its children).
+     */
+    public function getKanbanColumnQuery(array $filters, ?string $leadType, array $statusIds): array
+    {
+        $userId = Auth::id();
+        $filename = $leadType ? 'junk_leads' : 'leads';
+
+        $whereConditions = $this->buildWhereConditions($filters, $filename, $userId);
+        $serviceConditions = $this->buildServiceConditions($filters, $filename, $userId);
+        $junkStatus = $this->getJunkLeadStatus(Auth::user()->account_id);
+        $junkStatusId = $junkStatus->id ?? 0;
+        $userCities = ACL::getUserCities();
+        $statusIds = array_values(array_filter(array_map('intval', $statusIds)));
+
+        $countQuery = $this->buildCountQuery($whereConditions, $serviceConditions, $leadType, $junkStatusId, $userCities)
+            ->whereIn('leads.lead_status_id', $statusIds);
+
+        $resultQuery = $this->buildOptimizedResultQuery($whereConditions, $serviceConditions, $leadType, $junkStatusId, $userCities)
+            ->whereIn('leads.lead_status_id', $statusIds);
+
+        return [
+            'total' => (int) $countQuery->count(),
+            'query' => $resultQuery,
+        ];
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    protected function kanbanStatusCountMap(array $filters, ?string $leadType): array
+    {
+        $userId = Auth::id();
+        $filename = $leadType ? 'junk_leads' : 'leads';
+
+        $whereConditions = $this->buildWhereConditions($filters, $filename, $userId);
+        $serviceConditions = $this->buildServiceConditions($filters, $filename, $userId);
+        $junkStatus = $this->getJunkLeadStatus(Auth::user()->account_id);
+        $junkStatusId = $junkStatus->id ?? 0;
+        $userCities = ACL::getUserCities();
+
+        $query = $this->buildCountQuery($whereConditions, $serviceConditions, $leadType, $junkStatusId, $userCities);
+        $query->getQuery()->columns = null;
+        $rows = $query
+            ->selectRaw('leads.lead_status_id, COUNT(leads.id) as total')
+            ->groupBy('leads.lead_status_id')
+            ->get();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $map[(int) $row->lead_status_id] = (int) $row->total;
+        }
+
+        return $map;
     }
 
     /**
@@ -121,6 +249,8 @@ class LeadService
             },
             'city:id,name',
             'towns:id,name',
+            'department:id,name',
+            'assignedTo:id,name',
         ])->where(function ($q) use ($userCities) {
             $q->whereIn('leads.city_id', $userCities)
               ->orWhereNull('leads.city_id');
@@ -288,14 +418,26 @@ class LeadService
             $data['updated_by'] = Auth::id();
             $data['account_id'] = Auth::user()->account_id;
 
+            $before = $lead->replicate();
+            $before->setRelation('city', $lead->city()->first());
+            $before->setRelation('towns', $lead->towns()->first());
+            $before->setRelation('lead_status', $lead->lead_status()->first());
+            if (Schema::hasColumn('leads', 'assigned_to')) {
+                $before->setRelation('assignedTo', $lead->assignedTo()->first());
+            }
+            if (Schema::hasColumn('leads', 'department_id')) {
+                $before->setRelation('department', $lead->department()->first());
+            }
             $lead->update($data);
+            $fresh = $lead->fresh();
+            $this->logTrackedLeadChanges($before, $fresh);
 
             // Update patient name if phone matches
             if (!empty($data['phone']) && !empty($data['name'])) {
                 GeneralFunctions::patientNameUpdate($data['phone'], $data['name']);
             }
 
-            return $lead->fresh();
+            return $fresh;
         });
     }
 
@@ -390,11 +532,22 @@ class LeadService
             $this->validateStatusChange($lead);
 
             $statusId = $data['lead_status_chalid_id'] ?? $data['lead_status_parent_id'];
+            $previousStatus = optional(LeadStatuses::find($lead->lead_status_id))->name ?: '—';
 
             $lead->update([
                 'lead_status_id' => $statusId,
                 'converted_by' => Auth::id(),
             ]);
+
+            $fresh = $lead->fresh();
+            $newStatus = optional(LeadStatuses::find($statusId))->name ?: '—';
+            ActivityLogger::logLeadChange(
+                $fresh,
+                'Status updated',
+                'lead_status_changed',
+                $previousStatus,
+                $newStatus
+            );
 
             // Add comment if provided
             $comment = $data['comment1'] ?? $data['comment2'] ?? null;
@@ -416,7 +569,12 @@ class LeadService
     public function toggleStatus($id, $status): Leads
     {
         $lead = Leads::findOrFail($id);
+        $previous = $lead->active ? 'Active' : 'Inactive';
         $lead->update(['active' => $status]);
+        $new = $status ? 'Active' : 'Inactive';
+        if ($previous !== $new) {
+            ActivityLogger::logLeadChange($lead->fresh(), 'Active flag changed', 'lead_active_changed', $previous, $new);
+        }
         return $lead;
     }
 
@@ -431,6 +589,8 @@ class LeadService
             'city:id,name',
             'lead_source:id,name',
             'lead_status:id,name,parent_id',
+            'department:id,name',
+            'assignedTo:id,name',
             'lead_service.service:id,name',
             'lead_service.childservice:id,name',
         ])->find($id);
@@ -701,15 +861,17 @@ class LeadService
 
                 $description = '<span class="highlight">' . $creatorName . '</span> created a <span class="highlight-orange">' . ($serviceName ?: 'Service') . '</span> lead for <span class="highlight-orange">' . $patientName . '</span>' . ($locationName ? ' in <span class="highlight">' . $locationName . '</span>' : '');
 
-                $activitiesToCreate[] = [
+                $sourceName = $row['lead_source'] ?? '—';
+                $statusName = $row['lead_status'] ?? 'Open';
+                $activityRow = [
                     'account_id' => $accountId,
-                    'action' => 'Lead Created',
+                    'action' => 'Lead created',
                     'activity_type' => 'lead_created',
                     'description' => $description,
                     'patient' => $patientName,
                     'patient_id' => null,
                     'lead_id' => $leadId,
-                    'lead_status' => 'Open',
+                    'lead_status' => $statusName ?: 'Open',
                     'lead_status_id' => $defaultStatusId,
                     'service' => $serviceName,
                     'service_id' => $row['_service_id'],
@@ -719,6 +881,11 @@ class LeadService
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
+                if (Schema::hasColumn('activities', 'previous_state')) {
+                    $activityRow['previous_state'] = $sourceName ?: '—';
+                    $activityRow['new_state'] = $statusName ?: 'Open';
+                }
+                $activitiesToCreate[] = $activityRow;
             }
 
             // Insert activities in chunks
@@ -849,7 +1016,13 @@ class LeadService
         });
 
         $activeFilters = Filters::all($userId, $filename);
+        $junkStatus = $this->getJunkLeadStatus($accountId);
+        $filterValues['lead_statuses'] = $junkStatus
+            ? LeadStatuses::getLeadStatuses($junkStatus->id)
+            : LeadStatuses::getLeadStatuses();
         $filterValues['leadServices'] = Filters::get($userId, 'leads', 'service_id');
+        $filterValues['departments'] = $this->departmentsLookup($accountId);
+        $filterValues['csr_users'] = $this->getCsrUsers($accountId);
 
         return [
             'filter_values' => $filterValues,
@@ -923,6 +1096,8 @@ class LeadService
             'region_id' => ['region_id', '='],
             'lead_status_id' => ['lead_status_id', '='],
             'created_by' => ['leads.created_by', '='],
+            'department_id' => ['leads.department_id', '='],
+            'assigned_to' => ['leads.assigned_to', '='],
         ];
 
         foreach ($filterMappings as $filterKey => $mapping) {
@@ -1046,11 +1221,319 @@ class LeadService
      */
     public function addComment($leadId, string $comment): LeadComments
     {
-        return LeadComments::create([
+        $row = LeadComments::create([
             'lead_id' => $leadId,
             'comment' => $comment,
             'created_by' => Auth::id(),
         ]);
+
+        $lead = Leads::find($leadId);
+        if ($lead) {
+            ActivityLogger::logLeadChange($lead, 'Comment added', 'lead_commented', '—', $comment);
+        }
+
+        return $row;
+    }
+
+    protected function logTrackedLeadChanges(Leads $before, Leads $after): void
+    {
+        $after->loadMissing(['city:id,name', 'towns:id,name', 'lead_status:id,name', 'assignedTo:id,name', 'department:id,name']);
+
+        if ((int) $before->lead_status_id !== (int) $after->lead_status_id) {
+            ActivityLogger::logLeadChange(
+                $after,
+                'Status updated',
+                'lead_status_changed',
+                $before->lead_status->name ?? '—',
+                $after->lead_status->name ?? '—'
+            );
+        }
+
+        if ((int) $before->city_id !== (int) $after->city_id) {
+            ActivityLogger::logLeadChange(
+                $after,
+                'City updated',
+                'lead_city_changed',
+                $before->city->name ?? '—',
+                $after->city->name ?? '—'
+            );
+        }
+
+        if ((int) $before->location_id !== (int) $after->location_id) {
+            ActivityLogger::logLeadChange(
+                $after,
+                'Location updated',
+                'lead_location_changed',
+                $before->towns->name ?? '—',
+                $after->towns->name ?? '—'
+            );
+        }
+
+        if (Schema::hasColumn('leads', 'assigned_to') && (int) ($before->assigned_to ?? 0) !== (int) ($after->assigned_to ?? 0)) {
+            ActivityLogger::logLeadChange(
+                $after,
+                'Assignee changed',
+                'lead_assignee_changed',
+                $before->assignedTo->name ?? '—',
+                $after->assignedTo->name ?? '—'
+            );
+        }
+    }
+
+    public function assignLead(int $leadId, int $userId): Leads
+    {
+        if (! $this->isCsrUser($userId)) {
+            throw new LeadException('Selected user is not a CSR.');
+        }
+
+        $lead = Leads::findOrFail($leadId);
+        $previous = optional($lead->assignedTo)->name ?: '—';
+        $lead->update([
+            'assigned_to' => $userId,
+            'updated_by' => Auth::id(),
+            'updated_at' => Carbon::now(),
+        ]);
+        $fresh = $lead->fresh(['assignedTo:id,name']);
+        $new = optional($fresh->assignedTo)->name ?: '—';
+        if ($previous !== $new) {
+            ActivityLogger::logLeadChange($fresh, 'Assignee changed', 'lead_assignee_changed', $previous, $new);
+        }
+
+        return $fresh;
+    }
+
+    public function getCsrUsers(?int $accountId = null): array
+    {
+        $accountId = $accountId ?? Auth::user()->account_id;
+        $userIds = $this->csrUserIds();
+        if ($userIds === []) {
+            return [];
+        }
+
+        return User::query()
+            ->where('account_id', $accountId)
+            ->where('active', 1)
+            ->whereIn('id', $userIds)
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    public function isCsrUser(int $userId): bool
+    {
+        return in_array($userId, $this->csrUserIds(), true);
+    }
+
+    protected function csrUserIds(): array
+    {
+        $roleIds = DB::table('roles')->whereIn('name', ['CSR'])->pluck('id');
+        if ($roleIds->isEmpty()) {
+            return [];
+        }
+
+        $userIds = RoleHasUsers::withTrashed()->whereIn('role_id', $roleIds)->pluck('user_id');
+        if (Schema::hasTable('model_has_roles')) {
+            $userIds = $userIds->merge(
+                DB::table('model_has_roles')->whereIn('role_id', $roleIds)->pluck('model_id')
+            );
+        }
+
+        return $userIds->filter()->unique()->map(fn ($id) => (int) $id)->values()->all();
+    }
+
+    public function getDepartmentsForLocation(?int $locationId = null, ?int $accountId = null)
+    {
+        $accountId = $accountId ?? Auth::user()->account_id;
+        $query = LeadDepartment::forAccount($accountId)->where('active', 1)->orderBy('sort_order')->orderBy('name');
+
+        if ($locationId) {
+            $forLocation = (clone $query)->whereHas('locations', function ($q) use ($locationId) {
+                $q->where('locations.id', $locationId);
+            })->get();
+            if ($forLocation->isNotEmpty()) {
+                return $forLocation;
+            }
+        }
+
+        return $query->get();
+    }
+
+    public function departmentsLookup(?int $accountId = null): array
+    {
+        return LeadDepartment::getActiveForAccount($accountId)->pluck('name', 'id')->toArray();
+    }
+
+    public function getLeadActivities(int $leadId): array
+    {
+        $lead = Leads::with(['lead_source:id,name', 'lead_status:id,name'])->find($leadId);
+
+        $rows = Activity::query()
+            ->with(['user:id,name'])
+            ->where('lead_id', $leadId)
+            ->whereIn('activity_type', [
+                'lead_created',
+                'lead_status_changed',
+                'lead_booked',
+                'lead_arrived',
+                'lead_converted',
+                'lead_removed_from_junk',
+                'lead_commented',
+                'lead_assignee_changed',
+                'lead_city_changed',
+                'lead_location_changed',
+            ])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(200)
+            ->get();
+
+        $items = [];
+        foreach ($rows as $row) {
+            $items[] = $this->formatLeadActivity($row, $lead);
+        }
+
+        return $items;
+    }
+
+    protected function formatLeadActivity(Activity $row, ?Leads $lead = null): array
+    {
+        $actor = $row->user->name ?? 'System';
+        $previous = $row->previous_state ?? null;
+        $new = $row->new_state ?? null;
+        $type = $row->activity_type ?: 'lead_activity';
+        $at = $row->created_at ? Carbon::parse($row->created_at)->format('M j, Y g:i A') : '—';
+
+        if (($previous === null || $previous === '') && ($new === null || $new === '')) {
+            [$previous, $new] = $this->inferredLeadActivityStates($row);
+        }
+
+        $previous = $previous ?: '—';
+        $new = $new ?: '—';
+        $action = $this->leadActivityTitle($type, $row->action);
+        $fields = $this->leadActivityFields($type, $at, $actor, $previous, $new, $row, $lead);
+
+        return [
+            'id' => $row->id,
+            'type' => $type,
+            'action' => $action,
+            'fields' => $fields,
+            'actor' => $actor,
+            'at' => $at,
+            'at_raw' => $row->created_at,
+        ];
+    }
+
+    protected function leadActivityTitle(string $type, ?string $action): string
+    {
+        switch ($type) {
+            case 'lead_created':
+                return 'Lead created';
+            case 'lead_status_changed':
+            case 'lead_booked':
+            case 'lead_arrived':
+            case 'lead_converted':
+            case 'lead_removed_from_junk':
+                return 'Status updated';
+            case 'lead_commented':
+                return 'Comment added';
+            case 'lead_assignee_changed':
+                return 'Assignee changed';
+            case 'lead_city_changed':
+                return 'City updated';
+            case 'lead_location_changed':
+                return 'Location updated';
+            default:
+                return $action ?: 'Activity';
+        }
+    }
+
+    protected function leadActivityFields(
+        string $type,
+        string $at,
+        string $actor,
+        string $previous,
+        string $new,
+        Activity $row,
+        ?Leads $lead = null
+    ): array {
+        if ($type === 'lead_created') {
+            $source = ($previous !== '—' && $previous !== '' && !str_starts_with($previous, 'New lead'))
+                ? $previous
+                : ($lead->lead_source->name ?? '—');
+            $status = $row->lead_status ?: ($new !== '—' && !str_starts_with((string) $new, 'New lead') ? $new : ($lead->lead_status->name ?? 'Open'));
+
+            return [
+                ['label' => 'Date & time', 'value' => $at],
+                ['label' => 'Lead source', 'value' => $source ?: '—'],
+                ['label' => 'Lead status', 'value' => $status ?: '—'],
+                ['label' => 'Created by', 'value' => $actor],
+            ];
+        }
+
+        if (in_array($type, ['lead_status_changed', 'lead_booked', 'lead_arrived', 'lead_converted', 'lead_removed_from_junk'], true)) {
+            $fields = [
+                ['label' => 'Date & time', 'value' => $at],
+                ['label' => 'Previous status', 'value' => $previous],
+                ['label' => 'New status', 'value' => $new],
+                ['label' => 'Updated by', 'value' => $actor],
+            ];
+            if ($type === 'lead_booked') {
+                $fields[] = ['label' => 'Via', 'value' => 'Appointment booked'];
+            }
+
+            return $fields;
+        }
+
+        if ($type === 'lead_commented') {
+            $comment = $new !== '—' ? $new : trim(html_entity_decode(strip_tags((string) $row->description)));
+
+            return [
+                ['label' => 'Date & time', 'value' => $at],
+                ['label' => 'Comment', 'value' => $comment ?: '—'],
+                ['label' => 'Commented by', 'value' => $actor],
+            ];
+        }
+
+        if ($type === 'lead_assignee_changed') {
+            return [
+                ['label' => 'Date & time', 'value' => $at],
+                ['label' => 'Previous assignee', 'value' => $previous],
+                ['label' => 'New assignee', 'value' => $new],
+                ['label' => 'Updated by', 'value' => $actor],
+            ];
+        }
+
+        $subject = $type === 'lead_location_changed' ? 'location' : 'city';
+
+        return [
+            ['label' => 'Date & time', 'value' => $at],
+            ['label' => 'Previous '.$subject, 'value' => $previous],
+            ['label' => 'New '.$subject, 'value' => $new],
+            ['label' => 'Updated by', 'value' => $actor],
+        ];
+    }
+
+    protected function inferredLeadActivityStates(Activity $row): array
+    {
+        $type = $row->activity_type ?? '';
+        $status = $row->lead_status ?: null;
+
+        switch ($type) {
+            case 'lead_created':
+                return ['—', $status ?: 'New lead'];
+            case 'lead_booked':
+                return ['Open', 'Booked'];
+            case 'lead_arrived':
+                return ['Booked', 'Arrived'];
+            case 'lead_converted':
+                return ['Arrived', 'Converted'];
+            case 'lead_removed_from_junk':
+                return ['Junk', $status ?: 'Open'];
+            case 'lead_commented':
+                return ['—', trim(html_entity_decode(strip_tags((string) $row->description))) ?: 'Comment added'];
+            default:
+                return ['—', $status ?: '—'];
+        }
     }
 
     /**

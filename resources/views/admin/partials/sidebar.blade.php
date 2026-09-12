@@ -485,6 +485,7 @@
                         'admin.cities.sort',
                         'admin.lead_sources.index',
                         'admin.lead_sources.sort',
+                        'admin.lead_departments.index',
                         'admin.lead_statuses.index',
                         'admin.lead_statuses.sort',
                         'admin.appointment_statuses.index',
@@ -629,7 +630,14 @@
                                     <span class="menu-text">Lead Sources</span>
                                 </a>
                             </li>
-
+                            <li class="menu-item {{ openMenu(['admin.lead_departments.index'], 'menu-item-active') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.lead_departments.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">Lead Departments</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     @endcan
@@ -1214,12 +1222,11 @@
                     @endcan -->
                 </li>
 
-                {{-- Cash Flow menu hidden --}}
+                {{-- Cash Flow module hidden --}}
                 @if(false)
                 <li class="menu-header">
                     <span class="menu-header-text">Finance</span>
                 </li>
-                {{-- Cash Flow Module --}}
                 @can('cashflow_manage')
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.cashflow.dashboard','admin.cashflow.expenses','admin.cashflow.transfers','admin.cashflow.vendors','admin.cashflow.staff','admin.cashflow.reports','admin.cashflow.settings']) }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
@@ -1281,6 +1288,8 @@
                                 </a>
                             </li>
                             @endcan --}}
+                            {{-- Cash Flow Reports menu hidden --}}
+                            @if(false)
                             @can('cashflow_reports')
                             <li class="menu-item {{ activeMenu('admin.cashflow.reports') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.cashflow.reports') }}" class="menu-link">
@@ -1289,6 +1298,7 @@
                                 </a>
                             </li>
                             @endcan
+                            @endif
                             @can('cashflow_settings')
                             <li class="menu-item {{ activeMenu('admin.cashflow.settings') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.cashflow.settings') }}" class="menu-link">

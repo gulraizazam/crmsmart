@@ -70,7 +70,12 @@
                         </div>
                         <div class="fv-row col-md-6 mt-3">
                             <label class="required fw-bold fs-6 mb-2 pl-0">Centre <span class="text text-danger">*</span></label>
-                            <select id="add_location_id" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="location_id">
+                            <select id="add_location_id" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="location_id" onchange="loadLeadDepartments(this.value, '#add_department_id')">
+                            </select>
+                        </div>
+                        <div class="fv-row col-md-6 mt-3">
+                            <label class="fw-bold fs-6 mb-2 pl-0">Department</label>
+                            <select id="add_department_id" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="department_id">
                             </select>
                         </div>
                         <div class="fv-row col-md-6 mt-3">
@@ -88,6 +93,11 @@
                             <select id="add_referred_by_id" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="referred_by">
                             </select>
                         </div>
+                        <div class="fv-row col-md-6 mt-3">
+                            <label class="fw-bold fs-6 mb-2 pl-0">Assigned To</label>
+                            <select id="add_assigned_to" class="form-control form-control-solid mb-3 mb-lg-0 select2" name="assigned_to">
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,4 +111,9 @@
     </form>
 </div>
 <!--end::Modal content-->
+
+
+
+
+
 
