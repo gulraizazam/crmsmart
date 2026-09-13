@@ -486,6 +486,7 @@
                         'admin.lead_sources.index',
                         'admin.lead_sources.sort',
                         'admin.lead_departments.index',
+                        'admin.meta_leads.index',
                         'admin.lead_statuses.index',
                         'admin.lead_statuses.sort',
                         'admin.appointment_statuses.index',
@@ -636,6 +637,14 @@
                                         <span></span>
                                     </i>
                                     <span class="menu-text">Lead Departments</span>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ openMenu(['admin.meta_leads.index'], 'menu-item-active') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.meta_leads.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">Meta Leads</span>
                                 </a>
                             </li>
                         </ul>

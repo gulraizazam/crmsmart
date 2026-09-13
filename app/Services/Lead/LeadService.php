@@ -2018,4 +2018,118 @@ class LeadService
         return $response;
         */
     }
+
+    /**
+     * Create or update a lead from Meta (or any external source) without a logged-in user.
+     *
+     * @return array{status: string, lead: ?Leads, message: ?string}
+     */
+    public function ingestExternalLead(array $data, int $accountId, $settings = null): array
+    {
+        $rawPhone = trim((string) ($data['phone'] ?? ''));
+        $phone = $rawPhone !== '' ? GeneralFunctions::cleanNumber($rawPhone) : '';
+        $metaLeadId = ! empty($data['meta_lead_id']) ? trim((string) $data['meta_lead_id']) : null;
+
+        if ($metaLeadId) {
+            $byMeta = Leads::where('account_id', $accountId)->where('meta_lead_id', $metaLeadId)->first();
+            if ($byMeta) {
+                return [
+                    'status' => 'duplicate',
+                    'lead' => $byMeta,
+                    'message' => 'Meta lead already imported.',
+                ];
+            }
+        }
+
+        if (strlen($phone) < 10) {
+            return [
+                'status' => 'failed',
+                'lead' => null,
+                'message' => 'Phone number is missing or invalid.',
+            ];
+        }
+
+        $statusId = ($data['lead_status_id'] ?? null) ?: $this->getDefaultLeadStatus($accountId)?->id;
+        $cityId = $data['city_id'] ?? null;
+        if (! $cityId) {
+            return [
+                'status' => 'failed',
+                'lead' => null,
+                'message' => 'City is required. Set a default city in Meta Leads settings.',
+            ];
+        }
+
+        return DB::transaction(function () use ($data, $accountId, $phone, $metaLeadId, $statusId, $cityId) {
+            $payload = [
+                'name' => ($data['name'] ?? '') ?: 'Meta Lead',
+                'phone' => $phone,
+                'email' => $data['email'] ?? null,
+                'gender' => ($data['gender'] ?? null) ?: 1,
+                'city_id' => $cityId,
+                'region_id' => $this->getRegionFromCity((int) $cityId),
+                'location_id' => $data['location_id'] ?? null,
+                'department_id' => $data['department_id'] ?? null,
+                'assigned_to' => $data['assigned_to'] ?? null,
+                'lead_source_id' => $data['lead_source_id'] ?: config('constants.lead_source_social_media'),
+                'lead_status_id' => $statusId,
+                'meta_lead_id' => $metaLeadId,
+                'account_id' => $accountId,
+                'updated_at' => Carbon::now(),
+            ];
+
+            $existing = Leads::where('phone', $phone)->where('account_id', $accountId)->first();
+            if ($existing) {
+                $previousStatus = optional($existing->lead_status)->name ?: '—';
+                $existing->fill([
+                    'lead_status_id' => $statusId ?: $existing->lead_status_id,
+                    'meta_lead_id' => $existing->meta_lead_id ?: $metaLeadId,
+                    'email' => $existing->email ?: ($payload['email'] ?? null),
+                    'location_id' => $existing->location_id ?: $payload['location_id'],
+                    'department_id' => $existing->department_id ?: $payload['department_id'],
+                    'assigned_to' => $existing->assigned_to ?: $payload['assigned_to'],
+                    'updated_at' => Carbon::now(),
+                ]);
+                $existing->save();
+                $this->attachNewLeadService($existing->id, $data, $accountId);
+                ActivityLogger::logLeadChange($existing->fresh(['lead_status']), 'Lead updated from Meta', 'lead_status_updated', $previousStatus, optional($existing->lead_status)->name);
+
+                return [
+                    'status' => 'updated',
+                    'lead' => $existing->fresh(),
+                    'message' => 'Existing lead updated from Meta.',
+                ];
+            }
+
+            $payload['created_at'] = Carbon::now();
+            $lead = Leads::create($payload);
+            $this->attachNewLeadService($lead->id, $data, $accountId);
+            $location = ! empty($payload['location_id']) ? Locations::with('city')->find($payload['location_id']) : null;
+            $service = ! empty($data['service_id']) ? Services::find($data['service_id']) : null;
+            ActivityLogger::logLeadCreated($lead->fresh(['lead_source', 'lead_status']), $location, $service);
+
+            return [
+                'status' => 'created',
+                'lead' => $lead->fresh(),
+                'message' => 'Lead created from Meta.',
+            ];
+        });
+    }
+
+    protected function attachNewLeadService(int $leadId, array $data, int $accountId): void
+    {
+        if (empty($data['service_id'])) {
+            return;
+        }
+
+        $exists = LeadsServices::where('lead_id', $leadId)
+            ->where('service_id', $data['service_id'])
+            ->when(! empty($data['child_service_id']), function ($query) use ($data) {
+                $query->where('child_service_id', $data['child_service_id']);
+            })
+            ->exists();
+
+        if (! $exists) {
+            $this->createLeadService($leadId, $data, $accountId);
+        }
+    }
 }

@@ -152,6 +152,15 @@ class Kernel extends ConsoleKernel
          */
         $schedule->job(new \App\Jobs\SendCashflowMonthlyReport)
             ->monthlyOn(1, '09:00')->timezone($timeZone);
+
+        $schedule->command('queue:work --stop-when-empty --max-time=50')
+            ->everyMinute()
+            ->withoutOverlapping();
+
+        $schedule->command('meta:catch-up')
+            ->hourly()
+            ->withoutOverlapping()
+            ->timezone($timeZone);
     }
 
     /**

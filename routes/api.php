@@ -32,6 +32,8 @@ use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\CustomFormsController;
 use App\Http\Controllers\Admin\LeadSourcesController;
 use App\Http\Controllers\Api\LeadDepartmentsController;
+use App\Http\Controllers\Api\MetaLeadWebhookController;
+use App\Http\Controllers\Api\MetaLeadSettingsController;
 use App\Http\Controllers\Admin\MachineTypeController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -74,6 +76,8 @@ use App\Http\Controllers\Api\ScheduleController;
 */
 
 Route::post('login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
+
+Route::match(['get', 'post'], 'meta/leads/webhook', [MetaLeadWebhookController::class, 'handle'])->name('meta.leads.webhook');
 
 Route::middleware('auth.common')->name('admin.')->group(function () {
 
@@ -220,6 +224,10 @@ Route::middleware('auth.common')->name('admin.')->group(function () {
     Route::post('lead-departments', [LeadDepartmentsController::class, 'store'])->name('lead_departments.store');
     Route::put('lead-departments/{id}', [LeadDepartmentsController::class, 'update'])->name('lead_departments.update');
     Route::delete('lead-departments/{id}', [LeadDepartmentsController::class, 'destroy'])->name('lead_departments.destroy');
+    Route::get('meta-leads', [MetaLeadSettingsController::class, 'show'])->name('meta_leads.show');
+    Route::put('meta-leads', [MetaLeadSettingsController::class, 'update'])->name('meta_leads.update');
+    Route::get('meta-leads/events', [MetaLeadSettingsController::class, 'events'])->name('meta_leads.events');
+    Route::post('meta-leads/catch-up', [MetaLeadSettingsController::class, 'catchUp'])->name('meta_leads.catch_up');
     Route::post('lead_sources/datatable', [LeadSourcesController::class, 'datatable'])->name('lead_sources.datatable');
     Route::post('lead_sources', [LeadSourcesController::class, 'store'])->name('lead_sources.store');
     Route::get('lead_sources/{id}/edit', [LeadSourcesController::class, 'edit'])->name('lead_sources.edit');
