@@ -6,6 +6,7 @@ use App\Models\Patients;
 use App\Models\WhatsAppConversation;
 use App\Models\WhatsAppMessage;
 use App\Models\WhatsAppSetting;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -71,11 +72,19 @@ class WhatsAppInboxService
         return $query->limit(200)->get()->map(fn (WhatsAppConversation $row) => $this->transformConversation($row));
     }
 
-    public function messages(WhatsAppConversation $conversation, ?int $afterId = null): Collection
+    public function messages(WhatsAppConversation $conversation, ?int $afterId = null, ?string $updatedSince = null): Collection
     {
         $query = $conversation->messages()->orderBy('id');
-        if ($afterId) {
-            $query->where('id', '>', $afterId);
+        $since = $this->parseUpdatedSince($updatedSince);
+        if ($afterId || $since) {
+            $query->where(function ($q) use ($afterId, $since) {
+                if ($afterId) {
+                    $q->where('id', '>', $afterId);
+                }
+                if ($since) {
+                    $q->orWhere('updated_at', '>=', $since);
+                }
+            });
         } else {
             $query->limit(200);
         }
@@ -83,11 +92,30 @@ class WhatsAppInboxService
         return $query->get()->map(fn (WhatsAppMessage $row) => $this->transformMessage($row));
     }
 
-    public function markRead(WhatsAppConversation $conversation): void
+    public function markRead(WhatsAppConversation $conversation, bool $notifyWhatsApp = true): void
     {
         if ($conversation->unread_count > 0) {
             $conversation->unread_count = 0;
             $conversation->save();
+        }
+
+        if (! $notifyWhatsApp) {
+            return;
+        }
+
+        $lastInbound = $conversation->messages()
+            ->where('direction', 'inbound')
+            ->whereNotNull('wa_message_id')
+            ->orderByDesc('id')
+            ->first();
+        if (! $lastInbound) {
+            return;
+        }
+
+        try {
+            $this->cloud->markRead($this->requireConnected($conversation->account_id), (string) $lastInbound->wa_message_id);
+        } catch (\Throwable $e) {
+            // Opening the CRM thread still works if Meta mark-as-read fails.
         }
     }
 
@@ -146,6 +174,90 @@ class WhatsAppInboxService
         $conversation->save();
 
         return $conversation->load('patient:id,name,phone,image_src');
+    }
+
+    public function sendFile(WhatsAppConversation $conversation, \Illuminate\Http\UploadedFile $file, ?string $caption = null, ?int $userId = null): WhatsAppMessage
+    {
+        $setting = $this->requireConnected($conversation->account_id);
+        if (! $conversation->sessionIsOpen()) {
+            throw new \RuntimeException('Free-form messages can only be sent within 24 hours of the patient’s last reply.');
+        }
+
+        $mime = (string) ($file->getMimeType() ?: 'application/octet-stream');
+        $type = $this->whatsAppTypeFromMime($mime);
+        $filename = $file->getClientOriginalName() ?: ('file.'.$file->getClientOriginalExtension());
+        $caption = trim((string) $caption);
+        $preview = $caption !== '' ? $caption : $filename;
+
+        $message = $this->storeOutbound($conversation, $type, $preview, $userId, [
+            'filename' => $filename,
+            'mime' => $mime,
+        ]);
+
+        $dir = 'whatsapp/'.$conversation->account_id.'/'.$conversation->id;
+        $stored = $file->storeAs($dir, $message->id.'_'.preg_replace('/[^A-Za-z0-9._-]/', '_', $filename), 'local');
+        $absolute = storage_path('app/'.$stored);
+        $message->media_path = $stored;
+        $message->mime_type = $mime;
+        $message->file_name = $filename;
+        $message->save();
+
+        $upload = $this->cloud->uploadMedia($setting, $absolute, $mime, $filename);
+        if (! $upload['ok']) {
+            $message->status = 'failed';
+            $message->error_message = $upload['error'];
+            $message->save();
+
+            return $message;
+        }
+
+        $result = $this->cloud->sendMedia(
+            $setting,
+            $conversation->phone,
+            $type,
+            (string) $upload['id'],
+            $caption !== '' ? $caption : null,
+            $filename
+        );
+        $this->applySendResult($message, $conversation, $result);
+
+        return $message->fresh();
+    }
+
+    public function mediaContent(WhatsAppMessage $message): array
+    {
+        if ($message->media_path && is_file(storage_path('app/'.$message->media_path))) {
+            return [
+                'bytes' => file_get_contents(storage_path('app/'.$message->media_path)),
+                'mime' => $message->mime_type ?: 'application/octet-stream',
+                'name' => $message->file_name ?: ('file-'.$message->id),
+            ];
+        }
+
+        $mediaId = $this->payloadMediaId($message);
+        if ($mediaId === '') {
+            throw new \RuntimeException('No media on this message.');
+        }
+
+        $downloaded = $this->cloud->downloadMedia($this->requireConnected($message->account_id), $mediaId);
+        if (! $downloaded) {
+            throw new \RuntimeException('Could not download WhatsApp media.');
+        }
+
+        $ext = $this->extensionFromMime($downloaded['mime']);
+        $name = $message->file_name ?: ('file-'.$message->id.$ext);
+        $dir = 'whatsapp/'.$message->account_id.'/'.$message->conversation_id;
+        \Illuminate\Support\Facades\Storage::disk('local')->put($dir.'/'.$message->id.'_'.$name, $downloaded['bytes']);
+        $message->media_path = $dir.'/'.$message->id.'_'.$name;
+        $message->mime_type = $downloaded['mime'];
+        $message->file_name = $name;
+        $message->save();
+
+        return [
+            'bytes' => $downloaded['bytes'],
+            'mime' => $downloaded['mime'],
+            'name' => $name,
+        ];
     }
 
     public function sendText(WhatsAppConversation $conversation, string $body, ?int $userId = null): WhatsAppMessage
@@ -241,6 +353,8 @@ class WhatsAppInboxService
 
     public function transformMessage(WhatsAppMessage $row): array
     {
+        $isMedia = in_array($row->type, ['image', 'video', 'audio', 'document', 'sticker'], true);
+
         return [
             'id' => $row->id,
             'direction' => $row->direction,
@@ -248,7 +362,12 @@ class WhatsAppInboxService
             'body' => $row->body,
             'status' => $row->status,
             'error' => $row->error_message,
+            'has_media' => $isMedia || (bool) $row->media_path || $this->payloadMediaId($row) !== '',
+            'media_url' => url('/api/whatsapp/messages/'.$row->id.'/media'),
+            'file_name' => $row->file_name,
+            'mime' => $row->mime_type,
             'created_at' => optional($row->created_at)->toIso8601String(),
+            'updated_at' => optional($row->updated_at)->toIso8601String(),
         ];
     }
 
@@ -292,6 +411,8 @@ class WhatsAppInboxService
             'wa_message_id' => $waMessageId,
             'status' => 'delivered',
             'payload' => $incoming,
+            'file_name' => $extracted['file_name'] ?? null,
+            'mime_type' => $extracted['mime'] ?? null,
         ]);
 
         $conversation->contact_name = $profileName ?: $conversation->contact_name;
@@ -319,8 +440,13 @@ class WhatsAppInboxService
         }
 
         $state = strtolower((string) ($status['status'] ?? ''));
+        $rank = ['pending' => 0, 'sent' => 1, 'delivered' => 2, 'read' => 3, 'failed' => 4];
         if (in_array($state, ['sent', 'delivered', 'read', 'failed'], true)) {
-            $message->status = $state;
+            $current = $rank[$message->status] ?? 0;
+            $incoming = $rank[$state] ?? 0;
+            if ($state === 'failed' || $incoming >= $current) {
+                $message->status = $state;
+            }
         }
         if (! empty($status['errors'][0]['title'])) {
             $message->error_message = $status['errors'][0]['title'];
@@ -381,8 +507,14 @@ class WhatsAppInboxService
         }
         if (in_array($type, ['image', 'video', 'document', 'audio', 'sticker'], true)) {
             $caption = $incoming[$type]['caption'] ?? null;
+            $filename = $incoming[$type]['filename'] ?? null;
 
-            return ['type' => $type, 'body' => $caption ?: '['.Str::title($type).']'];
+            return [
+                'type' => $type,
+                'body' => $caption ?: ($filename ?: '['.Str::title($type).']'),
+                'file_name' => $filename,
+                'mime' => $incoming[$type]['mime_type'] ?? null,
+            ];
         }
         if ($type === 'location') {
             return ['type' => 'location', 'body' => '[Location]'];
@@ -462,5 +594,56 @@ class WhatsAppInboxService
         }
 
         return $phone ? '+'.$phone : '';
+    }
+
+    protected function parseUpdatedSince(?string $updatedSince): ?Carbon
+    {
+        if (! $updatedSince) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($updatedSince)->subSeconds(2);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    protected function whatsAppTypeFromMime(string $mime): string
+    {
+        if (str_starts_with($mime, 'image/')) {
+            return 'image';
+        }
+        if (str_starts_with($mime, 'video/')) {
+            return 'video';
+        }
+        if (str_starts_with($mime, 'audio/')) {
+            return 'audio';
+        }
+
+        return 'document';
+    }
+
+    protected function payloadMediaId(WhatsAppMessage $row): string
+    {
+        $payload = $row->payload ?? [];
+        $type = $row->type ?: 'image';
+
+        return (string) ($payload[$type]['id'] ?? $payload['id'] ?? '');
+    }
+
+    protected function extensionFromMime(string $mime): string
+    {
+        $map = [
+            'image/jpeg' => '.jpg',
+            'image/png' => '.png',
+            'image/webp' => '.webp',
+            'video/mp4' => '.mp4',
+            'audio/ogg' => '.ogg',
+            'audio/mpeg' => '.mp3',
+            'application/pdf' => '.pdf',
+        ];
+
+        return $map[$mime] ?? '';
     }
 }

@@ -2,17 +2,22 @@
 
 (function () {
     var apiBase = '/api/whatsapp/';
+    var EMOJIS = '😀😁😂🤣😊😍😘😅😉😎🙂🤔😴😭😡👍👎🙏👏🔥❤️💯🎉✅❌'.split('');
     var state = {
         conversations: [],
         activeId: null,
         lastMessageId: 0,
+        lastSyncedAt: null,
         sending: false,
+        pendingFile: null,
+        msgReq: 0,
         templates: [],
         pollTimer: null
     };
 
     $(document).ready(function () {
         bindEvents();
+        renderEmojiPanel();
         loadConversations();
         loadTemplates();
         state.pollTimer = setInterval(function () {
@@ -20,7 +25,7 @@
             if (state.activeId) {
                 loadMessages(state.activeId, true);
             }
-        }, 6000);
+        }, 4000);
     });
 
     function csrf() {
@@ -63,6 +68,10 @@
 
         $('#wa-composer').on('submit', function (e) {
             e.preventDefault();
+        });
+
+        $('#wa-send').on('click', function (e) {
+            e.preventDefault();
             sendCurrent();
         });
 
@@ -79,6 +88,104 @@
         });
 
         $('#wa-template-send').on('click', sendTemplate);
+
+        $('#wa-emoji-btn').on('click', function (e) {
+            e.stopPropagation();
+            $('#wa-attach-menu').removeClass('is-on');
+            $('#wa-emoji-panel').toggleClass('is-on');
+        });
+
+        $('#wa-attach-btn').on('click', function (e) {
+            e.stopPropagation();
+            if ($(this).prop('disabled')) return;
+            $('#wa-emoji-panel').removeClass('is-on');
+            $('#wa-attach-menu').toggleClass('is-on');
+        });
+
+        $('#wa-pick-media').on('click', function () {
+            pickFile('image/*,video/*');
+        });
+
+        $('#wa-pick-doc').on('click', function () {
+            pickFile('.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar');
+        });
+
+        $('#wa-file').on('change', function () {
+            var file = this.files && this.files[0];
+            this.value = '';
+            if (!file) return;
+            if (file.size > 16 * 1024 * 1024) {
+                toastr.error('File must be 16 MB or smaller.');
+                return;
+            }
+            state.pendingFile = file;
+            renderFilePreview();
+            $('#wa-attach-menu').removeClass('is-on');
+        });
+
+        $('#wa-file-preview').on('click', '.wa-file-preview__clear', function () {
+            clearPendingFile();
+        });
+
+        $('#wa-emoji-panel').on('click', 'button', function () {
+            insertEmoji($(this).text());
+        });
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#wa-attach-menu, #wa-attach-btn').length) {
+                $('#wa-attach-menu').removeClass('is-on');
+            }
+            if (!$(e.target).closest('#wa-emoji-panel, #wa-emoji-btn').length) {
+                $('#wa-emoji-panel').removeClass('is-on');
+            }
+        });
+    }
+
+    function pickFile(accept) {
+        $('#wa-file').attr('accept', accept);
+        $('#wa-file').trigger('click');
+        $('#wa-attach-menu').removeClass('is-on');
+    }
+
+    function renderEmojiPanel() {
+        var $panel = $('#wa-emoji-panel').empty();
+        EMOJIS.forEach(function (emoji) {
+            $panel.append($('<button/>', { type: 'button', text: emoji }));
+        });
+    }
+
+    function insertEmoji(emoji) {
+        var el = document.getElementById('wa-body');
+        if (!el || el.disabled) return;
+        var start = el.selectionStart || el.value.length;
+        var end = el.selectionEnd || el.value.length;
+        el.value = el.value.slice(0, start) + emoji + el.value.slice(end);
+        el.selectionStart = el.selectionEnd = start + emoji.length;
+        $(el).trigger('input').focus();
+        $('#wa-emoji-panel').removeClass('is-on');
+    }
+
+    function renderFilePreview() {
+        var $box = $('#wa-file-preview').empty();
+        if (!state.pendingFile) {
+            $box.removeClass('is-on');
+            return;
+        }
+        var file = state.pendingFile;
+        var inner = '<div class="wa-file-preview__card">';
+        if (file.type && file.type.indexOf('image/') === 0) {
+            inner += '<img src="' + URL.createObjectURL(file) + '" alt="">';
+        } else {
+            inner += '<i class="la la-file"></i>';
+        }
+        inner += '<div><strong>' + escapeHtml(file.name) + '</strong><div>' + formatBytes(file.size) + '</div></div>';
+        inner += '<button type="button" class="wa-file-preview__clear" title="Remove">&times;</button></div>';
+        $box.html(inner).addClass('is-on');
+    }
+
+    function clearPendingFile() {
+        state.pendingFile = null;
+        renderFilePreview();
     }
 
     function loadConversations(silent) {
@@ -150,11 +257,13 @@
     function openChat(id) {
         state.activeId = parseInt(id, 10);
         state.lastMessageId = 0;
+        state.lastSyncedAt = null;
         $('.wa-inbox').addClass('is-chat');
         $('#wa-placeholder').addClass('d-none');
         $('#wa-thread-live').removeClass('d-none').addClass('d-flex');
         $('.wa-chat-item').removeClass('is-active');
         $('.wa-chat-item[data-id="' + id + '"]').addClass('is-active');
+        clearPendingFile();
         var cached = state.conversations.find(function (row) { return row.id === state.activeId; });
         if (cached) {
             renderHeader(cached);
@@ -164,32 +273,46 @@
     }
 
     function loadMessages(id, silent) {
+        var reqId = ++state.msgReq;
+        var data = {};
+        if (silent) {
+            data.after_id = state.lastMessageId;
+            if (state.lastSyncedAt) {
+                data.updated_since = state.lastSyncedAt;
+            }
+        }
         $.ajax({
             url: apiBase + 'conversations/' + id + '/messages',
             type: 'GET',
-            data: silent ? { after_id: state.lastMessageId } : {},
+            data: data,
             success: function (res) {
+                if (parseInt(id, 10) !== state.activeId || reqId !== state.msgReq) {
+                    return;
+                }
                 if (!res.status) {
                     if (!silent) toastr.error(res.message || 'Could not load messages.');
                     return;
                 }
                 var conv = res.data.conversation;
                 var messages = res.data.messages || [];
+                if (res.data.synced_at) {
+                    state.lastSyncedAt = res.data.synced_at;
+                }
                 if (!silent) {
-                    $('#wa-messages').empty();
+                    $('#wa-messages').empty().removeData('last-day');
                     state.lastMessageId = 0;
                 }
                 renderHeader(conv);
-                if (!silent || messages.length) {
-                    renderMessages(messages, !silent);
-                }
+                upsertMessages(messages, !silent);
                 updateComposer(conv);
                 if (!silent) {
                     loadConversations(true);
                 }
             },
             error: function () {
-                if (!silent) toastr.error('Could not load messages.');
+                if (!silent && parseInt(id, 10) === state.activeId) {
+                    toastr.error('Could not load messages.');
+                }
             }
         });
     }
@@ -205,60 +328,114 @@
         }
     }
 
-    function renderMessages(messages, replace) {
+    function upsertMessages(messages, replace) {
         var $box = $('#wa-messages');
         var lastDay = $box.data('last-day') || '';
+        var appended = false;
         if (replace) {
             lastDay = '';
             $box.removeData('last-day');
         }
         messages.forEach(function (msg) {
+            var $existing = $box.find('.wa-bubble-row[data-id="' + msg.id + '"]');
+            if ($existing.length) {
+                $existing.find('.wa-ticks').replaceWith(ticks(msg));
+                if (msg.id > state.lastMessageId) {
+                    state.lastMessageId = msg.id;
+                }
+                return;
+            }
             var day = dayLabel(msg.created_at);
             if (day !== lastDay) {
                 $box.append('<div class="wa-day"><span>' + day + '</span></div>');
                 lastDay = day;
             }
-            var dir = msg.direction === 'outbound' ? 'is-out' : 'is-in';
-            $box.append(
-                '<div class="wa-bubble-row ' + dir + '" data-id="' + msg.id + '">' +
-                    '<div class="wa-bubble">' +
-                        '<div class="wa-bubble__text">' + escapeHtml(msg.body || '') + '</div>' +
-                        '<div class="wa-bubble__meta">' +
-                            '<span>' + formatClock(msg.created_at) + '</span>' +
-                            ticks(msg) +
-                        '</div>' +
-                    '</div>' +
-                '</div>'
-            );
+            $box.append(bubbleHtml(msg));
+            appended = true;
             if (msg.id > state.lastMessageId) {
                 state.lastMessageId = msg.id;
             }
         });
         $box.data('last-day', lastDay);
-        $box.scrollTop($box.prop('scrollHeight'));
+        if (replace || appended) {
+            $box.scrollTop($box.prop('scrollHeight'));
+        }
+    }
+
+    function bubbleHtml(msg) {
+        var dir = msg.direction === 'outbound' ? 'is-out' : 'is-in';
+        return (
+            '<div class="wa-bubble-row ' + dir + '" data-id="' + msg.id + '">' +
+                '<div class="wa-bubble">' +
+                    bubbleBody(msg) +
+                    '<div class="wa-bubble__meta">' +
+                        '<span>' + formatClock(msg.created_at) + '</span>' +
+                        ticks(msg) +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        );
+    }
+
+    function bubbleBody(msg) {
+        var html = '';
+        var caption = msg.body || '';
+        if (msg.has_media) {
+            var mime = (msg.mime || '').toLowerCase();
+            var type = (msg.type || '').toLowerCase();
+            var url = msg.media_url;
+            if (type === 'image' || mime.indexOf('image/') === 0) {
+                html += '<a class="wa-media-thumb" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">' +
+                    '<img src="' + escapeHtml(url) + '" alt=""></a>';
+            } else if (type === 'video' || mime.indexOf('video/') === 0) {
+                html += '<video class="wa-media-video" controls preload="metadata" src="' + escapeHtml(url) + '"></video>';
+            } else if (type === 'audio' || mime.indexOf('audio/') === 0) {
+                html += '<audio class="wa-media-audio" controls preload="metadata" src="' + escapeHtml(url) + '"></audio>';
+            } else {
+                html += '<a class="wa-doc" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">' +
+                    '<i class="la la-file"></i>' +
+                    '<span>' + escapeHtml(msg.file_name || caption || 'Document') + '</span>' +
+                    '</a>';
+                if (caption && caption === (msg.file_name || '')) {
+                    caption = '';
+                }
+            }
+            if (caption && (caption.charAt(0) === '[' || caption === (msg.file_name || ''))) {
+                if (type !== 'document') {
+                    caption = caption.charAt(0) === '[' ? '' : caption;
+                }
+            }
+        }
+        if (caption) {
+            html += '<div class="wa-bubble__text">' + escapeHtml(caption) + '</div>';
+        } else if (!html) {
+            html += '<div class="wa-bubble__text"></div>';
+        }
+        return html;
     }
 
     function ticks(msg) {
         if (msg.direction !== 'outbound') return '';
         if (msg.status === 'failed') {
-            return '<span class="wa-tick is-failed" title="' + escapeHtml(msg.error || 'Failed') + '">!</span>';
+            return '<span class="wa-ticks is-failed" title="' + escapeHtml(msg.error || 'Failed') + '">!</span>';
         }
         if (msg.status === 'read') {
-            return '<span class="wa-tick is-read">✓✓</span>';
+            return '<span class="wa-ticks is-read" title="Read">✓✓</span>';
         }
-        if (msg.status === 'delivered' || msg.status === 'sent') {
-            return '<span class="wa-tick">✓✓</span>';
+        if (msg.status === 'delivered') {
+            return '<span class="wa-ticks is-delivered" title="Delivered">✓✓</span>';
         }
-        return '<span class="wa-tick">✓</span>';
+        return '<span class="wa-ticks is-sent" title="Sent">✓</span>';
     }
 
     function updateComposer(conv) {
         var canSend = window.waCanSend;
         var connected = window.waConnected;
         var sessionOpen = conv && conv.session_open;
+        var locked = !canSend || !connected || !sessionOpen;
         $('#wa-session-note').toggleClass('is-on', connected && !sessionOpen);
         $('#wa-template-bar').toggleClass('is-on', connected && !sessionOpen && state.templates.length > 0);
-        $('#wa-body, #wa-send').prop('disabled', !canSend || !connected || !sessionOpen);
+        $('#wa-body, #wa-send, #wa-attach-btn, #wa-emoji-btn').prop('disabled', locked);
         if (!connected) {
             $('#wa-body').attr('placeholder', 'Connect WhatsApp in Settings to send messages');
         } else if (!sessionOpen) {
@@ -270,33 +447,71 @@
 
     function sendCurrent() {
         if (state.sending || !state.activeId) return;
-        if ($('#wa-template-bar').hasClass('is-on')) {
-            sendTemplate();
-            return;
-        }
+        if ($('#wa-send').prop('disabled')) return;
         var body = $.trim($('#wa-body').val());
-        if (!body) return;
+        var file = state.pendingFile;
+        if (!body && !file) return;
+
         state.sending = true;
-        $.ajax({
+        $('#wa-send').prop('disabled', true);
+        $('#wa-body').val('').trigger('input');
+        var sendingFile = file;
+        clearPendingFile();
+
+        var ajax = {
             url: apiBase + 'conversations/' + state.activeId + '/messages',
             type: 'POST',
             headers: csrf(),
-            data: { type: 'text', body: body },
-            success: function (res) {
-                state.sending = false;
-                if (!res.status) {
-                    toastr.error(res.message || 'Could not send.');
-                    return;
-                }
-                $('#wa-body').val('').trigger('input');
-                renderMessages([res.data.message], false);
-                loadConversations(true);
-            },
+            success: onSendSuccess,
             error: function (xhr) {
+                if (!sendingFile) {
+                    $('#wa-body').val(body).trigger('input');
+                } else {
+                    state.pendingFile = sendingFile;
+                    renderFilePreview();
+                }
+                onSendError(xhr);
+            },
+            complete: function () {
                 state.sending = false;
-                toastr.error((xhr.responseJSON && xhr.responseJSON.message) || 'Could not send.');
+                var conv = state.conversations.find(function (row) { return row.id === state.activeId; });
+                if (conv) {
+                    updateComposer(conv);
+                } else {
+                    $('#wa-send').prop('disabled', false);
+                }
             }
-        });
+        };
+
+        if (sendingFile) {
+            var form = new FormData();
+            form.append('file', sendingFile);
+            if (body) form.append('body', body);
+            ajax.data = form;
+            ajax.processData = false;
+            ajax.contentType = false;
+        } else {
+            ajax.data = { type: 'text', body: body };
+        }
+
+        $.ajax(ajax);
+    }
+
+    function onSendSuccess(res) {
+        if (!res.status) {
+            toastr.error(res.message || 'Could not send.');
+            return;
+        }
+        upsertMessages([res.data.message], false);
+        if (res.data.conversation) {
+            renderHeader(res.data.conversation);
+            updateComposer(res.data.conversation);
+        }
+        loadConversations(true);
+    }
+
+    function onSendError(xhr) {
+        toastr.error((xhr.responseJSON && xhr.responseJSON.message) || 'Could not send.');
     }
 
     function sendTemplate() {
@@ -329,7 +544,7 @@
                     toastr.error(res.message || 'Could not send template.');
                     return;
                 }
-                renderMessages([res.data.message], false);
+                upsertMessages([res.data.message], false);
                 loadConversations(true);
             },
             error: function (xhr) {
@@ -420,6 +635,12 @@
         y.setDate(now.getDate() - 1);
         if (d.toDateString() === y.toDateString()) return 'Yesterday';
         return d.toLocaleDateString();
+    }
+
+    function formatBytes(n) {
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        return (n / (1024 * 1024)).toFixed(1) + ' MB';
     }
 
     function escapeHtml(str) {

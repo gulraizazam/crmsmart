@@ -85,6 +85,97 @@ class WhatsAppCloudService
         return $this->postMessage($setting, $payload);
     }
 
+    public function sendMedia(WhatsAppSetting $setting, string $to, string $type, string $mediaId, ?string $caption = null, ?string $filename = null): array
+    {
+        $content = ['id' => $mediaId];
+        if ($caption && in_array($type, ['image', 'video', 'document'], true)) {
+            $content['caption'] = $caption;
+        }
+        if ($filename && $type === 'document') {
+            $content['filename'] = $filename;
+        }
+
+        return $this->postMessage($setting, [
+            'messaging_product' => 'whatsapp',
+            'to' => $to,
+            'type' => $type,
+            $type => $content,
+        ]);
+    }
+
+    public function uploadMedia(WhatsAppSetting $setting, string $absolutePath, string $mime, string $filename): array
+    {
+        if (! $setting->isConnected()) {
+            return ['ok' => false, 'id' => null, 'error' => 'WhatsApp is not connected.'];
+        }
+
+        $response = Http::withToken($setting->access_token)
+            ->timeout(60)
+            ->attach('file', file_get_contents($absolutePath), $filename, ['Content-Type' => $mime])
+            ->post($this->graphUrl($setting->phone_number_id.'/media'), [
+                'messaging_product' => 'whatsapp',
+                'type' => $mime,
+            ]);
+
+        $json = $response->json() ?? [];
+        if (! $response->successful() || empty($json['id'])) {
+            $error = $json['error']['message'] ?? ('WhatsApp media upload failed '.$response->status());
+            Log::warning('whatsapp.media_upload_failed', ['error' => $json]);
+
+            return ['ok' => false, 'id' => null, 'error' => $error];
+        }
+
+        return ['ok' => true, 'id' => (string) $json['id'], 'error' => null];
+    }
+
+    public function downloadMedia(WhatsAppSetting $setting, string $mediaId): ?array
+    {
+        if (! $setting->isConnected() || $mediaId === '') {
+            return null;
+        }
+
+        $meta = Http::withToken($setting->access_token)
+            ->timeout(30)
+            ->get($this->graphUrl($mediaId));
+        if (! $meta->successful()) {
+            return null;
+        }
+
+        $url = (string) ($meta->json('url') ?? '');
+        if ($url === '') {
+            return null;
+        }
+
+        $bin = Http::withToken($setting->access_token)
+            ->timeout(60)
+            ->withHeaders(['User-Agent' => 'crmsmart-whatsapp'])
+            ->get($url);
+        if (! $bin->successful()) {
+            return null;
+        }
+
+        return [
+            'bytes' => $bin->body(),
+            'mime' => (string) ($meta->json('mime_type') ?? $bin->header('Content-Type') ?? 'application/octet-stream'),
+            'size' => (int) ($meta->json('file_size') ?? strlen($bin->body())),
+        ];
+    }
+
+    public function markRead(WhatsAppSetting $setting, string $waMessageId): void
+    {
+        if (! $setting->isConnected() || $waMessageId === '') {
+            return;
+        }
+
+        Http::withToken($setting->access_token)
+            ->timeout(15)
+            ->post($this->graphUrl($setting->phone_number_id.'/messages'), [
+                'messaging_product' => 'whatsapp',
+                'status' => 'read',
+                'message_id' => $waMessageId,
+            ]);
+    }
+
     public function listTemplates(WhatsAppSetting $setting): array
     {
         if (! $setting->waba_id || ! $setting->access_token) {

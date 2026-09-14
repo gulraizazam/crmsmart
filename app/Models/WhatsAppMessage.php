@@ -20,6 +20,9 @@ class WhatsAppMessage extends Model
         'error_message',
         'sent_by',
         'payload',
+        'media_path',
+        'mime_type',
+        'file_name',
     ];
 
     protected $casts = [

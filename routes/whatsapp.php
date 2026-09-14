@@ -9,6 +9,7 @@ Route::prefix('whatsapp')->name('whatsapp.')->middleware('permission:whatsapp_ma
     Route::post('conversations/start', [WhatsAppInboxController::class, 'start'])->name('start');
     Route::get('conversations/{id}/messages', [WhatsAppInboxController::class, 'messages'])->name('messages');
     Route::post('conversations/{id}/messages', [WhatsAppInboxController::class, 'send'])->name('send');
+    Route::get('messages/{id}/media', [WhatsAppInboxController::class, 'media'])->name('media');
     Route::get('patients', [WhatsAppInboxController::class, 'patients'])->name('patients');
     Route::get('templates', [WhatsAppInboxController::class, 'templates'])->name('templates');
     Route::get('settings', [WhatsAppInboxController::class, 'showSettings'])->name('settings.show')->middleware('permission:whatsapp_settings');

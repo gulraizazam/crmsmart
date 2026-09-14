@@ -356,37 +356,253 @@ body.wa-inbox-open .content#kt_content {
     font-size: 11px;
 }
 
-.wa-tick {
+.wa-ticks {
     font-size: 14px;
     line-height: 1;
+    letter-spacing: -1px;
+    color: #667781;
 }
 
-.wa-tick.is-read {
+.wa-ticks.is-read {
     color: var(--wa-tick);
 }
 
-.wa-tick.is-failed {
+.wa-ticks.is-failed {
     color: #ea0038;
+    letter-spacing: 0;
+}
+
+.wa-composer-wrap {
+    position: relative;
+    background: var(--wa-head);
 }
 
 .wa-inbox__composer {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
-    padding: 8px 12px 10px;
+    gap: 4px;
+    padding: 8px 8px 10px 6px;
     background: var(--wa-head);
+}
+
+.wa-composer-btn {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: #54656f;
+    font-size: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.wa-composer-btn:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.wa-composer-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
 }
 
 .wa-inbox__composer textarea {
     flex: 1;
     resize: none;
     border: 0;
-    border-radius: 8px;
+    border-radius: 21px;
     min-height: 42px;
     max-height: 120px;
     padding: 10px 14px;
     outline: none;
     font-size: 15px;
+    background: #fff;
+}
+
+.wa-attach-menu {
+    display: none;
+    position: absolute;
+    left: 48px;
+    bottom: 58px;
+    width: 220px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(11, 20, 26, 0.18);
+    padding: 8px;
+    z-index: 5;
+}
+
+.wa-attach-menu.is-on {
+    display: block;
+}
+
+.wa-attach-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+    padding: 10px 8px;
+    border-radius: 10px;
+    color: var(--wa-text);
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.wa-attach-item:hover {
+    background: #f5f6f6;
+}
+
+.wa-attach-ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.wa-attach-ico.is-photo {
+    background: #7f66ff;
+}
+
+.wa-attach-ico.is-doc {
+    background: #5157ae;
+}
+
+.wa-emoji-panel {
+    display: none;
+    position: absolute;
+    left: 8px;
+    bottom: 58px;
+    width: 280px;
+    max-height: 210px;
+    overflow: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(11, 20, 26, 0.18);
+    padding: 8px;
+    z-index: 5;
+}
+
+.wa-emoji-panel.is-on {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.wa-emoji-panel button {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.wa-emoji-panel button:hover {
+    background: #f0f2f5;
+}
+
+.wa-file-preview {
+    display: none;
+    padding: 8px 12px 0;
+}
+
+.wa-file-preview.is-on {
+    display: block;
+}
+
+.wa-file-preview__card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: var(--wa-text);
+    font-size: 13px;
+}
+
+.wa-file-preview__card img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.wa-file-preview__card i {
+    font-size: 28px;
+    color: #5157ae;
+}
+
+.wa-file-preview__card strong {
+    display: block;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wa-file-preview__clear {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    font-size: 22px;
+    color: var(--wa-muted);
+    cursor: pointer;
+}
+
+.wa-media-thumb,
+.wa-media-video {
+    display: block;
+    max-width: 280px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.wa-media-thumb img,
+.wa-media-video {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    display: block;
+    background: #000;
+}
+
+.wa-media-audio {
+    width: 240px;
+    margin-bottom: 4px;
+}
+
+.wa-doc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    color: var(--wa-text);
+    text-decoration: none;
+    margin-bottom: 4px;
+}
+
+.wa-doc i {
+    font-size: 26px;
+    color: #5157ae;
+}
+
+.wa-bubble-row.is-out .wa-doc {
+    background: rgba(0, 0, 0, 0.06);
 }
 
 .wa-send {

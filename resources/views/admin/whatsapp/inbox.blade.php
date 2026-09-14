@@ -3,7 +3,7 @@
 @section('body_class', 'wa-inbox-open')
 
 @push('css')
-    <link href="{{ asset('assets/css/whatsapp-inbox.css') }}?v=1" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/whatsapp-inbox.css') }}?v=3" rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
@@ -83,12 +83,33 @@
                         <input type="text" id="wa-template-params" placeholder="Template variables, comma separated">
                         <button type="button" class="btn btn-sm btn-success" id="wa-template-send">Send template</button>
                     </div>
-                    <form class="wa-inbox__composer" id="wa-composer">
-                        <textarea id="wa-body" rows="1" placeholder="Type a message" {{ $canSend && !empty($status['connected']) ? '' : 'disabled' }}></textarea>
-                        <button type="submit" class="wa-send" id="wa-send" {{ $canSend && !empty($status['connected']) ? '' : 'disabled' }} title="Send">
-                            <i class="la la-paper-plane"></i>
-                        </button>
-                    </form>
+                    <div class="wa-composer-wrap">
+                        <div class="wa-attach-menu" id="wa-attach-menu">
+                            <button type="button" class="wa-attach-item" id="wa-pick-media">
+                                <span class="wa-attach-ico is-photo"><i class="la la-image"></i></span>
+                                <span>Photos &amp; videos</span>
+                            </button>
+                            <button type="button" class="wa-attach-item" id="wa-pick-doc">
+                                <span class="wa-attach-ico is-doc"><i class="la la-file"></i></span>
+                                <span>Document</span>
+                            </button>
+                        </div>
+                        <div class="wa-emoji-panel" id="wa-emoji-panel"></div>
+                        <div class="wa-file-preview" id="wa-file-preview"></div>
+                        <form class="wa-inbox__composer" id="wa-composer" autocomplete="off">
+                            <button type="button" class="wa-composer-btn" id="wa-emoji-btn" title="Emoji">
+                                <i class="la la-smile"></i>
+                            </button>
+                            <button type="button" class="wa-composer-btn" id="wa-attach-btn" title="Attach">
+                                <i class="la la-paperclip"></i>
+                            </button>
+                            <input type="file" id="wa-file" hidden>
+                            <textarea id="wa-body" rows="1" placeholder="Type a message" {{ $canSend && !empty($status['connected']) ? '' : 'disabled' }}></textarea>
+                            <button type="button" class="wa-send" id="wa-send" {{ $canSend && !empty($status['connected']) ? '' : 'disabled' }} title="Send">
+                                <i class="la la-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </section>
         </div>
@@ -100,5 +121,5 @@
         window.waConnected = {{ !empty($status['connected']) ? 'true' : 'false' }};
         window.waCanSend = {{ $canSend ? 'true' : 'false' }};
     </script>
-    <script src="{{ asset('assets/js/pages/whatsapp/inbox.js') }}?v=2"></script>
+    <script src="{{ asset('assets/js/pages/whatsapp/inbox.js') }}?v=3"></script>
 @endpush

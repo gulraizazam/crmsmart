@@ -57,13 +57,18 @@ class WhatsAppInboxController extends Controller
             return ApiHelper::apiResponse(404, 'Conversation not found.', false);
         }
 
-        $this->inbox->markRead($conversation);
         $afterId = (int) $request->input('after_id', 0);
-        $messages = $this->inbox->messages($conversation, $afterId > 0 ? $afterId : null);
+        $this->inbox->markRead($conversation, $afterId <= 0);
+        $messages = $this->inbox->messages(
+            $conversation,
+            $afterId > 0 ? $afterId : null,
+            $request->input('updated_since') ? (string) $request->input('updated_since') : null
+        );
 
         return ApiHelper::apiResponse(config('constants.api_status.success'), 'OK', true, [
             'conversation' => $this->inbox->transformConversation($conversation->fresh('patient:id,name,phone,image_src')),
             'messages' => $messages,
+            'synced_at' => now()->toIso8601String(),
         ]);
     }
 
@@ -74,12 +79,13 @@ class WhatsAppInboxController extends Controller
         }
 
         $data = $request->validate([
-            'type' => 'nullable|in:text,template',
+            'type' => 'nullable|in:text,template,image,video,audio,document',
             'body' => 'nullable|string|max:4096',
             'template_name' => 'nullable|string|max:512',
             'template_language' => 'nullable|string|max:16',
             'template_params' => 'nullable|array',
             'template_params.*' => 'nullable|string|max:255',
+            'file' => 'nullable|file|max:16384',
         ]);
 
         $conversation = $this->conversation($id);
@@ -95,6 +101,13 @@ class WhatsAppInboxController extends Controller
                     (string) ($data['template_name'] ?? ''),
                     (string) ($data['template_language'] ?? 'en'),
                     array_values($data['template_params'] ?? []),
+                    Auth::id()
+                );
+            } elseif ($request->hasFile('file')) {
+                $message = $this->inbox->sendFile(
+                    $conversation,
+                    $request->file('file'),
+                    trim((string) ($data['body'] ?? '')),
                     Auth::id()
                 );
             } else {
@@ -228,5 +241,36 @@ class WhatsAppInboxController extends Controller
     protected function denied(): JsonResponse
     {
         return ApiHelper::apiResponse(config('constants.api_status.unauthorized'), 'You are not authorized to access this resource.', false);
+    }
+
+    public function media(int $id)
+    {
+        if (! $this->canInbox()) {
+            return $this->denied();
+        }
+
+        $message = \App\Models\WhatsAppMessage::query()
+            ->where('account_id', Auth::user()->account_id)
+            ->where('id', $id)
+            ->first();
+        if (! $message) {
+            return response('Not found', 404);
+        }
+
+        try {
+            $media = $this->inbox->mediaContent($message);
+        } catch (Throwable $e) {
+            return response($e->getMessage(), 404);
+        }
+
+        $disposition = str_starts_with((string) $media['mime'], 'image/') || str_starts_with((string) $media['mime'], 'video/') || str_starts_with((string) $media['mime'], 'audio/')
+            ? 'inline'
+            : 'attachment';
+
+        return response($media['bytes'], 200, [
+            'Content-Type' => $media['mime'],
+            'Content-Disposition' => $disposition.'; filename="'.str_replace('"', '', $media['name']).'"',
+            'Cache-Control' => 'private, max-age=86400',
+        ]);
     }
 }
