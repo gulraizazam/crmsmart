@@ -100,5 +100,5 @@
         window.waConnected = {{ !empty($status['connected']) ? 'true' : 'false' }};
         window.waCanSend = {{ $canSend ? 'true' : 'false' }};
     </script>
-    <script src="{{ asset('assets/js/pages/whatsapp/inbox.js') }}?v=1"></script>
+    <script src="{{ asset('assets/js/pages/whatsapp/inbox.js') }}?v=2"></script>
 @endpush

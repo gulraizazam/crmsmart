@@ -58,7 +58,8 @@ class WhatsAppInboxController extends Controller
         }
 
         $this->inbox->markRead($conversation);
-        $messages = $this->inbox->messages($conversation, $request->integer('after_id') ?: null);
+        $afterId = (int) $request->input('after_id', 0);
+        $messages = $this->inbox->messages($conversation, $afterId > 0 ? $afterId : null);
 
         return ApiHelper::apiResponse(config('constants.api_status.success'), 'OK', true, [
             'conversation' => $this->inbox->transformConversation($conversation->fresh('patient:id,name,phone,image_src')),

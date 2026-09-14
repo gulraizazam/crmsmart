@@ -155,6 +155,11 @@
         $('#wa-thread-live').removeClass('d-none').addClass('d-flex');
         $('.wa-chat-item').removeClass('is-active');
         $('.wa-chat-item[data-id="' + id + '"]').addClass('is-active');
+        var cached = state.conversations.find(function (row) { return row.id === state.activeId; });
+        if (cached) {
+            renderHeader(cached);
+            updateComposer(cached);
+        }
         loadMessages(id, false);
     }
 
@@ -164,7 +169,10 @@
             type: 'GET',
             data: silent ? { after_id: state.lastMessageId } : {},
             success: function (res) {
-                if (!res.status) return;
+                if (!res.status) {
+                    if (!silent) toastr.error(res.message || 'Could not load messages.');
+                    return;
+                }
                 var conv = res.data.conversation;
                 var messages = res.data.messages || [];
                 if (!silent) {
@@ -179,6 +187,9 @@
                 if (!silent) {
                     loadConversations(true);
                 }
+            },
+            error: function () {
+                if (!silent) toastr.error('Could not load messages.');
             }
         });
     }
