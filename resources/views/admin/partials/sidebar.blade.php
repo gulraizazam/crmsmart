@@ -204,6 +204,17 @@
 
                 <!-- End leads menu -->
 
+                @can('whatsapp_manage')
+                <li class="menu-item {{ activeMenu('admin.whatsapp.index') }} {{ activeMenu('admin.whatsapp.settings') }}" aria-haspopup="true">
+                    <a href="{{ route('admin.whatsapp.index') }}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                            <i class="font-icon lab la-whatsapp"></i>
+                        </span>
+                        <span class="menu-text">WhatsApp</span>
+                    </a>
+                </li>
+                @endcan
+
                 <!-- Appointment menu -->
 
                 @if (Gate::allows('appointments_manage'))

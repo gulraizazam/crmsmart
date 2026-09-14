@@ -205,6 +205,7 @@ class NormalizeUnderscorePermissions extends Command
         return [
             'treatments_manage' => 'Treatments',
             'cashflow_manage' => 'Cash Flow Management',
+            'whatsapp_manage' => 'WhatsApp Inbox',
             'memberships_manage' => 'Memberships',
             'membershiptypes_manage' => 'Membership Types',
             'vouchers_manage' => 'Vouchers',
@@ -360,6 +361,9 @@ class NormalizeUnderscorePermissions extends Command
             ['voucher_types_inactive', 'Inactivate', 'voucher_types_manage'],
             ['vouchers_destroy', 'Delete', 'vouchers_manage'],
             ['vouchers_view', 'View', 'vouchers_manage'],
+            ['whatsapp_inbox', 'Open WhatsApp Inbox', 'whatsapp_manage'],
+            ['whatsapp_send', 'Send WhatsApp Messages', 'whatsapp_manage'],
+            ['whatsapp_settings', 'Manage WhatsApp Settings', 'whatsapp_manage'],
         ];
 
         $rows = [];
@@ -654,7 +658,7 @@ class NormalizeUnderscorePermissions extends Command
             'staff_revenue_reports.' => 'staff_revenue_reports_manage',
             'logs.' => 'logs_manage',
             'pabao_records.' => 'pabao_records_manage',
-            'whatsapp.' => 'leads_manage',
+            'whatsapp.' => 'whatsapp_manage',
         ];
     }
 
@@ -709,7 +713,7 @@ class NormalizeUnderscorePermissions extends Command
             'dashboard_overview' => 'dashboard_manage',
             'dashboard_practitioners' => 'dashboard_manage',
             'management_dashboard' => 'dashboard_manage',
-            'whatsapp' => 'leads_manage',
+            'whatsapp' => 'whatsapp_manage',
             'leads_reports' => 'leads_reports_manage',
             'centers_reports' => 'centers_reports_manage',
             'finance_ledger_reports' => 'finance_ledger_reports_manage',

@@ -35,7 +35,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body" class="sneat-shell">
+<body id="kt_body" class="sneat-shell @yield('body_class')">
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-overlay"></div>
         <div class="layout-container">

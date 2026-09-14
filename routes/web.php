@@ -675,6 +675,11 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
         Route::post('wrong-conversions/reset/{id}', [\App\Http\Controllers\Admin\WrongConversionsController::class, 'reset'])->name('wrong-conversions.reset');
         Route::post('wrong-conversions/reset-all', [\App\Http\Controllers\Admin\WrongConversionsController::class, 'resetAll'])->name('wrong-conversions.reset-all');
 
+        Route::prefix('whatsapp')->name('whatsapp.')->middleware('permission:whatsapp_manage')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\WhatsAppInboxController::class, 'index'])->name('index');
+            Route::get('settings', [\App\Http\Controllers\Admin\WhatsAppInboxController::class, 'settings'])->name('settings')->middleware('permission:whatsapp_settings');
+        });
+
         // Cash Flow Module (view-only routes)
         Route::prefix('cashflow')->name('cashflow.')->middleware('permission:cashflow_manage')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\CashFlowController::class, 'dashboard'])->name('dashboard');

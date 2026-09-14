@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\LeadSourcesController;
 use App\Http\Controllers\Api\LeadDepartmentsController;
 use App\Http\Controllers\Api\MetaLeadWebhookController;
 use App\Http\Controllers\Api\MetaLeadSettingsController;
+use App\Http\Controllers\Api\WhatsAppWebhookController;
 use App\Http\Controllers\Admin\MachineTypeController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -78,6 +79,7 @@ use App\Http\Controllers\Api\ScheduleController;
 Route::post('login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
 Route::match(['get', 'post'], 'meta/leads/webhook', [MetaLeadWebhookController::class, 'handle'])->name('meta.leads.webhook');
+Route::match(['get', 'post'], 'whatsapp/webhook', [WhatsAppWebhookController::class, 'handle'])->name('whatsapp.webhook');
 
 Route::middleware('auth.common')->name('admin.')->group(function () {
 
@@ -926,6 +928,9 @@ Route::get('packages/deleteplanrowtem', [PackagesController::class, 'deleteplanr
 
     // Cash Flow Module Routes
     require __DIR__.'/cashflow.php';
+
+    // WhatsApp inbox
+    require __DIR__.'/whatsapp.php';
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

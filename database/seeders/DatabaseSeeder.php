@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AuditTrailActionSeeder::class,
             AuditTrailTableSeeder::class,
             AccountsSeeder::class,
+            WhatsAppPermissionsSeeder::class,
         ]);
     }
 }
