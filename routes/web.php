@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\Admin\TownController;
 use Facade\Ignition\Support\Packagist\Package;
 use App\Http\Controllers\Admin\LeadsController;
+use App\Http\Controllers\Admin\LeadsDashboardController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ApplicationUserController;
 use App\Http\Controllers\Admin\BrandsController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Admin\UserTypesController;
 use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\PatientFollowupController;
 use App\Http\Controllers\ConversionReportController;
+use App\Http\Controllers\Admin\Reports\LeadsReportController;
 use App\Http\Controllers\DashboardReportsController;
 use App\Http\Controllers\Admin\CustomFormsController;
 use App\Http\Controllers\Admin\LeadSourcesController;
@@ -378,6 +380,7 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
 
         // Leads - View routes only (all API operations handled in api.php)
         Route::get('leads', [LeadsController::class, 'index'])->name('leads.index');
+        Route::get('leads/dashboard', [LeadsDashboardController::class, 'index'])->name('leads.dashboard');
         Route::get('leads/junk', [LeadsController::class, 'junk'])->name('leads.junk');
         Route::get('leads/import', [LeadsController::class, 'importLeads'])->name('leads.import');
         
@@ -623,9 +626,11 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
         Route::get('/admin/doctor/consultant/breakdown/{sellerId}', [UpsellingReportController::class, 'doctorConsultantBreakdown'])->name('doctor.consultant.breakdown');
         Route::get('/admin/consultant/seller/detail/{consultantId}/{sellerId}', [UpsellingReportController::class, 'doctorConsultantBreakdown'])->name('consultant.seller.detail');
         Route::get('reports/conversion', [ConversionReportController::class, 'index'])->name('reports.conversion')->middleware('permission:conversion_report_manage');
+        Route::post('reports/load_conversion_report', [ConversionReportController::class, 'LoadConversionReport'])->name('reports.load_conversion_report');
+        Route::get('reports/leads', [LeadsReportController::class, 'index'])->name('reports.leads');
+        Route::post('reports/load_leads_report', [LeadsReportController::class, 'load'])->name('reports.load_leads_report');
         Route::get('reports/activity_logs', [ActivitylogsReportController::class, 'index'])->name('reports.activity_logs');
         Route::post('reports/activity_logs', [ActivitylogsReportController::class, 'fetchActivityReport'])->name('reports.load_activity_report');
-        Route::post('reports/load_conversion_report', [ConversionReportController::class, 'LoadConversionReport'])->name('reports.load_conversion_report');
         Route::get('reports/staff_wise_arrival', [FinanceReportController::class, 'staffWiseArrival'])->name('reports.staff_wise_arrival')->middleware('permission:staff_wise_arrival_manage');
         Route::post('reports/staff_wise_arrival_report', [FinanceReportController::class, 'staffWiseArrivalReport'])->name('reports.staff_wise_arrival_report');
          Route::get('reports/doctor_wise_conversion', [FinanceReportController::class, 'doctorWiseConversion'])->name('reports.doctorWiseConversion')->middleware('permission:staff_wise_arrival_manage');

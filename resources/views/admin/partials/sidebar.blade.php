@@ -149,7 +149,7 @@
                 <!-- Leads menu -->
 
                 @if (Gate::allows('leads_manage'))
-                <li class="menu-item menu-item-submenu {{ openMenu(['admin.leads.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
+                <li class="menu-item menu-item-submenu {{ openMenu(['admin.leads.index', 'admin.leads.dashboard']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
@@ -174,6 +174,14 @@
                             @endcan --}}
 
                             @can('leads_manage')
+                            <li class="menu-item {{ activeMenu('admin.leads.dashboard') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.leads.dashboard') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">Dashboard</span>
+                                </a>
+                            </li>
                             <li class="menu-item {{ isActive(url('admin/leads'), 'other') }}" aria-haspopup="true">
                                 <a href="{{ route('admin.leads.index') }}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -808,11 +816,8 @@
                 </li>
                 @endif
                 @endif
-                {{-- Inventory menu hidden --}}
-                {{--
                 <!-- Inventory menu -->
                 @if (Gate::allows('inventory_manage'))
-                @can('inventory_manage')
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.warehouse.index']) }} {{ openMenu(['admin.brands.index']) }} {{ openMenu(['admin.products.index']) }} {{ openMenu(['admin.products.logs']) }} {{ openMenu(['admin.products.stock']) }} {{ openMenu(['admin.transfer_product.index']) }} {{ openMenu(['admin.orders.index']) }} {{ openMenu(['admin.order.refunds.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -822,22 +827,6 @@
                         <span class="menu-text">Inventory</span>
                         <i class="menu-arrow"></i>
                     </a>
-                    <!-- @can('warehouse_manage')
-                    <div class="menu-submenu">
-                        <i class="menu-arrow"></i>
-                        <ul class="menu-subnav">
-                            <li class="menu-item {{ activeMenu('admin.warehouse.index') }}" aria-haspopup="true">
-                                <a href="{{ route('admin.warehouse.index') }}" class="menu-link">
-                                    <i class="menu-bullet menu-bullet-dot">
-                                        <span></span>
-                                    </i>
-                                    <span class="menu-text">Warehouse</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                    @endcan -->
                     @can('brand_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
@@ -850,7 +839,6 @@
                                     <span class="menu-text">Brand</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
                     @endcan
@@ -866,7 +854,6 @@
                                     <span class="menu-text">Product</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
                     @endcan
@@ -882,7 +869,6 @@
                                     <span class="menu-text">Transfer</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
                     @endcan
@@ -898,35 +884,16 @@
                                     <span class="menu-text">Order</span>
                                 </a>
                             </li>
-
-                        </ul>
-                    </div>
-                    @endcan
-                    <!-- @can('inventory_refund_manage')
-                    <div class="menu-submenu">
-                        <i class="menu-arrow"></i>
-                        <ul class="menu-subnav">
-                            <li class="menu-item {{ activeMenu('admin.order.refunds.index') }}" aria-haspopup="true">
-                                <a href="{{ route('admin.order.refunds.index') }}" class="menu-link">
-                                    <i class="menu-bullet menu-bullet-dot">
-                                        <span></span>
-                                    </i>
-                                    <span class="menu-text">Refund</span>
-                                </a>
-                            </li>
-
                         </ul>
                     </div>
                     @endcan
                 </li>
-                @endcan -->
                 @endif
-                --}}
                 <!-- End Inventory menu -->
                 <li class="menu-header">
                     <span class="menu-header-text">Reports</span>
                 </li>
-                <li class="menu-item menu-item-submenu {{ openMenu(['admin.reports.finance_reports', 'admin.reports.operations_report', 'admin.reports.inventory_report']) }}" aria-haspopup="true" data-menu-toggle="hover">
+                <li class="menu-item menu-item-submenu {{ openMenu(['admin.reports.finance_reports', 'admin.reports.operations_report', 'admin.reports.inventory_report', 'admin.reports.conversion', 'admin.reports.leads']) }}" aria-haspopup="true" data-menu-toggle="hover">
 
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
@@ -1098,6 +1065,21 @@
                         </ul>
                     </div>
                     @endcan
+                    @if (Gate::allows('leads_reports_manage') || Gate::allows('leads_manage'))
+                    <div class="menu-submenu">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                            <li class="menu-item {{ activeMenu('admin.reports.leads') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.reports.leads') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text">Lead Reports</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endif
                     {{-- Activity Logs report hidden --}}
                     @if(false)
                     @can('appointment_reports_manage')

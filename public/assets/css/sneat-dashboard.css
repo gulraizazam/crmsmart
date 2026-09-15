@@ -507,3 +507,51 @@
         width: 100%;
     }
 }
+
+.sneat-dashboard .dash-toolbar__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.sneat-dashboard .dash-toolbar__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.375rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--s-border);
+    border-radius: 0.375rem;
+    background: var(--s-paper);
+    color: var(--s-heading);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--s-font);
+    text-decoration: none;
+}
+
+.sneat-dashboard .dash-toolbar__link:hover {
+    border-color: var(--s-primary);
+    color: var(--s-primary);
+}
+
+.sneat-dashboard .dash-section {
+    margin: 0.25rem 0 1rem;
+}
+
+.sneat-dashboard .dash-section__title {
+    margin: 0 0 0.85rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--s-muted);
+}
+
+.sneat-dashboard .dash-chart-subtitle {
+    margin: 0.2rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--s-muted);
+    font-weight: 400;
+}

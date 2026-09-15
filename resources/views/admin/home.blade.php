@@ -1,7 +1,7 @@
 ﻿@extends('admin.layouts.master')
 @section('title', 'Dashboard')
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=3">
 
 <div class="content d-flex flex-column flex-column-fluid sneat-dashboard" id="kt_content">
     <div class="d-flex flex-column-fluid">

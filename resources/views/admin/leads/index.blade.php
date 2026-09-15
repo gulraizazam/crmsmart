@@ -17,6 +17,10 @@
                         </div>
                         <div class="card-toolbar">
                             @if(request('type') != 'junk')
+                                <a href="{{ route('admin.leads.dashboard') }}" class="btn btn-light-primary">
+                                    <i class="la la-pie-chart"></i>
+                                    Dashboard
+                                </a>
                                 @if(Gate::allows('leads_import'))
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#modal_import_leads" class="btn btn-info">
                                         <i class="fa fa-upload"></i>
