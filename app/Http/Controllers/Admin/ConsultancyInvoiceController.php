@@ -83,24 +83,6 @@ class ConsultancyInvoiceController extends Controller
             $discounts = DiscountWidget::Discount_data_consultancy($appointment, Auth::User()->account_id);
             /*End*/
             $price = $tax = $price_tax = $tax_amt = $cash = $balance = 0;
-
-            if ($appointment_type->name == Config::get('constants.Consultancy')) {
-                $serviceinfo = Services::where('id', '=', $appointment->service_id)->first();
-                if ($serviceinfo) {
-
-                    /*I calculate prices as exculsive*/
-                    if ($serviceinfo->tax_treatment_type_id == Config::get('constants.tax_both') || $serviceinfo->tax_treatment_type_id == Config::get('constants.tax_is_exclusive')) {
-                        $price = $price_tax = $serviceinfo->price;
-                        $tax = ceil($price * ($location_info->tax_percentage / 100));
-                        $tax_amt = ceil($price + $tax);
-                    } else {
-                        $tax_amt = $price_tax = $serviceinfo->price;
-                        $price = ceil((100 * $tax_amt) / ($location_info->tax_percentage + 100));
-                        $tax = ceil($tax_amt - $price);
-                    }
-                }
-                /*End*/
-            }
             $outstanding = $tax_amt - $cash - $balance;
 
             if ($outstanding < 0) {
@@ -436,7 +418,7 @@ class ConsultancyInvoiceController extends Controller
         $data_detail['is_exclusive'] = $is_exclusive;
 
         $data_detail['qty'] = '1';
-        $data_detail['service_price'] = $appointmentinfo?->service?->price ?? 0;
+        $data_detail['service_price'] = $request->price ?? 0;
         $data_detail['service_id'] = $appointmentinfo->service_id ?? 0;
         $data_detail['invoice_id'] = $invoice->id;
 
