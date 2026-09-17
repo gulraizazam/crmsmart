@@ -197,7 +197,7 @@ class MetaLeadService
         $fields = [];
         foreach ($fieldData as $row) {
             $name = strtolower(trim(str_replace([' ', '-'], '_', (string) ($row['name'] ?? ''))));
-            $value = is_array($row['values'] ?? null) ? trim((string) ($row['values'][0] ?? '')) : trim((string) ($row['values'] ?? ''));
+            $value = $this->firstFieldValue($row['values'] ?? null);
             if ($name !== '') {
                 $fields[$name] = $value;
             }
@@ -206,7 +206,7 @@ class MetaLeadService
         $first = $fields['first_name'] ?? $fields['firstname'] ?? '';
         $last = $fields['last_name'] ?? $fields['lastname'] ?? '';
         $name = $fields['full_name'] ?? $fields['fullname'] ?? $fields['name'] ?? trim($first . ' ' . $last);
-        $phone = $fields['phone_number'] ?? $fields['phone'] ?? $fields['mobile'] ?? $fields['mobile_number'] ?? '';
+        $phone = $fields['phone_number'] ?? $fields['phone'] ?? $fields['mobile'] ?? $fields['mobile_number'] ?? $fields['work_phone_number'] ?? $fields['cell_phone'] ?? '';
         $email = $fields['email'] ?? $fields['email_address'] ?? null;
         $cityName = $fields['city'] ?? $fields['city_name'] ?? null;
         $genderRaw = $fields['gender'] ?? null;
@@ -229,6 +229,25 @@ class MetaLeadService
             'service_id' => $service['parent'] ?? null,
             'child_service_id' => $service['child'] ?? null,
         ];
+    }
+
+    protected function firstFieldValue($values): string
+    {
+        if (is_array($values)) {
+            $first = $values[0] ?? reset($values);
+            if ($first === false || $first === null) {
+                return '';
+            }
+            if (is_array($first)) {
+                $nested = $first[0] ?? reset($first);
+
+                return trim((string) ($nested === false ? '' : $nested));
+            }
+
+            return trim((string) $first);
+        }
+
+        return trim((string) $values);
     }
 
     protected function matchCity(?string $name, int $accountId): ?int

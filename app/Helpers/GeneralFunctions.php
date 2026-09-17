@@ -31,26 +31,27 @@ class GeneralFunctions
 {
     public static function cleanNumber($phoneNumber)
     {
-        $phoneNumber = str_replace(' ', '', $phoneNumber); // Replaces all spaces with hyphens.
-        $phoneNumber = str_replace('-', '', $phoneNumber); // Replaces all spaces with hyphens.
+        $phoneNumber = str_replace(' ', '', (string) $phoneNumber);
+        $phoneNumber = str_replace('-', '', $phoneNumber);
+        $phoneNumber = preg_replace('/[^0-9\-]/', '', $phoneNumber) ?? '';
 
-        return self::cleanCountryCodes(preg_replace('/[^0-9\-]/', '', $phoneNumber)); // Removes special chars.
+        return self::cleanCountryCodes($phoneNumber);
     }
 
     private static function cleanCountryCodes($phoneNumber)
     {
-        //if($_SERVER['REMOTE_ADDR'] == '202.166.167.242'){dd($phoneNumber);}
-        // Remove Zero Leading
-        if ($phoneNumber[0] == '0') {
-            return $phoneNumber = substr($phoneNumber, 1);
+        $phoneNumber = (string) $phoneNumber;
+        if ($phoneNumber === '') {
+            return $phoneNumber;
         }
-        // Remove Coutnry
-        if ($phoneNumber[0] == '9' && $phoneNumber[1] == '2') {
-            return $phoneNumber = substr($phoneNumber, 2);
+        if ($phoneNumber[0] === '0') {
+            return substr($phoneNumber, 1);
         }
-        // Remove Zero Leading
-        if ($phoneNumber[0] == '0') {
-            return $phoneNumber = substr($phoneNumber, 1);
+        if (isset($phoneNumber[1]) && $phoneNumber[0] === '9' && $phoneNumber[1] === '2') {
+            return substr($phoneNumber, 2);
+        }
+        if ($phoneNumber[0] === '0') {
+            return substr($phoneNumber, 1);
         }
 
         return $phoneNumber;
