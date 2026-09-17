@@ -45,7 +45,7 @@
             <div class="di-brand-left">
                 <div class="di-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 56px; width: auto; max-width: 240px; display: inline-block; vertical-align: middle; background: #161310; padding: 4px 8px; border-radius: 4px;"></div>
                 <div class="di-brand-address">{{$location_info->address}}</div>
-                <div class="di-brand-contact">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; https://aestheticlinics.net</div>
+                <div class="di-brand-contact">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; https://smartaesthetics.pk</div>
             </div>
             <div class="di-badge-invoice">Invoice</div>
         </div>

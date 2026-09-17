@@ -219,7 +219,7 @@
                     <img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height:70px;width:auto;max-width:260px;display:block;margin-bottom:10px;"/>
                     <p class="logo_caption">{{ $location_info->address }}.</p>
                     <p class="logo_caption logo_caption2">Phone. {{ $location_info->fdo_phone }} &nbsp; | &nbsp; Email.
-                        {{ $account->email }} &nbsp; | &nbsp; https://aestheticlinics.net &nbsp; | &nbsp; NTN.
+                        {{ $account->email }} &nbsp; | &nbsp; https://smartaesthetics.pk &nbsp; | &nbsp; NTN.
                         {{ $location_info->ntn }} &nbsp; | &nbsp; STN. {{ $location_info->stn }}</p>
                 </td>
                 <td style="padding:0px !important; float:right; width:120px; text-align:right;">

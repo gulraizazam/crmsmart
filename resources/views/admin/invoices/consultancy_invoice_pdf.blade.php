@@ -121,7 +121,7 @@
     <div class="cinv-footer">
         <strong>Smart Aesthetics</strong>
         &nbsp;&middot;&nbsp;
-        https://aestheticlinics.net
+        https://smartaesthetics.pk
         &nbsp;&middot;&nbsp;
         {{ $account->email ?? '' }}
     </div>

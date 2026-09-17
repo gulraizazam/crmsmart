@@ -440,7 +440,7 @@
             {{ $location_info->address ?? '' }}
             @if(!empty($location_info->fdo_phone)) &nbsp;&middot;&nbsp; {{ $location_info->fdo_phone }} @endif
             @if(!empty($account->email)) &nbsp;&middot;&nbsp; {{ $account->email }} @endif
-            &nbsp;&middot;&nbsp; https://aestheticlinics.net
+            &nbsp;&middot;&nbsp; https://smartaesthetics.pk
         </div>
     </div>
 </div>
