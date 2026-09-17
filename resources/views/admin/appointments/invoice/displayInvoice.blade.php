@@ -21,6 +21,7 @@
     .di-body .table tbody td { padding: 10px 12px; font-size: 13px; color: #566a7f; vertical-align: middle; }
     .di-total { text-align: right; padding: 14px 0 16px; font-size: 14px; color: #566a7f; font-weight: 600; }
     .di-total span { color: #111827; }
+    .di-legal { text-align: center; font-size: 12px; color: #4b5563; font-weight: 600; padding: 0 0 14px; }
     .di-actions { display: flex; justify-content: center; gap: 10px; padding-top: 4px; }
     .di-body .btn-success { background: #696cff; border: none; border-radius: 0.375rem; padding: 8px 18px; font-weight: 600; font-size: 13px; color: #fff; }
     .di-body .btn-success:hover { background: #5f61e6; color: #fff; }
@@ -44,7 +45,7 @@
             <div class="di-brand-left">
                 <div class="di-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 56px; width: auto; max-width: 240px; display: inline-block; vertical-align: middle; background: #161310; padding: 4px 8px; border-radius: 4px;"></div>
                 <div class="di-brand-address">{{$location_info->address}}</div>
-                <div class="di-brand-contact">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; https://aestheticlinics.net &nbsp;|&nbsp; NTN. {{$location_info->ntn}} &nbsp;|&nbsp; STN. {{$location_info->stn}}</div>
+                <div class="di-brand-contact">Phone. {{$location_info->fdo_phone}} &nbsp;|&nbsp; Email. {{$account->email}} &nbsp;|&nbsp; https://aestheticlinics.net</div>
             </div>
             <div class="di-badge-invoice">Invoice</div>
         </div>
@@ -102,6 +103,10 @@
                     </div>
 
                     <div class="di-total">Total: <span><?php echo number_format($Invoiceinfo->total_price);?>/-</span></div>
+
+                    @if($Invoiceinfo->appointment_type_id != 1)
+                        <div class="di-legal">This invoice can not be used for any legal purpose and paid amount is not refundable</div>
+                    @endif
 
                     <div class="di-actions">
                         @if($Invoiceinfo->appointment_type_id == 1)

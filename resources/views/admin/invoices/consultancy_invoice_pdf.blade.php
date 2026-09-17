@@ -123,8 +123,6 @@
         &nbsp;&middot;&nbsp;
         https://aestheticlinics.net
         &nbsp;&middot;&nbsp;
-        @if(!empty($location_info->ntn)) NTN {{ $location_info->ntn }} &nbsp;&middot;&nbsp; @endif
-        @if(!empty($location_info->stn)) STN {{ $location_info->stn }} &nbsp;&middot;&nbsp; @endif
         {{ $account->email ?? '' }}
     </div>
 </div>

@@ -48,7 +48,7 @@
             <div class="ci-brand-left">
                 <div class="ci-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 56px; width: auto; max-width: 240px; display: inline-block; vertical-align: middle; background: #161310; padding: 4px 8px; border-radius: 4px;"></div>
                 <div class="ci-brand-address">{{$location_info->address ?? ''}}</div>
-                <div class="ci-brand-contact">Phone. {{$location_info->fdo_phone ?? ''}} &nbsp;|&nbsp; Email. {{$account->email ?? ''}} &nbsp;|&nbsp; https://aestheticlinics.net &nbsp;|&nbsp; NTN. {{$location_info->ntn ?? ''}} &nbsp;|&nbsp; STN. {{$location_info->stn ?? ''}}</div>
+                <div class="ci-brand-contact">Phone. {{$location_info->fdo_phone ?? ''}} &nbsp;|&nbsp; Email. {{$account->email ?? ''}} &nbsp;|&nbsp; https://aestheticlinics.net</div>
             </div>
             <div class="ci-badge-invoice">Invoice</div>
         </div>

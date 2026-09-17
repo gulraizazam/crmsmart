@@ -207,6 +207,13 @@
         line-height: 1.5;
     }
     .cinv-footer strong { color: #111827; font-weight: 700; letter-spacing: 0.04em; }
+    .cinv-legal {
+        margin-top: 8px;
+        font-size: 10px;
+        color: #4b5563;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
 
     @if(($download ?? null) != 'download')
         @media not print {
