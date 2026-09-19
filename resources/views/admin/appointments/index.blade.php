@@ -3,7 +3,7 @@
 @section('content')
     @push('css')
         <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=10" rel="stylesheet" type="text/css" />
     @endpush
     <div class="content d-flex flex-column flex-column-fluid sneat-appt-page" id="kt_content">
         <div class="d-flex flex-column-fluid">
@@ -412,15 +412,15 @@
         <script src="{{ asset('assets/js/pages/appointment/consultancy-data.js') }}"></script>
         {{-- <script src="{{asset('assets/js/pages/appointment/treatment-data.js')}}"></script> --}}
 
-        <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/appointment/plan/create.js') }}"></script>
         <script src="{{ asset('assets/js/pages/appointment/common.js?v=8') }}"></script>
     @endpush
 
     @push('datatable-js')
         <script src="{{ asset('assets/js/pages/appointment/consultation-columns.js') }}?v=4"></script>
-        <script src="{{ asset('assets/js/pages/appointment/consultation-common.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/appointment/datatable.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/appointment/consultation-common.js') }}?v=3"></script>
+        <script src="{{ asset('assets/js/pages/appointment/datatable.js') }}?v=2"></script>
     @endpush
 
 @endsection

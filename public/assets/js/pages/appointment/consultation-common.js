@@ -24,74 +24,97 @@ function editStatus(id) {
     });
 }
 
+function applyStatusSelect2($el, html, value) {
+    if ($el.hasClass('select2-hidden-accessible')) {
+        $el.select2('destroy');
+    }
+    $el.html(html);
+    if (value !== undefined && value !== null && value !== '') {
+        $el.val(String(value));
+    }
+    $el.select2({
+        dropdownParent: $('#modal_change_appointment_status'),
+        width: '100%'
+    });
+}
+
+function lookupStatusRecord(map, id) {
+    if (!map || id === undefined || id === null || id === '') {
+        return null;
+    }
+    return map[id] || map[String(id)] || null;
+}
+
 // Set status data for status change modal
 function setStatusData(response, id) {
     try {
         let appointments = response.data.appointment;
-        let appointment_status = response.data.appointment.appointment_status;
         let appointment_statuses = response.data.appointment_statuses;
         let base_appointment_statuses = response.data.base_appointment_statuses;
-        let base_appointments = response.data.base_appointments;
+        let base_appointments = response.data.base_appointments || {};
         let appointment_status_not_show = response.data.appointment_status_not_show;
         let cancellation_reason_other_reason = response.data.cancellation_reason_other_reason;
         let appointment_type_id = response.data.appointment.appointment_type_id;
-        
+        let currentStatus = appointments?.appointment_status || {};
+        let parentId = currentStatus.parent_id;
+        let parentStatus = lookupStatusRecord(base_appointments, parentId);
+
         let base_status_option = '<option value="">Select Status</option>';
         if (base_appointment_statuses) {
             Object.entries(base_appointment_statuses).forEach(function (base_status) {
-                base_status_option += '<option value="' + base_status[0] + '">' + base_status[1] + '</option>';
+                var label = base_status[1];
+                if (label && typeof label === 'object') {
+                    label = label.name || label.text || '';
+                }
+                if (label) {
+                    base_status_option += '<option value="' + base_status[0] + '">' + label + '</option>';
+                }
             });
         }
 
         let appoint_status_option = '<option value="">Select Child Status</option>';
         if (appointment_statuses) {
-            Object.entries(appointment_statuses).forEach(function (appointment_status) {
-                appoint_status_option += '<option value="' + appointment_status[0] + '">' + appointment_status[1] + '</option>';
+            Object.entries(appointment_statuses).forEach(function (child_status) {
+                var label = child_status[1];
+                if (label && typeof label === 'object') {
+                    label = label.name || label.text || '';
+                }
+                if (label) {
+                    appoint_status_option += '<option value="' + child_status[0] + '">' + label + '</option>';
+                }
             });
         }
 
-        $("#base_appointment_status_id").html(base_status_option);
-        $("#appointment_status_id").html(appoint_status_option);
         $("#appointment_type_id").val(appointment_type_id);
         $("#appointment_id").val(id);
         $("#appointment_status_not_show").val(appointment_status_not_show);
         $("#cancellation_reason_other_reason").val(cancellation_reason_other_reason);
 
-        if (appointments?.appointment_status?.parent_id != 0) {
-            $("#base_appointment_status_id").val(appointments?.appointment_status?.parent_id);
-        } else {
-            $("#base_appointment_status_id").val(appointments?.appointment_status_id);
+        var baseValue = (parentId && parentId != 0) ? parentId : appointments?.appointment_status_id;
+        if (baseValue && currentStatus.name && base_status_option.indexOf('value="' + baseValue + '"') === -1) {
+            base_status_option += '<option value="' + baseValue + '">' + currentStatus.name + '</option>';
         }
+        applyStatusSelect2($("#base_appointment_status_id"), base_status_option, baseValue);
 
-        if (appointments?.appointment_status?.parent_id == 0) {
+        if (!parentId || parentId == 0) {
             $("#appointment_status_id_section").hide();
+            applyStatusSelect2($("#appointment_status_id"), appoint_status_option, '');
+            if (currentStatus.is_comment == 1 || currentStatus.is_comment == '1') {
+                $("#appointment_reason").show();
+                $("#reason").val(appointments?.reason);
+            } else {
+                $("#appointment_reason").hide();
+            }
         } else {
             $("#appointment_status_id_section").show();
-            $("#appointment_status_id").val(appointments?.appointment_status?.id);
-        }
-
-        if (appointments?.appointment_status?.parent_id == 0) {
-            if (appointments.appointment_status?.is_comment == 0) {
-                $("#appointment_reason").hide();
-            } else {
+            applyStatusSelect2($("#appointment_status_id"), appoint_status_option, currentStatus.id);
+            var needsComment = (parentStatus && (parentStatus.is_comment == 1 || parentStatus.is_comment == '1'))
+                || currentStatus.is_comment == 1 || currentStatus.is_comment == '1';
+            if (needsComment) {
                 $("#appointment_reason").show();
                 $("#reason").val(appointments?.reason);
-            }
-        } else {
-            if (base_appointments[appointments.appointment_status?.parent_id]?.is_comment == 0
-                && appointments?.appointment_status?.is_comment == 0) {
             } else {
                 $("#appointment_reason").hide();
-                $("#appointment_status_id_section").hide();
-            }
-            if (base_appointments[appointments.appointment_status.parent_id].is_comment == 0
-                && appointments?.appointment_status?.is_comment == 0) {
-                $("#appointment_reason").hide();
-            } else {
-                $("#appointment_reason").show();
-                $("#appointment_status_id_section").show();
-                $("#reason").val(appointments?.reason);
-                $("#appointment_status_id").val(appointments?.appointment_status?.id);
             }
         }
     } catch (error) {
@@ -650,7 +673,7 @@ let loadChildStatuses = function (appointmentStatusId) {
                 if (parseInt(response.count) > 1) {
                     $('.appointment_status_id').show();
                 }
-                if (response.status && response.data.appointment_status.is_comment == '1') {
+                if (response.status && response.data?.appointment_status?.is_comment == '1') {
                     $('.reason').show();
                     statusValidate.addField('reason', extraValidate);
                 } else {
@@ -721,7 +744,7 @@ let statusListener = function (appointmentStatusId) {
             },
             cache: false,
             success: function (response) {
-                if (response.status && (response.data.appointment_status.is_comment == '1' || response.data.base_appointment_status.is_comment == '1')) {
+                if (response.status && (response.data?.appointment_status?.is_comment == '1' || response.data?.base_appointment_status?.is_comment == '1')) {
                     $('.reason').show();
                     statusValidate.addField('reason', extraValidate);
                 } else {

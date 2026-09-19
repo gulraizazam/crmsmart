@@ -475,7 +475,7 @@ function resetFilters(datatable) {
 }
 function setFilters(filter_values, active_filters) {
     try {
-        let appointment_statuses = filter_values.appointment_statuses;
+        let appointment_statuses = filter_values.appointment_statuses || {};
         let appointment_types = filter_values.appointment_types;
         let cities = filter_values.cities;
         let doctors = filter_values.doctors;
@@ -486,8 +486,16 @@ function setFilters(filter_values, active_filters) {
         let consultancy_types = filter_values.consultancy_types;
 
         let appoint_status_options = '<option value="">All</option>';
-        Object.entries(appointment_statuses).forEach(function (status, index) {
-            appoint_status_options += '<option value="' + status[0] + '">' + status[1] + '</option>';
+        Object.entries(appointment_statuses).forEach(function (status) {
+            var id = status[0];
+            var label = status[1];
+            if (label && typeof label === 'object') {
+                id = label.id != null ? label.id : id;
+                label = label.name || label.text || '';
+            }
+            if (label) {
+                appoint_status_options += '<option value="' + id + '">' + label + '</option>';
+            }
         });
 
         let appoint_type_options = '<option value="">All</option>';
@@ -554,9 +562,16 @@ function setFilters(filter_values, active_filters) {
             $("#appoint_search_type").html(appoint_type_options);
         }
 
-        let status = $("#appoint_search_status").val();
-        if (status == null || status == '') {
-            $("#appoint_search_status").html(appoint_status_options);
+        var $statusSelect = $("#appoint_search_status");
+        if ($statusSelect.find('option').length <= 1) {
+            var statusSelect2 = $statusSelect.hasClass('select2-hidden-accessible');
+            if (statusSelect2) {
+                $statusSelect.select2('destroy');
+            }
+            $statusSelect.html(appoint_status_options);
+            if (statusSelect2 || $statusSelect.hasClass('select2')) {
+                $statusSelect.select2({ dropdownCssClass: 'bigdrop' });
+            }
         }
 
         let doctor = $("#appoint_search_doctor").val();

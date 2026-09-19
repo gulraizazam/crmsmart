@@ -44,19 +44,42 @@ class AppointmentStatuses extends BaseModal
      */
     public static function getBaseActiveSorted($account_id, $exclude_appointment_status_id = false)
     {
+        $query = self::query()
+            ->where('active', 1)
+            ->where('account_id', $account_id)
+            ->where(function ($q) {
+                $q->where('parent_id', 0)->orWhereNull('parent_id');
+            });
+
         if ($exclude_appointment_status_id) {
-            return self::where(['active' => 1, 'parent_id' => 0, 'account_id' => $account_id])->where('id', '!=', $exclude_appointment_status_id)->OrderBy('sort_no', 'asc')->get()->pluck('name', 'id');
+            $query->where('id', '!=', $exclude_appointment_status_id);
         }
 
-        return self::where(['active' => 1, 'parent_id' => 0, 'account_id' => $account_id])
-            ->where('name', '!=', 'Arrived')
-            ->where(function($query) {
-                $query->where('is_converted', '!=', 1)
-                      ->orWhereNull('is_converted');
+        return $query->orderBy('sort_no', 'asc')->get()->pluck('name', 'id');
+    }
+
+    public static function getParentStatusesForDropdown($account_id)
+    {
+        $statuses = self::query()
+            ->where('account_id', $account_id)
+            ->where('active', 1)
+            ->where(function ($query) {
+                $query->where('parent_id', 0)->orWhereNull('parent_id');
             })
-            ->OrderBy('sort_no', 'asc')
-            ->get()
-            ->pluck('name', 'id');
+            ->orderBy('sort_no', 'asc')
+            ->pluck('name', 'id')
+            ->toArray();
+
+        if (empty($statuses)) {
+            $statuses = self::query()
+                ->where('account_id', $account_id)
+                ->where('active', 1)
+                ->orderBy('sort_no', 'asc')
+                ->pluck('name', 'id')
+                ->toArray();
+        }
+
+        return $statuses;
     }
 
     /**
@@ -247,7 +270,13 @@ class AppointmentStatuses extends BaseModal
      */
     public static function getAllParentRecords($account_id)
     {
-        return self::where(['account_id' => $account_id, 'parent_id' => 0, 'active' => 1])->get();
+        return self::where('account_id', $account_id)
+            ->where('active', 1)
+            ->where(function ($query) {
+                $query->where('parent_id', 0)->orWhereNull('parent_id');
+            })
+            ->orderBy('sort_no', 'asc')
+            ->get();
     }
 
     /**

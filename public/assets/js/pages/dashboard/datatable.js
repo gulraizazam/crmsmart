@@ -130,12 +130,14 @@ function setStatusData(response, id) {
     try {
 
         let appointments = response.data.appointment;
-        let appointment_status = response.data.appointment.appointment_status;
         let appointment_statuses = response.data.appointment_statuses;
         let base_appointment_statuses = response.data.base_appointment_statuses;
-        let base_appointments = response.data.base_appointments;
+        let base_appointments = response.data.base_appointments || {};
         let appointment_status_not_show = response.data.appointment_status_not_show;
         let cancellation_reason_other_reason = response.data.cancellation_reason_other_reason;
+        let currentStatus = appointments?.appointment_status || {};
+        let parentId = currentStatus.parent_id;
+        let parentStatus = (base_appointments[parentId] || base_appointments[String(parentId)]) || null;
 
         let base_status_option = '<option value="">Select Status</option>';
         if (base_appointment_statuses) {
@@ -160,28 +162,24 @@ function setStatusData(response, id) {
             $("#base_appointment_status_id").val(appointments?.appointment_status_id);
         }
 
-        if (appointments?.appointment_status?.parent_id == 0) {
+        if (!parentId || parentId == 0) {
             $("#appointment_status_id_section").hide();
-        } else {
-            $("#appointment_status_id_section").show();
-            $("#appointment_status_id").val(appointments?.appointment_status?.id);
-        }
-
-        if (appointments?.appointment_status?.parent_id == 0) {
-
-            if (appointments.appointment_status?.is_comment == 0) {
-                $("#appointment_reason").hide();
-            } else {
+            if (currentStatus.is_comment == 1 || currentStatus.is_comment == '1') {
                 $("#appointment_reason").show();
                 $("#reason").val(appointments?.reason);
+            } else {
+                $("#appointment_reason").hide();
             }
         } else {
-            if (base_appointments[appointments.appointment_status.parent_id].is_comment == 0
-                && appointments?.appointment_status?.is_comment == 0) {
-                $("#appointment_reason").hide();
-            } else {
+            $("#appointment_status_id_section").show();
+            $("#appointment_status_id").val(currentStatus.id);
+            var needsComment = (parentStatus && (parentStatus.is_comment == 1 || parentStatus.is_comment == '1'))
+                || currentStatus.is_comment == 1 || currentStatus.is_comment == '1';
+            if (needsComment) {
                 $("#appointment_reason").show();
                 $("#reason").val(appointments?.reason);
+            } else {
+                $("#appointment_reason").hide();
             }
         }
 
@@ -377,7 +375,7 @@ let loadChildStatuses = function (appointmentStatusId) {
                 if (parseInt(response.count) > 1) {
                     $('.appointment_status_id').show();
                 }
-                if (response.status && response.data.appointment_status.is_comment == '1') {
+                if (response.status && response.data?.appointment_status?.is_comment == '1') {
                     $('.reason').show();
                     statusValidate.addField('reason', extraValidate);
                 } else {
@@ -443,7 +441,7 @@ let statusListener = function (appointmentStatusId) {
             },
             cache: false,
             success: function (response) {
-                if (response.status && (response.data.appointment_status.is_comment == '1' || response.data.base_appointment_status.is_comment == '1')) {
+                if (response.status && (response.data?.appointment_status?.is_comment == '1' || response.data?.base_appointment_status?.is_comment == '1')) {
                     $('.reason').show();
                     statusValidate.addField('reason', extraValidate);
                 } else {

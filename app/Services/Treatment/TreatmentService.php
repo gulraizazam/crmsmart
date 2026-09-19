@@ -494,7 +494,7 @@ class TreatmentService
     protected function getFilterValues(): array
     {
         $accountId = Auth::user()->account_id;
-        $cacheKey = "treatment_filter_values_{$accountId}_" . md5(json_encode(ACL::getUserCentres()));
+        $cacheKey = "treatment_filter_values_v2_{$accountId}_" . md5(json_encode(ACL::getUserCentres()));
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($accountId) {
             $regions = Regions::getActiveSorted(ACL::getUserRegions());
@@ -503,10 +503,7 @@ class TreatmentService
             $locations = Locations::getActiveSorted(ACL::getUserCentres());
             $services = GeneralFunctions::ServicesTreeList();
 
-            $appointmentStatuses = AppointmentStatuses::getAllParentRecords($accountId);
-            if ($appointmentStatuses) {
-                $appointmentStatuses = $appointmentStatuses->pluck('name', 'id');
-            }
+            $appointmentStatuses = AppointmentStatuses::getParentStatusesForDropdown($accountId);
 
             $appointmentTypes = $this->getAppointmentTypes();
             $users = User::getAllRecords($accountId)->pluck('name', 'id');
@@ -604,8 +601,10 @@ class TreatmentService
     public function clearCache(): void
     {
         $accountId = Auth::user()->account_id;
+        $centresHash = md5(json_encode(ACL::getUserCentres()));
         Cache::forget("treatment_lookup_data_{$accountId}");
-        Cache::forget("treatment_filter_values_{$accountId}_" . md5(json_encode(ACL::getUserCentres())));
+        Cache::forget("treatment_filter_values_{$accountId}_" . $centresHash);
+        Cache::forget("treatment_filter_values_v2_{$accountId}_" . $centresHash);
         Cache::forget('treatment_type_id');
         Cache::forget('paid_invoice_status');
     }

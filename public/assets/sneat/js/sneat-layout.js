@@ -54,6 +54,25 @@
         }
     }
 
+    function restackModals() {
+        var $open = $('.modal.show');
+        $open.each(function (i) {
+            this.style.setProperty('z-index', String(1110 + i * 20), 'important');
+        });
+        $('.modal-backdrop').each(function (i) {
+            this.style.setProperty('z-index', String(1100 + i * 20), 'important');
+        });
+    }
+
+    $(document).on('shown.bs.modal', '.modal', restackModals);
+
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        if ($('.modal.show').length) {
+            $('body').addClass('modal-open');
+            restackModals();
+        }
+    });
+
     $(function () {
         var $body = $('body');
         var menu = document.getElementById('layout-menu');
