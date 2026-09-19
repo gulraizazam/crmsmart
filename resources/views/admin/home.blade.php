@@ -249,7 +249,7 @@
 </div>
 
 @push('datatable-js')
-<script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}"></script>
+<script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
 <script src="{{ asset('assets/js/pages/dashboard/datatable.js') }}"></script>
 <script src="{{ asset('assets/js/jsapi.js') }}"></script>
 <script src="{{ asset('assets/js/pie.js') }}"></script>

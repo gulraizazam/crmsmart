@@ -539,12 +539,16 @@ body.sneat-shell .modal {
     z-index: 1110 !important;
 }
 
+/* Nested Bootstrap modal: extra backdrop sits between parent and child, not over the child. */
 body.sneat-shell .modal-backdrop + .modal-backdrop {
-    z-index: 1115 !important;
+    z-index: 1120 !important;
 }
 
+body.sneat-shell .modal.show ~ .modal.show,
+body.sneat-shell #plan_edit_cash,
+body.sneat-shell #modal_edit_refunds,
 body.sneat-shell #modal_edit_sold_by {
-    z-index: 1120 !important;
+    z-index: 1130 !important;
 }
 
 body.sneat-shell .select2-container--open,
@@ -552,7 +556,12 @@ body.sneat-shell .select2-dropdown,
 body.sneat-shell .daterangepicker,
 body.sneat-shell .datepicker,
 body.sneat-shell .bootstrap-datetimepicker-widget {
-    z-index: 1130 !important;
+    z-index: 1140 !important;
+}
+
+/* SweetAlert confirmations must appear above every Bootstrap modal (including nested). */
+body.sneat-shell .swal2-container {
+    z-index: 2000 !important;
 }
 
 /* Readable type: filters, placeholders, and table heads match Sneat body (~15px). */

@@ -240,7 +240,7 @@ class ConsultancyDatatableService
         // Get invoice info
         $invoiceId = 0;
         $invoice = null;
-        if ($appointment->invoice && $appointment->invoice->invoice_status_id == $referenceData['invoice_status']->id) {
+        if ($appointment->invoice && $referenceData['invoice_status'] && $appointment->invoice->invoice_status_id == $referenceData['invoice_status']->id) {
             $invoice = $appointment->invoice;
             $invoiceId = $invoice->id;
         }
@@ -318,11 +318,7 @@ class ConsultancyDatatableService
         $locations = \App\Models\Locations::getActiveSorted(ACL::getUserCentres());
         $services = GeneralFunctions::ServicesTreeList();
         
-        // Get appointment statuses
-        $appointmentStatuses = AppointmentStatuses::getAllParentRecords($this->accountId);
-        if ($appointmentStatuses) {
-            $appointmentStatuses = $appointmentStatuses->pluck('name', 'id');
-        }
+        $appointmentStatuses = AppointmentStatuses::getParentStatusesForDropdown($this->accountId);
         
         // Get appointment types based on permissions
         if (Gate::allows('appointments_consultancy') && Gate::allows('treatments_services')) {

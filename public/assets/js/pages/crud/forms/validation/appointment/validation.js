@@ -36,12 +36,11 @@ var UpdateStatusValidation = function () {
                     closePopup(modal_id);
                     let query = get_query();
 
-                    if(response.data.appontment_type_id==1){
-                        var appointment = 'consultancy';
-                    }else {
-                        var appointment = 'treatment';
+                    var appointmentTypeId = response.data && response.data.appontment_type_id;
+                    var appointment = (appointmentTypeId == 1) ? 'consultancy' : 'treatment';
+                    if (typeof reInitTable === 'function') {
+                        reInitTable(appointment);
                     }
-                    reInitTable(appointment);
                 } else {
                     toastr.error(response.message);
                 }

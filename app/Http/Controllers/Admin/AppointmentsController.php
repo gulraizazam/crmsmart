@@ -206,10 +206,7 @@ class AppointmentsController extends Controller
         $locations = Locations::getActiveSorted(ACL::getUserCentres());
         $services = GeneralFunctions::ServicesTreeList();
 
-        $appointment_statuses = AppointmentStatuses::getAllParentRecords(Auth::User()->account_id);
-        if ($appointment_statuses) {
-            $appointment_statuses = $appointment_statuses->pluck('name', 'id');
-        }
+        $appointment_statuses = AppointmentStatuses::getParentStatusesForDropdown(Auth::User()->account_id);
         if (Gate::allows('appointments_consultancy')) {
             $appointment_types = AppointmentTypes::where('slug', '=', 'consultancy')->get()->pluck('name', 'id');
         }
@@ -2079,25 +2076,36 @@ class AppointmentsController extends Controller
      */
     public function showAppointmentStatuses(Request $request)
     {
-        $appointment = Appointments::find($request->id);
+        $accountId = Auth::User()->account_id;
+        $appointment = Appointments::with('appointment_status')->find($request->id);
         if (! $appointment) {
             return ApiHelper::apiResponse($this->success, 'No record found', false);
         }
-        $base_appointments = AppointmentStatuses::where(['account_id' => 1])->select('id', 'parent_id', 'is_comment')->get()->keyBy('id');
-        /*
-         * If Un-scheduled status is present then exclude this status from drop-down
-         */
-        $unscheduled_appointment_status = AppointmentStatuses::getUnScheduledStatusOnly(Auth::User()->account_id);
-        if ($unscheduled_appointment_status) {
-            $base_appointment_statuses = AppointmentStatuses::getBaseActiveSorted(Auth::User()->account_id/*, $unscheduled_appointment_status->id*/);
-        } else {
-            $base_appointment_statuses = AppointmentStatuses::getBaseActiveSorted(Auth::User()->account_id);
+        $base_appointments = AppointmentStatuses::where('account_id', $accountId)
+            ->select('id', 'parent_id', 'is_comment')
+            ->get()
+            ->keyBy('id')
+            ->map(function ($status) {
+                return [
+                    'id' => $status->id,
+                    'parent_id' => $status->parent_id,
+                    'is_comment' => $status->is_comment,
+                ];
+            })
+            ->toArray();
+        $base_appointment_statuses = AppointmentStatuses::getParentStatusesForDropdown($accountId);
+
+        $currentStatus = $appointment->appointment_status;
+        if ($currentStatus && empty($currentStatus->parent_id) && !isset($base_appointment_statuses[$currentStatus->id])) {
+            $base_appointment_statuses[$currentStatus->id] = $currentStatus->name;
         }
 
-        if (isset($appointment->appointment_status) && $appointment->appointment_status->parent_id != 0) {
-            $appointment_statuses = AppointmentStatuses::getActiveSorted($appointment->appointment_status->parent_id, Auth::User()->account_id);
-        } else {
-            $appointment_statuses[''] = '';
+        $appointment_statuses = ['' => ''];
+        if (! empty($appointment->appointment_status?->parent_id)) {
+            $appointment_statuses = AppointmentStatuses::getActiveSorted($appointment->appointment_status->parent_id, $accountId);
+            if ($appointment_statuses instanceof \Illuminate\Support\Collection) {
+                $appointment_statuses = $appointment_statuses->toArray();
+            }
         }
 
         return ApiHelper::apiResponse($this->success, 'Record found', true, [
@@ -2118,87 +2126,91 @@ class AppointmentsController extends Controller
      */
     public function storeAppointmentStatuses(Request $request)
     {
-       
         $data = $request->all();
-        $invoicestatus = InvoiceStatuses::where('slug', '=', 'paid')->first();
+        if (empty($data['base_appointment_status_id'])) {
+            return ApiHelper::apiResponse($this->success, 'Please select a status.', false);
+        }
+
         $appointment = Appointments::find($request->id);
         if (! $appointment) {
             return ApiHelper::apiResponse($this->success, 'Appointment not found', false);
         }
-        
-        // Store old status for activity logging
+
         $oldStatusId = $appointment->base_appointment_status_id;
         $oldStatus = AppointmentStatuses::find($oldStatusId);
         $appointment_type = AppointmentTypes::where('slug', '=', 'consultancy')->first();
-        $appointment_type_2 = AppointmentTypes::where('slug', '=', 'treatment')->first();
+        $isConsultancy = $appointment_type && (int) $appointment_type->id === (int) $appointment->appointment_type_id;
         $counterglobal = Settings::where('slug', '=', 'sys-appointmentrescheduledcounter')->first();
-        $invoiceexit = Invoices::where([
-            ['invoice_status_id', '=', $invoicestatus->id],
-            ['appointment_id', '=', $data['id']],
-        ])->get();
-        if ($data['base_appointment_status_id'] == Config::get('constants.appointment_status_arrived')) {
-            if (count($invoiceexit) == 0) {
-                return ApiHelper::apiResponse($this->success, 'Kindly pay invoice first!', false);
+        $rescheduleLimit = (int) ($counterglobal?->data ?? 3);
+
+        $invoicestatus = InvoiceStatuses::where('slug', '=', 'paid')->first();
+        $invoiceexit = collect();
+        if ($invoicestatus) {
+            $invoiceexit = Invoices::where([
+                ['invoice_status_id', '=', $invoicestatus->id],
+                ['appointment_id', '=', $appointment->id],
+            ])->get();
+        }
+
+        if ($invoicestatus) {
+            if ($data['base_appointment_status_id'] == Config::get('constants.appointment_status_arrived')) {
+                if (count($invoiceexit) == 0) {
+                    return ApiHelper::apiResponse($this->success, 'Kindly pay invoice first!', false);
+                }
+            }
+            if ($data['base_appointment_status_id'] != Config::get('constants.appointment_status_arrived')) {
+                if (count($invoiceexit) == 1) {
+                    return ApiHelper::apiResponse($this->success, 'Invoice paid, you not able to change status!', false);
+                }
             }
         }
-        if ($data['base_appointment_status_id'] != Config::get('constants.appointment_status_arrived')) {
-            if (count($invoiceexit) == 1) {
-                return ApiHelper::apiResponse($this->success, 'Invoice paid, you not able to change status!', false);
-            }
-        }
-        if ($appointment_type->id == $appointment->appointment_type_id) {
+
+        if ($isConsultancy) {
             if ($appointment->base_appointment_status_id == Config::get('constants.appointment_status_not_interested')) {
                 if ($data['base_appointment_status_id'] != Config::get('constants.appointment_status_not_interested')) {
                     $data['counter'] = 0;
                 }
             }
         }
-        // Set Allow Message Flag
-        if (isset($data['base_appointment_status_id'])) {
-            $appointment_status = AppointmentStatuses::getData($data['base_appointment_status_id']);
-            $data['appointment_status_allow_message'] = $appointment_status->allow_message;
-        }
+
+        $appointment_status = AppointmentStatuses::getData($data['base_appointment_status_id']);
+        $data['appointment_status_allow_message'] = $appointment_status?->allow_message ?? 0;
+
         if (! isset($data['appointment_status_id']) || $data['appointment_status_id'] == '') {
             $data['appointment_status_id'] = $data['base_appointment_status_id'];
         }
-        // Set Comments
         if (isset($data['reason']) && ! $data['reason']) {
             $data['reason'] = null;
         }
-        // Converted By
-        // $data['converted_by'] = Auth::User()->id;
+
         $data['updated_by'] = Auth::User()->id;
         $data['updated_at'] = Filters::getCurrentTimeStamp();
-        if ($appointment_type->id == $appointment->appointment_type_id) {
-            if ($data['base_appointment_status_id'] == Config::get('constants.appointment_status_not_show')) {
-                if ($appointment->counter == $counterglobal->data) {
-                    $data['base_appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
-                    $appointment_childstatus_not_interested = AppointmentStatuses::where('parent_id', '=', Config::get('constants.appointment_status_not_interested'))->first();
-                    if ($appointment_childstatus_not_interested) {
-                        $data['appointment_status_id'] = $appointment_childstatus_not_interested->id;
-                    } else {
-                        $data['appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
-                    }
-                } else {
-                    $data['counter'] = $appointment->counter + 1;
-                }
+
+        $applyNoShowLimit = function () use (&$data, $appointment, $isConsultancy, $rescheduleLimit) {
+            if (! $isConsultancy || $data['base_appointment_status_id'] != Config::get('constants.appointment_status_not_show')) {
+                return;
+            }
+            if ((int) $appointment->counter == $rescheduleLimit) {
+                $data['base_appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
+                $childNotInterested = AppointmentStatuses::where('parent_id', '=', Config::get('constants.appointment_status_not_interested'))->first();
+                $data['appointment_status_id'] = $childNotInterested?->id ?? Config::get('constants.appointment_status_not_interested');
+            } else {
+                $data['counter'] = $appointment->counter + 1;
+            }
+        };
+
+        $applyNoShowLimit();
+        $appointment->update($data);
+        $appointment->refresh();
+
+        if ($isConsultancy && $data['base_appointment_status_id'] == Config::get('constants.appointment_status_not_show')) {
+            if ((int) $appointment->counter == $rescheduleLimit) {
+                $data['base_appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
+                $childNotInterested = AppointmentStatuses::where('parent_id', '=', Config::get('constants.appointment_status_not_interested'))->first();
+                $data['appointment_status_id'] = $childNotInterested?->id ?? Config::get('constants.appointment_status_not_interested');
+                $appointment->update($data);
             }
         }
-        $appointment->update($data);
-        if ($appointment_type->id == $appointment->appointment_type_id) {
-            if ($data['base_appointment_status_id'] == Config::get('constants.appointment_status_not_show')) {
-                if ($appointment->counter == $counterglobal->data) {
-                    $data['base_appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
-                    $appointment_childstatus_not_interested = AppointmentStatuses::where('parent_id', '=', Config::get('constants.appointment_status_not_interested'))->first();
-                    if ($appointment_childstatus_not_interested) {
-                        $data['appointment_status_id'] = $appointment_childstatus_not_interested->id;
-                    } else {
-                        $data['appointment_status_id'] = Config::get('constants.appointment_status_not_interested');
-                    }
-                }
-            }
-        }
-        $appointment->update($data);
         $appointment_status_name = AppointmentStatuses::where('id', '=', $data['base_appointment_status_id'])->first();
 
         /** When appointment status will be 'No Show' then lead status will be automatically changed to 'Open' */
@@ -2925,8 +2937,8 @@ class AppointmentsController extends Controller
             }
 
             return ApiHelper::apiResponse($this->success, 'Record Found', true, [
-                'appointment_status' => count($appointment_status) > 0 ? $appointment_status : null,
-                'base_appointment_status' => count($base_appointment_status) > 0 ? $base_appointment_status : null,
+                'appointment_status' => is_array($appointment_status) && count($appointment_status) > 0 ? $appointment_status : null,
+                'base_appointment_status' => is_array($base_appointment_status) && count($base_appointment_status) > 0 ? $base_appointment_status : null,
             ]);
         }
 

@@ -371,7 +371,7 @@
         <script src="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
         <script src="{{asset('assets/js/pages/appointment/treatment-data.js?v=7')}}"></script>
         <script src="{{asset('assets/js/pages/crud/forms/validation/feedbacks/feedbacks.js')}}"></script>
-        <script src="{{asset('assets/js/pages/crud/forms/validation/appointment/validation.js?v=2')}}"></script>
+        <script src="{{asset('assets/js/pages/crud/forms/validation/appointment/validation.js?v=3')}}"></script>
         <script src="{{asset('assets/js/pages/appointment/plan/create.js')}}"></script>
         <script src="{{asset('assets/js/pages/appointment/common.js?v=8')}}"></script>
 
@@ -379,7 +379,7 @@
 
     @push('datatable-js')
         <script src="{{asset('assets/js/pages/appointment/treatment-columns.js')}}?v=3"></script>
-        <script src="{{asset('assets/js/pages/appointment/treatmentDatatable.js?v=3')}}"></script>
+        <script src="{{asset('assets/js/pages/appointment/treatmentDatatable.js?v=7')}}"></script>
     @endpush
 
 @endsection

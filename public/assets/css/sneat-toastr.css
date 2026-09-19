@@ -1,7 +1,7 @@
 /* Sneat advanced toastr — light cards, titles, close, progress. */
 
 #toast-container {
-    z-index: 1095;
+    z-index: 2050;
 }
 
 #toast-container > div {
