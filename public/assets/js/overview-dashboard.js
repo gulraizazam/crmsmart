@@ -139,6 +139,7 @@
         var horizontal = !!opts.horizontal;
         var stacked = !!opts.stacked;
         var moneyAxis = !!opts.money;
+        var categoryCount = (payload.labels || []).length || 1;
         var series;
         if (payload.datasets && payload.datasets.length) {
             series = payload.datasets.map(function (set) {
@@ -147,10 +148,17 @@
         } else {
             series = [{ name: opts.seriesName || 'Value', data: payload.values || [] }];
         }
+
+        var barHeightPct = categoryCount <= 1 ? '26%' : categoryCount <= 3 ? '38%' : categoryCount <= 6 ? '50%' : '58%';
+        var columnWidthPct = categoryCount <= 2 ? '28%' : categoryCount <= 4 ? '40%' : '52%';
+        var chartHeight = horizontal
+            ? Math.max(240, Math.min(el.clientHeight || 360, categoryCount * 54 + 110))
+            : (el.clientHeight || 360);
+
         var options = Object.assign(baseOptions(), {
             chart: Object.assign(baseOptions().chart, {
                 type: 'bar',
-                height: el.clientHeight || 360,
+                height: chartHeight,
                 stacked: stacked
             }),
             colors: payload.colors && payload.colors.length ? payload.colors : lineColors,
@@ -159,9 +167,32 @@
                 bar: {
                     horizontal: horizontal,
                     borderRadius: 6,
-                    columnWidth: '55%',
-                    barHeight: '70%',
-                    distributed: !stacked && !(payload.datasets && payload.datasets.length > 1)
+                    columnWidth: columnWidthPct,
+                    barHeight: barHeightPct,
+                    distributed: !stacked && !(payload.datasets && payload.datasets.length > 1),
+                    dataLabels: {
+                        position: horizontal ? 'top' : 'top'
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: !stacked,
+                offsetX: horizontal ? 6 : 0,
+                offsetY: horizontal ? 0 : -6,
+                style: {
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    fontFamily: 'Public Sans, Segoe UI, sans-serif',
+                    colors: ['#566a7f']
+                },
+                background: {
+                    enabled: false
+                },
+                formatter: function (val) {
+                    if (val == null || val === '') {
+                        return '';
+                    }
+                    return moneyAxis ? money.format(val) : Math.round(Number(val) || 0);
                 }
             },
             xaxis: Object.assign(baseOptions().xaxis, {
@@ -184,8 +215,39 @@
                 y: { formatter: moneyAxis ? moneyLabel : function (v) { return v; } }
             })
         });
+        if (horizontal) {
+            var longest = 0;
+            (payload.labels || []).forEach(function (label) {
+                longest = Math.max(longest, String(label || '').length);
+            });
+            var labelWidth = Math.min(200, Math.max(110, Math.round(longest * 7.5)));
+            options.grid = Object.assign({}, baseOptions().grid, {
+                padding: { top: 8, right: 28, bottom: 4, left: 16 }
+            });
+            options.yaxis = Object.assign({}, baseOptions().yaxis, {
+                labels: {
+                    show: true,
+                    align: 'left',
+                    minWidth: labelWidth,
+                    maxWidth: labelWidth,
+                    offsetX: 0,
+                    trim: false,
+                    style: baseOptions().yaxis.labels.style
+                }
+            });
+            options.xaxis.labels.trim = false;
+        }
         if (moneyAxis && horizontal) {
             options.xaxis.labels.formatter = function (v) { return money.format(v); };
+        }
+        if (stacked) {
+            options.dataLabels.enabled = true;
+            options.dataLabels.formatter = function (val) {
+                if (!val) {
+                    return '';
+                }
+                return Math.round(Number(val) || 0);
+            };
         }
         new ApexCharts(el, options).render();
     }
@@ -197,19 +259,99 @@
             emptyState(el);
             return;
         }
+
+        var rawValues = (payload.values || []).map(function (v) { return Number(v) || 0; });
+        var total = rawValues.reduce(function (sum, value) { return sum + value; }, 0) || 1;
+
+        if (type === 'radialBar') {
+            var radialOptions = Object.assign(baseOptions(), {
+                chart: Object.assign(baseOptions().chart, { type: 'radialBar', height: el.clientHeight || 320 }),
+                labels: payload.labels,
+                series: rawValues.map(function (value) {
+                    return Math.round((value / total) * 1000) / 10;
+                }),
+                colors: payload.colors && payload.colors.length ? payload.colors : lineColors,
+                legend: Object.assign(baseOptions().legend, {
+                    show: true,
+                    position: 'bottom',
+                    formatter: function (seriesName, opts) {
+                        var value = rawValues[opts.seriesIndex] || 0;
+                        var formatted = moneyAxis ? money.format(value) : String(Math.round(value));
+                        return seriesName + ': ' + formatted;
+                    }
+                }),
+                plotOptions: {
+                    radialBar: {
+                        hollow: { size: '28%' },
+                        track: { background: '#f0f2f5' },
+                        dataLabels: {
+                            name: { fontSize: '12px', color: '#566a7f' },
+                            value: {
+                                fontSize: '14px',
+                                fontWeight: 600,
+                                color: '#566a7f',
+                                formatter: function (val) {
+                                    return Math.round(Number(val) || 0) + '%';
+                                }
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                formatter: function () {
+                                    return moneyAxis ? money.format(total) : String(Math.round(total));
+                                }
+                            }
+                        }
+                    }
+                },
+                stroke: { lineCap: 'round' },
+                tooltip: Object.assign(baseOptions().tooltip, {
+                    y: {
+                        formatter: function (_val, opts) {
+                            var value = rawValues[opts.seriesIndex] || 0;
+                            return moneyAxis ? moneyLabel(value) : value;
+                        }
+                    }
+                })
+            });
+            new ApexCharts(el, radialOptions).render();
+            return;
+        }
+
         var options = Object.assign(baseOptions(), {
             chart: Object.assign(baseOptions().chart, { type: type, height: el.clientHeight || 320 }),
             labels: payload.labels,
-            series: (payload.values || []).map(function (v) { return Number(v) || 0; }),
+            series: rawValues,
             colors: payload.colors && payload.colors.length ? payload.colors : lineColors,
             stroke: { width: type === 'polarArea' ? 1 : 0 },
-            legend: Object.assign(baseOptions().legend, { position: 'bottom' }),
+            legend: Object.assign(baseOptions().legend, {
+                position: 'bottom',
+                formatter: function (seriesName, opts) {
+                    var value = opts.w.globals.series[opts.seriesIndex];
+                    var formatted = moneyAxis ? money.format(value) : String(Math.round(Number(value) || 0));
+                    return seriesName + ': ' + formatted;
+                }
+            }),
             plotOptions: {
                 pie: {
                     donut: { size: type === 'donut' ? '68%' : '0%' }
+                },
+                polarArea: {
+                    rings: { strokeWidth: 0 },
+                    spokes: { connectorColors: '#d9dee3' }
                 }
             },
-            dataLabels: { enabled: true, style: { fontSize: '12px', fontFamily: 'Public Sans, Segoe UI, sans-serif' } },
+            dataLabels: {
+                enabled: true,
+                style: { fontSize: '12px', fontFamily: 'Public Sans, Segoe UI, sans-serif' },
+                formatter: function (_percent, opts) {
+                    var value = opts.w.config.series[opts.seriesIndex];
+                    if (moneyAxis) {
+                        return money.format(value);
+                    }
+                    return Math.round(Number(value) || 0);
+                }
+            },
             tooltip: Object.assign(baseOptions().tooltip, {
                 y: { formatter: moneyAxis ? moneyLabel : function (v) { return v; } }
             })
@@ -227,13 +369,13 @@
         renderBar('chartRevenueCentre', charts.revenue_by_centre, { money: true });
         renderLine('chartAppointmentTrend', charts.appointment_trend, false);
         renderCircle('chartAppointmentType', charts.appointments_by_type, 'polarArea');
-        renderCircle('chartAppointmentStatus', charts.appointments_by_status, 'donut');
+        renderBar('chartAppointmentStatus', charts.appointments_by_status, { horizontal: true });
         renderBar('chartAppointmentCentre', charts.appointments_by_centre, { stacked: true });
         renderBar('chartRevenueCategory', charts.revenue_by_category, { horizontal: true, money: true });
         renderBar('chartRevenueService', charts.revenue_by_service, { horizontal: true, money: true });
         renderBar('chartLeadSource', charts.leads_by_source, { horizontal: true });
         renderCircle('chartLeadStatus', charts.leads_by_status, 'pie');
-        renderCircle('chartPatientGender', charts.patients_by_gender, 'donut');
+        renderCircle('chartPatientGender', charts.patients_by_gender, 'radialBar');
         renderLine('chartPatientTrend', charts.patients_trend, false);
         renderBar('chartDoctors', charts.doctors_by_appointments, { horizontal: true });
         renderBar('chartExpenses', charts.expenses_by_category, { horizontal: true, money: true });

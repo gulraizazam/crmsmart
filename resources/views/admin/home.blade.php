@@ -1,7 +1,7 @@
 ﻿@extends('admin.layouts.master')
 @section('title', 'Dashboard')
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=3">
+<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=4">
 
 <div class="content d-flex flex-column flex-column-fluid sneat-dashboard" id="kt_content">
     <div class="d-flex flex-column-fluid">
@@ -269,7 +269,7 @@ window.dashboardConfig = {
     }
 };
 </script>
-<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=3"></script>
+<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=6"></script>
 <script src="{{ asset('assets/js/dashboard.js') }}?v={{ @filemtime(public_path('assets/js/dashboard.js')) }}"></script>
 <script src="{{ asset('assets/js/dashboard-charts.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-charts.js')) }}"></script>
 @endpush
