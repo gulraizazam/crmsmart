@@ -3,8 +3,8 @@
 @section('content')
 
     @push('css')
-        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=9" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=14" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=12" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=16" rel="stylesheet" type="text/css" />
     @endpush
 
     <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-leads-page" id="kt_content">
@@ -23,13 +23,13 @@
                                 </a>
                                 @if(Gate::allows('leads_import'))
                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#modal_import_leads" class="btn btn-info">
-                                        <i class="fa fa-upload"></i>
+                                        <i class="la la-file-import"></i>
                                         Import
                                     </a>
                                 @endif
                                 @if(Gate::allows('leads_export'))
                                     <a href="#" id="export-leads" data-href="{{route('admin.leads.export.excel')}}" class="btn btn-info">
-                                        <i class="fa fa-download"></i>
+                                        <i class="la la-file-export"></i>
                                         Export
                                     </a>
                                 @endif
@@ -173,7 +173,7 @@
                 },1000);
             }
         </script>
-        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=11"></script>
+        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=12"></script>
         <script src="{{asset('assets/js/pages/leads/leads-kanban.js')}}?v=7"></script>
 
         <script>

@@ -331,6 +331,11 @@ class Appointments extends Model
         return $this->hasMany('App\Models\SMSLogs', 'appointment_id')->withTrashed();
     }
 
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'appointment_id');
+    }
+
     /*
      * Self join on appointment_id
      * */

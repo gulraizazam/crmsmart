@@ -140,7 +140,7 @@ class ConsultancyDatatableService
                 'location:id,name',
                 'service:id,name',
                 'appointment_type:id,name',
-                'appointment_status:id,name,parent_id',
+                'appointment_status:id,name,parent_id,is_arrived,is_converted',
                 'patient:id,phone',
                 'region:id,name'
             ])
@@ -210,6 +210,7 @@ class ConsultancyDatatableService
         // Load appointment statuses
         $unscheduledStatus = AppointmentStatuses::getUnScheduledStatusOnly($this->accountId, ['id']);
         $cancelledStatus = AppointmentStatuses::getCancelledStatusOnly($this->accountId);
+        $arrivedConvertedIds = AppointmentStatuses::arrivedAndConvertedIds($this->accountId);
         
         // Load users referenced in appointments
         $userIds = $appointments->pluck('app_created_by')
@@ -227,6 +228,7 @@ class ConsultancyDatatableService
             'invoice_status' => $invoiceStatus,
             'unscheduled_status' => $unscheduledStatus,
             'cancelled_status' => $cancelledStatus,
+            'arrived_converted_ids' => $arrivedConvertedIds,
             'users' => $users,
             'appointment_statuses' => $appointmentStatuses,
         ];
@@ -298,6 +300,10 @@ class ConsultancyDatatableService
             'cancelled_appointment_status' => $referenceData['cancelled_status'],
             'appointment_status_id' => $statusName,
             'appointment_status' => $appointment->appointment_status_id,
+            'can_prescribe' => AppointmentStatuses::appointmentAllowsPrescription(
+                $appointment,
+                $referenceData['arrived_converted_ids'] ?? []
+            ),
             'invoice_id' => $invoiceId,
             'invoice' => $invoice,
         ];
@@ -384,6 +390,7 @@ class ConsultancyDatatableService
             'image_manage' => Gate::allows('appointments_image_manage'),
             'measurement_manage' => Gate::allows('appointments_measurement_manage'),
             'medical_form_manage' => Gate::allows('appointments_medical_form_manage'),
+            'prescription_manage' => Gate::allows('appointments_prescription_manage'),
             'plans_create' => Gate::allows('appointments_plans_create'),
             'patient_card' => Gate::allows('appointments_patient_card'),
             'contact' => Gate::allows('contact'),

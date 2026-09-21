@@ -114,6 +114,40 @@ class AppointmentStatuses extends BaseModal
         return self::where(['is_unscheduled' => '1', 'account_id' => $account_id])->first($columns);
     }
 
+    public static function arrivedAndConvertedIds($account_id): array
+    {
+        $arrivedId = self::where(['account_id' => $account_id, 'is_arrived' => 1])->value('id') ?: 2;
+        $convertedId = self::where(['account_id' => $account_id, 'is_converted' => 1])->value('id') ?: 16;
+
+        return array_values(array_unique([(int) $arrivedId, (int) $convertedId]));
+    }
+
+    public static function appointmentAllowsPrescription($appointment, array $statusIds = []): bool
+    {
+        if (!$appointment) {
+            return false;
+        }
+        if (!$statusIds) {
+            $statusIds = self::arrivedAndConvertedIds($appointment->account_id);
+        }
+        $currentId = (int) $appointment->appointment_status_id;
+        $baseId = (int) $appointment->base_appointment_status_id;
+        if (in_array($currentId, $statusIds, true) || in_array($baseId, $statusIds, true)) {
+            return true;
+        }
+        $status = $appointment->appointment_status;
+        if ($status) {
+            if ((int) $status->is_arrived === 1 || (int) $status->is_converted === 1) {
+                return true;
+            }
+            if ($status->parent_id && in_array((int) $status->parent_id, $statusIds, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Get Default Status
      */

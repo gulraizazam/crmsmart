@@ -556,6 +556,7 @@ class LeadService
                     'lead_id' => $leadId,
                     'comment' => $comment,
                     'created_by' => Auth::id(),
+                    'account_id' => $lead->account_id ?? Auth::user()->account_id,
                 ]);
             }
 
@@ -1221,13 +1222,15 @@ class LeadService
      */
     public function addComment($leadId, string $comment): LeadComments
     {
+        $lead = Leads::find($leadId);
+
         $row = LeadComments::create([
             'lead_id' => $leadId,
             'comment' => $comment,
             'created_by' => Auth::id(),
+            'account_id' => $lead?->account_id ?? Auth::user()->account_id,
         ]);
 
-        $lead = Leads::find($leadId);
         if ($lead) {
             ActivityLogger::logLeadChange($lead, 'Comment added', 'lead_commented', '—', $comment);
         }

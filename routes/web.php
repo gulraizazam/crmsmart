@@ -55,6 +55,7 @@ use App\Http\Controllers\Admin\PackageAdvancesController;
 use App\Http\Controllers\Admin\AppointmentimageController;
 use App\Http\Controllers\Admin\TransferProductsController;
 use App\Http\Controllers\Admin\AppointmentMedicalController;
+use App\Http\Controllers\Admin\AppointmentPrescriptionController;
 use App\Http\Controllers\Admin\ConsultancyInvoiceController;
 use App\Http\Controllers\Admin\AppointmentStatusesController;
 use App\Http\Controllers\Admin\CustomFormFeedbacksController;
@@ -541,6 +542,17 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
         Route::get('appointmentsmedical/{id}/print', [AppointmentMedicalController::class, 'filledPrint'])->name('appointmentsmedical.custom_form_feedbacks.filled_print');
 
         Route::get('appointmentsmedical/{id}/export_pdf', [AppointmentMedicalController::class, 'exportPdf'])->name('appointmentsmedical.custom_form_feedbacks.export_pdf');
+        //Appointment route end for medical history form
+
+        Route::get('appointments/{appointment}/prescriptions', [AppointmentPrescriptionController::class, 'index'])->name('appointments.prescriptions.index');
+        Route::get('appointments/{appointment}/prescriptions/create', [AppointmentPrescriptionController::class, 'create'])->name('appointments.prescriptions.create');
+        Route::post('appointments/{appointment}/prescriptions', [AppointmentPrescriptionController::class, 'store'])->name('appointments.prescriptions.store');
+        Route::get('prescriptions/{prescription}', [AppointmentPrescriptionController::class, 'show'])->name('appointments.prescriptions.show');
+        Route::get('prescriptions/{prescription}/edit', [AppointmentPrescriptionController::class, 'edit'])->name('appointments.prescriptions.edit');
+        Route::put('prescriptions/{prescription}', [AppointmentPrescriptionController::class, 'update'])->name('appointments.prescriptions.update');
+        Route::delete('prescriptions/{prescription}', [AppointmentPrescriptionController::class, 'destroy'])->name('appointments.prescriptions.destroy');
+        Route::get('prescriptions/{prescription}/print', [AppointmentPrescriptionController::class, 'printView'])->name('appointments.prescriptions.print');
+        Route::get('prescriptions/{prescription}/pdf', [AppointmentPrescriptionController::class, 'exportPdf'])->name('appointments.prescriptions.pdf');
         /*Appointment Route end for medical history form*/
 
         Route::get('dashboard/getdoctors', [DashboardReportsController::class, 'GetCentreDoctors'])->name('getdoctors');

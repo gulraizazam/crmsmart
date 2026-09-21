@@ -798,6 +798,7 @@ function consultationActions(data) {
         || perms.image_manage
         || perms.measurement_manage
         || perms.medical_form_manage
+        || perms.prescription_manage
         || perms.plans_create
         || perms.patient_card
     ) {
@@ -872,6 +873,15 @@ function consultationActions(data) {
                         <a target="_blank" href="' + patient_url + '" class="navi-link">\
                             <span class="navi-icon"><i class="la la-user"></i></span>\
                             <span class="navi-text">Patient Card</span>\
+                        </a>\
+                    </li>';
+        }
+        if (perms.prescription_manage && data.appointment_type == 1 && data.can_prescribe) {
+            var rx_url = route('admin.appointments.prescriptions.index', { appointment: id });
+            actions += '<li class="navi-item">\
+                        <a href="' + rx_url + '" class="navi-link">\
+                            <span class="navi-icon"><i class="la la-notes-medical"></i></span>\
+                            <span class="navi-text">E-Prescription</span>\
                         </a>\
                     </li>';
         }

@@ -218,6 +218,13 @@ function consultationActionsShared(data, perms) {
             '</a>';
     }
     
+    if (p.prescription_manage && data.appointment_type == 1 && data.can_prescribe) {
+        var rx_url = route('admin.appointments.prescriptions.index', { appointment: id });
+        actions += '<a title="E-Prescription" href="' + rx_url + '" class="d-lg-inline-flex d-none btn btn-icon btn-light-primary btn-sm">' +
+                '<span class="navi-icon"><i class="la la-notes-medical"></i></span>' +
+            '</a>';
+    }
+
     // SMS logs button
     actions += '<a href="javascript:void(0);" onclick="viewSmsLogs(`' + sms_logs_url + '`);" class="d-lg-inline-flex d-none btn btn-icon btn-success btn-sm" title="SMS Logs">' +
             '<span class="navi-icon"><i class="la la-comments"></i></span>' +
@@ -263,6 +270,16 @@ function consultationActionsShared(data, perms) {
                 '<a target="_blank" href="' + patient_url + '" class="navi-link">' +
                     '<span class="navi-icon"><i class="la la-user"></i></span>' +
                     '<span class="navi-text">Patient Card</span>' +
+                '</a>' +
+            '</li>';
+    }
+
+    if (p.prescription_manage && data.appointment_type == 1 && data.can_prescribe) {
+        var rxMenuUrl = route('admin.appointments.prescriptions.index', { appointment: id });
+        actions += '<li class="navi-item">' +
+                '<a href="' + rxMenuUrl + '" class="navi-link">' +
+                    '<span class="navi-icon"><i class="la la-notes-medical"></i></span>' +
+                    '<span class="navi-text">E-Prescription</span>' +
                 '</a>' +
             '</li>';
     }

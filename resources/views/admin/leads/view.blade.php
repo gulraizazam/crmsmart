@@ -120,15 +120,19 @@
             </div>
 
             <div class="tab-pane fade" id="lead_tab_comments" role="tabpanel" aria-labelledby="lead_tab_comments_btn">
-                <div class="portlet-body" id="commentsection"></div>
+                <div class="sneat-lead-comments" id="commentsection">
+                    <div class="sneat-lead-comment-empty">No comments yet</div>
+                </div>
 
                 @if(Gate::allows('leads_manage'))
-                    <div class="sneat-lead-section sneat-lead-comment-form">
+                    <div class="sneat-lead-comment-form">
                         <form id="cment">
-                            <label>Comment</label>
-                            <input type="text" name="comment" class="form-control" required/>
-                            <input type="hidden" name="lead_id" id="comment_lead_id" class="form-control" value="" />
-                            <button type="button" name="Add_comment" id="Add_comment" class="btn btn-primary">Comment</button>
+                            <label for="lead_comment_input">Add a comment</label>
+                            <div class="sneat-lead-composer-row">
+                                <textarea id="lead_comment_input" name="comment" class="form-control" rows="2" placeholder="Write a comment…" required></textarea>
+                                <input type="hidden" name="lead_id" id="comment_lead_id" value="" />
+                                <button type="button" name="Add_comment" id="Add_comment" class="btn btn-primary">Add comment</button>
+                            </div>
                         </form>
                     </div>
                 @endif

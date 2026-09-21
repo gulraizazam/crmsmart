@@ -156,8 +156,8 @@
             function resetAllFilters() { /* Not needed */ }
         </script>
         {{-- Use the SAME JS files as main consultations module --}}
-        <script src="{{ asset('assets/js/pages/appointment/consultation-columns.js') }}?v=4"></script>
-        <script src="{{ asset('assets/js/pages/appointment/consultation-common.js') }}?v=3"></script>
+        <script src="{{ asset('assets/js/pages/appointment/consultation-columns.js') }}?v=6"></script>
+        <script src="{{ asset('assets/js/pages/appointment/consultation-common.js') }}?v=5"></script>
         <script src="{{ asset('assets/js/pages/appointment/datatable.js') }}?v=2"></script>
         <script src="{{ asset('assets/js/pages/appointment/invoice.js') }}"></script>
         <script src="{{ asset('assets/js/pages/appointment/common.js') }}"></script>

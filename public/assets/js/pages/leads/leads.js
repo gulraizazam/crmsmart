@@ -767,31 +767,25 @@ function setComments(lead) {
         Object.values(lead_comments).forEach(function (comment) {
             comment_html += commentData(comment?.user?.name, comment?.created_at, comment?.comment);
         });
+    } else {
+        comment_html = '<div class="sneat-lead-comment-empty">No comments yet</div>';
     }
     $("#commentsection").html(comment_html);
     setLeadTabCount('lead_comments_count', lead_comments.length || 0);
 }
 
 function commentData(user_name, created_at, comment) {
-    let comment_html = '';
-    comment_html = '<div class="tab-content" id="itemComment">' +
-        ' <div class="tab-pane active" id="portlet_comments_1"> ' +
-        '<div class="mt-comments"> ' +
-        '<div class="mt-comment">' +
-        ' <div class="mt-comment-img" id="imgContainer"> ' +
-        '<img src="'+asset_url+'assets/media/avatar.jpg" alt="Avatar"> ' +
-        '</div><div class="mt-comment-body"> ' +
-        '<div class="mt-comment-info"> ' +
-        '<span class="mt-comment-author" id="creat_by">';
-    comment_html += user_name ?? 'N/A';
-    comment_html += '</span> <span class="mt-comment-date" id="datetime">';
-     comment_html += formatDate(created_at, 'ddd MMM, DD YYYY hh:mm A');
-    comment_html += '</span> </div>' +
-        '<div class="mt-comment-text" id="message">';
-    comment_html += comment ?? 'N/A';
-    comment_html += '</div><div class="mt-comment-details"> </div>' +
-        '</div></div></div></div></div>';
-    return comment_html;
+    var name = user_name || 'N/A';
+    return '<article class="sneat-lead-comment">' +
+        '<span class="sneat-lead-comment-avatar" aria-hidden="true">' + escapeLeadActivity(sneatPatientInitials(name)) + '</span>' +
+        '<div class="sneat-lead-comment-body">' +
+            '<div class="sneat-lead-comment-meta">' +
+                '<strong class="sneat-lead-comment-author">' + escapeLeadActivity(name) + '</strong>' +
+                '<time class="sneat-lead-comment-date">' + escapeLeadActivity(formatDate(created_at, 'ddd MMM, DD YYYY hh:mm A')) + '</time>' +
+            '</div>' +
+            '<p class="sneat-lead-comment-text">' + escapeLeadActivity(comment ?? 'N/A') + '</p>' +
+        '</div>' +
+    '</article>';
 }
 
 function editRow(url, id) {
@@ -1418,6 +1412,10 @@ $(function () {
                 $(this).animate({backgroundColor:"#000"},'slow');
         });
     $("#Add_comment").click(function(){
+        var comment = $.trim($('#cment [name=comment]').val());
+        if (!comment) {
+            return;
+        }
         $.ajax({
             type: 'POST',
             url: route('admin.leads.storecomment'),
@@ -1425,16 +1423,17 @@ $(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                'comment': $('input[name=comment]').val(),
+                'comment': comment,
                 'lead_id': $('#comment_lead_id').val(),
             },
             success: function(data) {
+                $('#commentsection .sneat-lead-comment-empty').remove();
                 $('#commentsection').prepend(commentData(data.username, data.leadCommentDate, data.lead.comment));
-                setLeadTabCount('lead_comments_count', $('#commentsection .mt-comment').length);
+                setLeadTabCount('lead_comments_count', $('#commentsection .sneat-lead-comment').length);
                 refreshLeadActivities();
+                $('#cment')[0].reset();
             },
         });
-        $('#cment')[0].reset();
     });
 })
 

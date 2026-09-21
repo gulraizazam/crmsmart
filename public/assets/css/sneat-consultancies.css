@@ -220,10 +220,18 @@
     color: var(--s-heading) !important;
 }
 
+.sneat-appt-page .btn-info i {
+    color: inherit !important;
+}
+
 .sneat-appt-page .btn-info:hover {
     background: rgba(105, 108, 255, 0.08) !important;
     border-color: var(--s-primary) !important;
     color: var(--s-primary) !important;
+}
+
+.sneat-appt-page .btn-info:hover i {
+    color: inherit !important;
 }
 
 .sneat-appt-page .btn-secondary,
