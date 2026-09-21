@@ -21,6 +21,28 @@
         return 'PKR ' + money.format(value || 0);
     }
 
+    /** Evenly spaced tick indexes that always include the first and last label. */
+    function pickTickIndices(count, maxTicks) {
+        if (count <= 0) {
+            return [];
+        }
+        if (count <= maxTicks) {
+            var all = [];
+            for (var i = 0; i < count; i++) {
+                all.push(i);
+            }
+            return all;
+        }
+        var indices = [];
+        var steps = maxTicks - 1;
+        for (var t = 0; t <= steps; t++) {
+            indices.push(Math.round((t * (count - 1)) / steps));
+        }
+        return indices.filter(function (value, index, arr) {
+            return index === 0 || value !== arr[index - 1];
+        });
+    }
+
     function baseOptions() {
         return {
             chart: {
@@ -71,12 +93,26 @@
             emptyState(el);
             return;
         }
+        var labels = payload.labels;
+        var tickIndex = {};
+        pickTickIndices(labels.length, 12).forEach(function (index) {
+            tickIndex[index] = true;
+        });
         var options = Object.assign(baseOptions(), {
             chart: Object.assign(baseOptions().chart, { type: 'line', height: el.clientHeight || 320, animations: { enabled: true } }),
             series: payload.datasets.map(function (set) {
                 return { name: set.label, data: set.data };
             }),
-            xaxis: Object.assign(baseOptions().xaxis, { categories: payload.labels, tickAmount: Math.min(12, payload.labels.length) }),
+            xaxis: Object.assign(baseOptions().xaxis, {
+                categories: labels,
+                labels: Object.assign({}, baseOptions().xaxis.labels, {
+                    hideOverlappingLabels: false,
+                    formatter: function (value, _timestamp, opts) {
+                        var index = opts && typeof opts.i === 'number' ? opts.i : labels.indexOf(value);
+                        return tickIndex[index] ? value : '';
+                    }
+                })
+            }),
             yaxis: Object.assign(baseOptions().yaxis, {
                 min: 0,
                 labels: {
