@@ -890,6 +890,20 @@
                 </li>
                 @endif
                 <!-- End Inventory menu -->
+
+                <!-- Inventory ERP (opens dedicated module dashboard) -->
+                @if (Gate::allows('inv_erp_manage'))
+                <li class="menu-item {{ request()->routeIs('admin.inventory-erp.*') ? 'active' : '' }}" aria-haspopup="true">
+                    <a href="{{ route('admin.inventory-erp.dashboard') }}" class="menu-link">
+                        <span class="svg-icon menu-icon fa_icon">
+                            <i class="la la-boxes"></i>
+                        </span>
+                        <span class="menu-text">Inventory ERP</span>
+                    </a>
+                </li>
+                @endif
+                <!-- End Inventory ERP -->
+
                 <li class="menu-header">
                     <span class="menu-header-text">Reports</span>
                 </li>

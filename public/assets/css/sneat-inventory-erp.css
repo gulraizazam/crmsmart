@@ -1,0 +1,183 @@
+/* Inventory ERP — Phase 1 screens */
+
+.sneat-inv-page {
+    --s-primary: #696cff;
+    --s-heading: #566a7f;
+    --s-body: #697a8d;
+    --s-muted: #a1acb8;
+    --s-border: #d9dee3;
+    --s-soft: #f5f5f9;
+    font-family: "Public Sans", "Segoe UI", sans-serif;
+}
+
+.sneat-inv-page .sneat-page-card .card-header {
+    align-items: center;
+}
+
+.sneat-inv-page .table th {
+    color: var(--s-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-top: 0;
+}
+
+.sneat-inv-page .table td {
+    color: var(--s-heading);
+    vertical-align: middle;
+}
+
+.sneat-inv-page .badge-soft {
+    background: rgba(105, 108, 255, 0.12);
+    color: var(--s-primary);
+    font-weight: 600;
+}
+
+.sneat-inv-page .badge-soft-success {
+    background: rgba(113, 221, 55, 0.16);
+    color: #3a9b1a;
+}
+
+.sneat-inv-page .badge-soft-muted {
+    background: #eceef1;
+    color: var(--s-body);
+}
+
+.sneat-inv-page .inv-filters {
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+}
+
+.sneat-inv-page .inv-filters .form-control,
+.sneat-inv-page .inv-form .form-control {
+    min-height: 2.375rem;
+}
+
+.sneat-inv-page .inv-opening-lines .form-control {
+    min-width: 0;
+}
+
+.sneat-inv-page .inv-meta {
+    color: var(--s-muted);
+    font-size: 0.8125rem;
+}
+
+.sneat-inv-page .inv-value {
+    font-weight: 600;
+    color: var(--s-heading);
+}
+
+/* Module shell */
+.sneat-inv-erp-shell .inv-erp-sidebar .app-brand-text {
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+}
+
+.sneat-inv-page .inv-dash-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sneat-inv-page .inv-dash-title {
+    font-size: 1.5rem;
+    font-weight: 650;
+    color: var(--s-heading);
+}
+
+.sneat-inv-page .inv-dash-sub {
+    color: var(--s-muted);
+    font-size: 0.9375rem;
+}
+
+.sneat-inv-page .inv-kpi {
+    background: #fff;
+    border: 1px solid var(--s-border);
+    border-radius: 0.5rem;
+    padding: 1rem 1.1rem;
+    height: 100%;
+}
+
+.sneat-inv-page .inv-kpi-warn {
+    border-color: #ffcf96;
+    background: #fff8ef;
+}
+
+.sneat-inv-page .inv-kpi-label {
+    color: var(--s-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+}
+
+.sneat-inv-page .inv-kpi-value {
+    font-size: 1.35rem;
+    font-weight: 650;
+    color: var(--s-heading);
+    line-height: 1.2;
+}
+
+.sneat-inv-page .inv-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+.sneat-inv-page .inv-quick-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--s-border);
+    border-radius: 0.5rem;
+    background: var(--s-soft);
+    color: var(--s-heading);
+    text-decoration: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.sneat-inv-page .inv-quick-tile:hover {
+    border-color: var(--s-primary);
+    background: #fff;
+    color: var(--s-primary);
+    text-decoration: none;
+}
+
+.sneat-inv-page .inv-quick-tile i {
+    font-size: 1.25rem;
+}
+
+.sneat-inv-page .inv-quick-tile span {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.sneat-inv-page .inv-module-card {
+    background: #fff;
+    border: 1px solid var(--s-border);
+    border-radius: 0.5rem;
+    padding: 1.15rem 1.25rem;
+    height: 100%;
+}
+
+.sneat-inv-page .inv-module-card h4 {
+    font-size: 1rem;
+    font-weight: 650;
+    color: var(--s-heading);
+    margin-bottom: 0.35rem;
+}
+
+.sneat-inv-page .inv-module-card p {
+    color: var(--s-muted);
+    font-size: 0.875rem;
+    margin-bottom: 0.65rem;
+}
+
+.sneat-inv-page .inv-module-card a {
+    font-size: 0.875rem;
+    font-weight: 600;
+}

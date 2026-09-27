@@ -447,6 +447,7 @@
             centre_wise_arrival.destroy();
         }
 
+        var categoryCount = modifiedLocations.length || 1;
         var options = {
             series: [{
                 name: 'Total Appointments',
@@ -467,7 +468,7 @@
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '70%',
+                    columnWidth: categoryCount > 10 ? '70%' : (categoryCount > 5 ? '50%' : '36%'),
                     endingShape: 'rounded',
                     dataLabels: { position: 'top' }
                 }
@@ -479,16 +480,17 @@
             },
             xaxis: {
                 categories: modifiedLocations,
+                tickPlacement: 'on',
                 labels: {
-                    rotate: 0,
+                    rotate: -45,
                     rotateAlways: true,
-                    trim: false,
-                    hideOverlappingLabels: false,
-                    maxHeight: 80,
-                    style: { fontSize: '11px' },
+                    trim: true,
+                    hideOverlappingLabels: true,
+                    maxHeight: 140,
+                    style: { fontSize: '11px', colors: '#697a8d' },
                     formatter: function (val) {
                         if (!val) return '';
-                        return val.length > 14 ? val.substring(0, 13) + '…' : val;
+                        return val.length > 18 ? val.substring(0, 17) + '…' : val;
                     }
                 }
             },
@@ -503,7 +505,18 @@
                 intersect: false
             },
             yaxis: {
-                title: { text: 'Count' }
+                min: 0,
+                forceNiceScale: true,
+                decimalsInFloat: 0,
+                title: { text: 'Count' },
+                labels: {
+                    formatter: function (val) {
+                        return Math.round(Number(val) || 0);
+                    }
+                }
+            },
+            grid: {
+                padding: { bottom: 12 }
             }
         };
         

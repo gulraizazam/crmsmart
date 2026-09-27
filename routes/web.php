@@ -697,6 +697,130 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
             Route::get('settings', [\App\Http\Controllers\Admin\WhatsAppInboxController::class, 'settings'])->name('settings')->middleware('permission:whatsapp_settings');
         });
 
+        // Inventory ERP (new module — separate from legacy inventory)
+        Route::prefix('inventory-erp')->name('inventory-erp.')->middleware('permission:inv_erp_manage')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\Inventory\InvDashboardController::class, 'index'])->name('dashboard');
+
+            Route::middleware('permission:inv_item_manage')->group(function () {
+                Route::get('items', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'index'])->name('items.index');
+                Route::get('items/create', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'create'])->name('items.create');
+                Route::post('items', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'store'])->name('items.store');
+                Route::get('items/{id}/edit', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'edit'])->name('items.edit');
+                Route::put('items/{id}', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'update'])->name('items.update');
+                Route::delete('items/{id}', [\App\Http\Controllers\Admin\Inventory\InvItemController::class, 'destroy'])->name('items.destroy');
+            });
+
+            Route::middleware('permission:inv_store_manage')->group(function () {
+                Route::get('stores', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'index'])->name('stores.index');
+                Route::get('stores/create', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'create'])->name('stores.create');
+                Route::post('stores', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'store'])->name('stores.store');
+                Route::get('stores/{id}/edit', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'edit'])->name('stores.edit');
+                Route::put('stores/{id}', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'update'])->name('stores.update');
+                Route::delete('stores/{id}', [\App\Http\Controllers\Admin\Inventory\InvStoreController::class, 'destroy'])->name('stores.destroy');
+            });
+
+            Route::get('openings', [\App\Http\Controllers\Admin\Inventory\InvOpeningController::class, 'index'])->name('openings.index');
+            Route::get('openings/create', [\App\Http\Controllers\Admin\Inventory\InvOpeningController::class, 'create'])->name('openings.create');
+            Route::post('openings', [\App\Http\Controllers\Admin\Inventory\InvOpeningController::class, 'store'])->name('openings.store');
+            Route::get('openings/{id}', [\App\Http\Controllers\Admin\Inventory\InvOpeningController::class, 'show'])->name('openings.show');
+
+            Route::get('stock/balances', [\App\Http\Controllers\Admin\Inventory\InvStockController::class, 'balances'])->name('stock.balances');
+            Route::get('stock/card', [\App\Http\Controllers\Admin\Inventory\InvStockController::class, 'card'])->name('stock.card');
+
+            Route::middleware('permission:inv_purchase_manage')->group(function () {
+                Route::get('suppliers', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'index'])->name('suppliers.index');
+                Route::get('suppliers/create', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'create'])->name('suppliers.create');
+                Route::post('suppliers', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'store'])->name('suppliers.store');
+                Route::get('suppliers/{id}/edit', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'edit'])->name('suppliers.edit');
+                Route::put('suppliers/{id}', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'update'])->name('suppliers.update');
+                Route::delete('suppliers/{id}', [\App\Http\Controllers\Admin\Inventory\InvSupplierController::class, 'destroy'])->name('suppliers.destroy');
+
+                Route::get('purchase-orders', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+                Route::get('purchase-orders/create', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'create'])->name('purchase-orders.create');
+                Route::post('purchase-orders', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+                Route::get('purchase-orders/{id}', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+                Route::post('purchase-orders/{id}/approve', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'approve'])->name('purchase-orders.approve');
+                Route::post('purchase-orders/{id}/cancel', [\App\Http\Controllers\Admin\Inventory\InvPurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
+
+                Route::get('grns', [\App\Http\Controllers\Admin\Inventory\InvGrnController::class, 'index'])->name('grns.index');
+                Route::get('grns/create', [\App\Http\Controllers\Admin\Inventory\InvGrnController::class, 'create'])->name('grns.create');
+                Route::post('grns', [\App\Http\Controllers\Admin\Inventory\InvGrnController::class, 'store'])->name('grns.store');
+                Route::get('grns/{id}', [\App\Http\Controllers\Admin\Inventory\InvGrnController::class, 'show'])->name('grns.show');
+
+                Route::get('purchase-returns', [\App\Http\Controllers\Admin\Inventory\InvPurchaseReturnController::class, 'index'])->name('purchase-returns.index');
+                Route::get('purchase-returns/create', [\App\Http\Controllers\Admin\Inventory\InvPurchaseReturnController::class, 'create'])->name('purchase-returns.create');
+                Route::post('purchase-returns', [\App\Http\Controllers\Admin\Inventory\InvPurchaseReturnController::class, 'store'])->name('purchase-returns.store');
+                Route::get('purchase-returns/{id}', [\App\Http\Controllers\Admin\Inventory\InvPurchaseReturnController::class, 'show'])->name('purchase-returns.show');
+
+                Route::get('purchases/register', [\App\Http\Controllers\Admin\Inventory\InvPurchaseRegisterController::class, 'index'])->name('purchases.register');
+            });
+
+            Route::middleware('permission:inv_transfer_manage')->group(function () {
+                Route::get('transfers', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'index'])->name('transfers.index');
+                Route::get('transfers/in-transit', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'inTransit'])->name('transfers.in-transit');
+                Route::get('transfers/create', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'create'])->name('transfers.create');
+                Route::post('transfers', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'store'])->name('transfers.store');
+                Route::get('transfers/{id}', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'show'])->name('transfers.show');
+                Route::post('transfers/{id}/approve', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'approve'])->name('transfers.approve');
+                Route::post('transfers/{id}/dispatch', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'dispatchTransfer'])->name('transfers.dispatch');
+                Route::get('transfers/{id}/receive', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'receiveForm'])->name('transfers.receive');
+                Route::post('transfers/{id}/receive', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'receive'])->name('transfers.receive.store');
+                Route::post('transfers/{id}/cancel', [\App\Http\Controllers\Admin\Inventory\InvTransferController::class, 'cancel'])->name('transfers.cancel');
+            });
+
+            Route::middleware('permission:inv_move_manage')->group(function () {
+                Route::get('issues', [\App\Http\Controllers\Admin\Inventory\InvIssueController::class, 'index'])->name('issues.index');
+                Route::get('issues/create', [\App\Http\Controllers\Admin\Inventory\InvIssueController::class, 'create'])->name('issues.create');
+                Route::post('issues', [\App\Http\Controllers\Admin\Inventory\InvIssueController::class, 'store'])->name('issues.store');
+                Route::get('issues/{id}', [\App\Http\Controllers\Admin\Inventory\InvIssueController::class, 'show'])->name('issues.show');
+                Route::post('issues/{id}/reverse', [\App\Http\Controllers\Admin\Inventory\InvIssueController::class, 'reverse'])->name('issues.reverse');
+
+                Route::get('sales', [\App\Http\Controllers\Admin\Inventory\InvSaleController::class, 'index'])->name('sales.index');
+                Route::get('sales/create', [\App\Http\Controllers\Admin\Inventory\InvSaleController::class, 'create'])->name('sales.create');
+                Route::post('sales', [\App\Http\Controllers\Admin\Inventory\InvSaleController::class, 'store'])->name('sales.store');
+                Route::get('sales/{id}', [\App\Http\Controllers\Admin\Inventory\InvSaleController::class, 'show'])->name('sales.show');
+                Route::post('sales/{id}/reverse', [\App\Http\Controllers\Admin\Inventory\InvSaleController::class, 'reverse'])->name('sales.reverse');
+
+                Route::get('sale-returns', [\App\Http\Controllers\Admin\Inventory\InvSaleReturnController::class, 'index'])->name('sale-returns.index');
+                Route::get('sale-returns/create', [\App\Http\Controllers\Admin\Inventory\InvSaleReturnController::class, 'create'])->name('sale-returns.create');
+                Route::post('sale-returns', [\App\Http\Controllers\Admin\Inventory\InvSaleReturnController::class, 'store'])->name('sale-returns.store');
+                Route::get('sale-returns/{id}', [\App\Http\Controllers\Admin\Inventory\InvSaleReturnController::class, 'show'])->name('sale-returns.show');
+                Route::post('sale-returns/{id}/reverse', [\App\Http\Controllers\Admin\Inventory\InvSaleReturnController::class, 'reverse'])->name('sale-returns.reverse');
+
+                Route::get('outbound/register', [\App\Http\Controllers\Admin\Inventory\InvOutboundRegisterController::class, 'index'])->name('outbound.register');
+            });
+
+            Route::middleware('permission:inv_adjust_manage')->group(function () {
+                Route::get('adjustment-reasons', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentReasonController::class, 'index'])->name('adjustment-reasons.index');
+                Route::post('adjustment-reasons', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentReasonController::class, 'store'])->name('adjustment-reasons.store');
+                Route::put('adjustment-reasons/{id}', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentReasonController::class, 'update'])->name('adjustment-reasons.update');
+
+                Route::get('adjustments', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'index'])->name('adjustments.index');
+                Route::get('adjustments/create', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'create'])->name('adjustments.create');
+                Route::post('adjustments', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'store'])->name('adjustments.store');
+                Route::get('adjustments/{id}', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'show'])->name('adjustments.show');
+                Route::post('adjustments/{id}/approve', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'approve'])->name('adjustments.approve');
+                Route::post('adjustments/{id}/post', [\App\Http\Controllers\Admin\Inventory\InvAdjustmentController::class, 'post'])->name('adjustments.post');
+
+                Route::get('cycle-counts/create', [\App\Http\Controllers\Admin\Inventory\InvCycleCountController::class, 'create'])->name('cycle-counts.create');
+                Route::post('cycle-counts', [\App\Http\Controllers\Admin\Inventory\InvCycleCountController::class, 'store'])->name('cycle-counts.store');
+
+                Route::get('stock-controls', [\App\Http\Controllers\Admin\Inventory\InvStockControlController::class, 'index'])->name('stock-controls.index');
+                Route::get('stock-controls/low-stock', [\App\Http\Controllers\Admin\Inventory\InvStockControlController::class, 'lowStock'])->name('stock-controls.low-stock');
+                Route::post('stock-controls', [\App\Http\Controllers\Admin\Inventory\InvStockControlController::class, 'store'])->name('stock-controls.store');
+                Route::delete('stock-controls/{id}', [\App\Http\Controllers\Admin\Inventory\InvStockControlController::class, 'destroy'])->name('stock-controls.destroy');
+            });
+
+            Route::get('finance/valuation', [\App\Http\Controllers\Admin\Inventory\InvFinanceController::class, 'valuation'])->name('finance.valuation');
+            Route::get('finance/cogs', [\App\Http\Controllers\Admin\Inventory\InvFinanceController::class, 'cogs'])->name('finance.cogs');
+
+            Route::middleware('permission:inv_erp_manage')->group(function () {
+                Route::get('finance/periods', [\App\Http\Controllers\Admin\Inventory\InvFinanceController::class, 'periods'])->name('finance.periods');
+                Route::post('finance/periods/lock', [\App\Http\Controllers\Admin\Inventory\InvFinanceController::class, 'lockPeriod'])->name('finance.periods.lock');
+                Route::post('finance/periods/{id}/unlock', [\App\Http\Controllers\Admin\Inventory\InvFinanceController::class, 'unlockPeriod'])->name('finance.periods.unlock');
+            });
+        });
+
         // Cash Flow Module (view-only routes)
         Route::prefix('cashflow')->name('cashflow.')->middleware('permission:cashflow_manage')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\CashFlowController::class, 'dashboard'])->name('dashboard');

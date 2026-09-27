@@ -544,6 +544,7 @@ function ConsultanciesByStatus(bar) {
             bar.data.arrived[i] -= bar.data.walkin[i];
         }
     }
+    var categoryCount = modifiedData.length || 1;
     var options = {
         series: [{
             name: 'Total Appointments',
@@ -565,7 +566,7 @@ function ConsultanciesByStatus(bar) {
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '70%',
+                columnWidth: categoryCount > 10 ? '70%' : (categoryCount > 5 ? '50%' : '36%'),
                 endingShape: 'rounded',
                 dataLabels: {
                     position: 'center',
@@ -580,18 +581,30 @@ function ConsultanciesByStatus(bar) {
         },
         xaxis: {
             categories: modifiedData,
+            tickPlacement: 'on',
             labels: {
-                rotate: 0,
+                rotate: -45,
                 rotateAlways: true,
-                trim: false,
-                hideOverlappingLabels: false,
-                maxHeight: 80,
+                trim: true,
+                hideOverlappingLabels: true,
+                maxHeight: 140,
                 style: {
-                    fontSize: '10px'
+                    fontSize: '11px',
+                    colors: '#697a8d'
                 },
                 formatter: function (val) {
                     if (!val) return '';
-                    return val.length > 14 ? val.substring(0, 13) + '…' : val;
+                    return val.length > 18 ? val.substring(0, 17) + '…' : val;
+                }
+            }
+        },
+        yaxis: {
+            min: 0,
+            forceNiceScale: true,
+            decimalsInFloat: 0,
+            labels: {
+                formatter: function (val) {
+                    return Math.round(Number(val) || 0);
                 }
             }
         },
@@ -617,8 +630,16 @@ function ConsultanciesByStatus(bar) {
             enabled: true,
             shared: true,
             intersect: false
+        },
+        grid: {
+            padding: {
+                bottom: 12
+            }
         }
     };
+    if (central_wise_arrival_chart) {
+        central_wise_arrival_chart.destroy();
+    }
     central_wise_arrival_chart = new ApexCharts(document.querySelector("#centre_wise_arrival"), options);
     central_wise_arrival_chart.render();
 }

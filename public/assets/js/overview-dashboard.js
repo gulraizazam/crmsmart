@@ -353,9 +353,17 @@
                 }
             },
             tooltip: Object.assign(baseOptions().tooltip, {
-                y: { formatter: moneyAxis ? moneyLabel : function (v) { return v; } }
+                y: { formatter: moneyAxis ? moneyLabel : function (v) { return Math.round(Number(v) || 0); } }
             })
         });
+        if (type === 'polarArea') {
+            options.yaxis = {
+                show: false,
+                labels: { show: false },
+                axisTicks: { show: false },
+                axisBorder: { show: false }
+            };
+        }
         new ApexCharts(el, options).render();
     }
 
@@ -371,9 +379,9 @@
         renderCircle('chartAppointmentType', charts.appointments_by_type, 'polarArea');
         renderBar('chartAppointmentStatus', charts.appointments_by_status, { horizontal: true });
         renderBar('chartAppointmentCentre', charts.appointments_by_centre, { stacked: true });
-        renderBar('chartRevenueCategory', charts.revenue_by_category, { horizontal: true, money: true });
-        renderBar('chartRevenueService', charts.revenue_by_service, { horizontal: true, money: true });
-        renderBar('chartLeadSource', charts.leads_by_source, { horizontal: true });
+        renderCircle('chartRevenueCategory', charts.revenue_by_category, 'pie', true);
+        renderCircle('chartRevenueService', charts.revenue_by_service, 'pie', true);
+        renderCircle('chartLeadSource', charts.leads_by_source, 'pie');
         renderCircle('chartLeadStatus', charts.leads_by_status, 'pie');
         renderCircle('chartPatientGender', charts.patients_by_gender, 'radialBar');
         renderLine('chartPatientTrend', charts.patients_trend, false);
