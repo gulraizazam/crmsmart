@@ -41,7 +41,7 @@
     </div>
     <!--end::Modal header-->
     <!--begin::Modal body-->
-    <div class="scroll-y" style="max-height: 75vh;">
+    <div class="ci-modal-body scroll-y">
         
         @if($invoice_status != true)
         <div class="ci-invoice-brand">
@@ -59,7 +59,7 @@
 
         <!--begin::Form-->
         <div class="ci-body">
-            <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_appointment_type_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+            <div class="d-flex flex-column" id="kt_modal_appointment_type_scroll">
 
                 <div class="form-group">
                     @include('admin.appointments.consultancyinvoice.fields')

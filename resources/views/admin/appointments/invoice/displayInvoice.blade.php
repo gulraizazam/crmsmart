@@ -40,7 +40,7 @@
     </div>
     <!--end::Modal header-->
     <!--begin::Modal body-->
-    <div class="scroll-y" style="max-height: 75vh;">
+    <div class="di-modal-body scroll-y">
         <div class="di-invoice-brand">
             <div class="di-brand-left">
                 <div class="di-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 56px; width: auto; max-width: 240px; display: inline-block; vertical-align: middle; background: #161310; padding: 4px 8px; border-radius: 4px;"></div>
@@ -57,7 +57,7 @@
 
         <!--begin::Form-->
         <div class="di-body">
-            <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_resourcerotas_scroll">
+            <div class="d-flex flex-column" id="kt_modal_resourcerotas_scroll">
 
                 <div class="form-group">
 

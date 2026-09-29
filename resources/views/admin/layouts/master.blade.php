@@ -28,7 +28,7 @@
     <link href="{{ asset('assets/css/dark-overrides.css') }}?v=2" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/sneat/css/sneat-datatables.css') }}?v=2" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/sneat/css/sneat-layout.css') }}?v=8" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/sneat-appointment-modals.css') }}?v=7" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/sneat-appointment-modals.css') }}?v=8" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/sneat-toastr.css') }}?v=2" rel="stylesheet" type="text/css" />
     @stack('css')
 </head>

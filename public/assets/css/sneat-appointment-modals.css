@@ -73,6 +73,16 @@
     overflow: hidden;
 }
 
+/* Invoice / detail modals use a .scroll-y wrapper instead of *-modal-body.
+   Without this, max-height + overflow:hidden clips content (no scrollbar). */
+.modal-content[class*="-modal"] > .scroll-y {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+}
+
 [class*="-modal-header"] {
     background: var(--s-modal-paper) !important;
     background-image: none !important;
@@ -138,6 +148,13 @@
     overflow-y: auto !important;
     padding: 1.25rem 1.5rem 1.5rem !important;
     background: var(--s-modal-paper) !important;
+}
+
+/* Edge-to-edge invoice brand/meta sections — keep scroll, drop body padding */
+.di-modal-body,
+.ti-modal-body,
+.ci-modal-body {
+    padding: 0 !important;
 }
 
 .modal [class*="-modal-body"] .me-n7 {
