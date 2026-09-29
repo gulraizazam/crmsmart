@@ -4,7 +4,7 @@
 
     @push('css')
         <link href="{{ asset('assets/css/sneat-consultancies.css') }}?v=12" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=16" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/sneat-leads.css') }}?v=17" rel="stylesheet" type="text/css" />
     @endpush
 
     <div class="content d-flex flex-column flex-column-fluid sneat-appt-page sneat-leads-page" id="kt_content">
@@ -118,6 +118,41 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal_lead_followup_reminder" tabindex="-1" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content sneat-followup-reminder">
+                <div class="modal-header">
+                    <h5 class="modal-title">Follow-up reminder</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="reminder_followup_id" value="" />
+                    <p class="sneat-followup-reminder-lead mb-2">
+                        You scheduled a follow-up for
+                        <strong id="reminder_lead_name">this lead</strong>.
+                    </p>
+                    <div class="sneat-followup-reminder-meta">
+                        <div>
+                            <span class="label">When</span>
+                            <span id="reminder_scheduled_at">—</span>
+                        </div>
+                        <div id="reminder_phone_wrap" hidden>
+                            <span class="label">Phone</span>
+                            <span id="reminder_lead_phone">—</span>
+                        </div>
+                    </div>
+                    <p class="sneat-followup-reminder-note mt-3 mb-0" id="reminder_note_wrap" hidden>
+                        <span class="label">Note</span>
+                        <span id="reminder_note"></span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" id="reminder_view_lead">View lead</button>
+                    <button type="button" class="btn btn-primary" id="reminder_close_btn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('js')
         <script src="{{asset('assets/js/jquery.inputmask.bundle.min.js')}}"></script>
         <script src="{{asset('assets/js/jquery.copy-to-clipboard.js')}}"></script>
@@ -173,7 +208,7 @@
                 },1000);
             }
         </script>
-        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=12"></script>
+        <script src="{{asset('assets/js/pages/leads/leads.js')}}?v=13"></script>
         <script src="{{asset('assets/js/pages/leads/leads-kanban.js')}}?v=7"></script>
 
         <script>

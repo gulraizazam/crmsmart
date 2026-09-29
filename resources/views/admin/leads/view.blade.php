@@ -31,6 +31,12 @@
                     <span id="lead_comments_count" class="sneat-lead-tab-count" hidden>0</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lead_tab_followups_btn" data-toggle="tab" href="#lead_tab_followups" role="tab" aria-controls="lead_tab_followups" aria-selected="false">
+                    Follow-ups
+                    <span id="lead_followups_count" class="sneat-lead-tab-count" hidden>0</span>
+                </a>
+            </li>
         </ul>
 
         <div class="tab-content sneat-lead-tab-content">
@@ -132,6 +138,38 @@
                                 <textarea id="lead_comment_input" name="comment" class="form-control" rows="2" placeholder="Write a comment…" required></textarea>
                                 <input type="hidden" name="lead_id" id="comment_lead_id" value="" />
                                 <button type="button" name="Add_comment" id="Add_comment" class="btn btn-primary">Add comment</button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+            </div>
+
+            <div class="tab-pane fade" id="lead_tab_followups" role="tabpanel" aria-labelledby="lead_tab_followups_btn">
+                <div class="sneat-lead-followups" id="followupsection">
+                    <div class="sneat-lead-followup-empty">No follow-ups scheduled</div>
+                </div>
+
+                @if(Gate::allows('leads_manage'))
+                    <div class="sneat-lead-followup-form">
+                        <form id="lead_followup_form">
+                            <input type="hidden" id="followup_lead_id" value="" />
+                            <label>Schedule a follow-up</label>
+                            <div class="sneat-lead-followup-fields">
+                                <div class="sneat-lead-followup-field">
+                                    <label for="followup_date">Date</label>
+                                    <input type="date" id="followup_date" class="form-control" required />
+                                </div>
+                                <div class="sneat-lead-followup-field">
+                                    <label for="followup_time">Time</label>
+                                    <input type="time" id="followup_time" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="sneat-lead-followup-field mt-3">
+                                <label for="followup_note">Note <span class="text-muted">(optional)</span></label>
+                                <textarea id="followup_note" class="form-control" rows="2" placeholder="e.g. Call this lead"></textarea>
+                            </div>
+                            <div class="sneat-lead-composer-row mt-3">
+                                <button type="button" id="Add_followup" class="btn btn-primary">Schedule follow-up</button>
                             </div>
                         </form>
                     </div>

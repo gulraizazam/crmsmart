@@ -566,6 +566,9 @@ Route::get('packages/deleteplanrowtem', [PackagesController::class, 'deleteplanr
         Route::post('load_child_services', [LeadsController::class, 'loadChildServices'])->name('load_child_services');
         Route::post('upload', [LeadsController::class, 'uploadLeads'])->name('upload');
         Route::post('comment', [LeadsController::class, 'storeComment'])->name('storecomment');
+        Route::post('follow-ups', [LeadsController::class, 'storeFollowUp'])->name('follow_ups.store');
+        Route::get('follow-ups/due', [LeadsController::class, 'dueFollowUps'])->name('follow_ups.due');
+        Route::post('follow-ups/{id}/dismiss', [LeadsController::class, 'dismissFollowUp'])->name('follow_ups.dismiss');
         Route::post('loadlead', [LeadsController::class, 'loadLeadData'])->name('load_lead');
         
         // GET routes - specific paths (must be before {id} wildcard)

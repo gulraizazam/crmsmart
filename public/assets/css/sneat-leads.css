@@ -702,3 +702,138 @@ body > .sneat-lead-action-menu-open {
         width: 16.5rem;
     }
 }
+
+/* Lead follow-ups */
+.sneat-lead-followups {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 18rem;
+    overflow-y: auto;
+    padding-right: 0.15rem;
+}
+
+.sneat-lead-followup-empty {
+    padding: 1.25rem 0.5rem;
+    text-align: center;
+    color: #a1acb8;
+    font-size: 0.875rem;
+}
+
+.sneat-lead-followup {
+    border: 1px solid #eceef1;
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    background: #fff;
+}
+
+.sneat-lead-followup.is-dismissed {
+    opacity: 0.65;
+}
+
+.sneat-lead-followup-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.sneat-lead-followup-when {
+    font-size: 0.875rem;
+    color: #566a7f;
+}
+
+.sneat-lead-followup-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #696cff;
+    background: rgba(105, 108, 255, 0.1);
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    white-space: nowrap;
+}
+
+.sneat-lead-followup.is-dismissed .sneat-lead-followup-status {
+    color: #8592a3;
+    background: #f1f2f4;
+}
+
+.sneat-lead-followup-note {
+    margin: 0 0 0.35rem;
+    font-size: 0.875rem;
+    color: #697a8d;
+}
+
+.sneat-lead-followup-by {
+    font-size: 0.75rem;
+    color: #a1acb8;
+}
+
+#modal_view_lead .sneat-lead-followup-form {
+    flex: 0 0 auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid #eceef1;
+    margin-top: 0.9rem;
+}
+
+#modal_view_lead .sneat-lead-followup-form > label {
+    display: block;
+    margin: 0 0 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a1acb8;
+}
+
+.sneat-lead-followup-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.sneat-lead-followup-field label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #697a8d;
+}
+
+.sneat-followup-reminder .modal-header {
+    border-bottom: 1px solid #eceef1;
+}
+
+.sneat-followup-reminder-lead {
+    font-size: 0.95rem;
+    color: #566a7f;
+}
+
+.sneat-followup-reminder-meta {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.sneat-followup-reminder-meta .label,
+.sneat-followup-reminder-note .label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #a1acb8;
+    margin-bottom: 0.1rem;
+}
+
+.sneat-followup-reminder-note {
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0f1f3;
+    color: #697a8d;
+}
+
+@media (max-width: 575.98px) {
+    .sneat-lead-followup-fields {
+        grid-template-columns: 1fr;
+    }
+}

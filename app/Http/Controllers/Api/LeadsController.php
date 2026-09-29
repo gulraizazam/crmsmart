@@ -806,6 +806,107 @@ class LeadsController extends Controller
     }
 
     /**
+     * Schedule a follow-up reminder on a lead.
+     */
+    public function storeFollowUp(Request $request): JsonResponse
+    {
+        if (!Gate::allows('leads_manage')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        $request->validate([
+            'lead_id' => 'required|integer|exists:leads,id',
+            'scheduled_date' => 'required|date_format:Y-m-d',
+            'scheduled_time' => 'required|string',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        try {
+            $scheduledAt = Carbon::parse(
+                trim($request->scheduled_date) . ' ' . trim($request->scheduled_time)
+            );
+
+            $followUp = $this->leadService->scheduleFollowUp(
+                (int) $request->lead_id,
+                $scheduledAt->toDateTimeString(),
+                $request->note
+            );
+
+            return ApiHelper::apiResponse($this->success, 'Follow-up scheduled successfully.', true, [
+                'follow_up' => [
+                    'id' => $followUp->id,
+                    'lead_id' => $followUp->lead_id,
+                    'scheduled_at' => $followUp->scheduled_at?->toDateTimeString(),
+                    'scheduled_at_formatted' => $followUp->scheduled_at?->format('D M j, Y h:i A'),
+                    'note' => $followUp->note,
+                    'created_by' => $followUp->created_by,
+                    'creator_name' => $followUp->creator?->name,
+                    'dismissed_at' => $followUp->dismissed_at,
+                ],
+            ]);
+        } catch (LeadException $e) {
+            return ApiHelper::apiResponse($this->error, $e->getMessage());
+        } catch (\Exception $e) {
+            return ApiHelper::apiException($e);
+        }
+    }
+
+    /**
+     * Due follow-up reminders for the logged-in user (for leads screen popup).
+     */
+    public function dueFollowUps(): JsonResponse
+    {
+        if (!Gate::allows('leads_manage')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        try {
+            $items = $this->leadService->getDueFollowUpsForUser()->map(function ($followUp) {
+                return [
+                    'id' => $followUp->id,
+                    'lead_id' => $followUp->lead_id,
+                    'lead_name' => $followUp->lead?->name ?? 'Unknown lead',
+                    'lead_phone' => $followUp->lead?->phone,
+                    'scheduled_at' => $followUp->scheduled_at?->toDateTimeString(),
+                    'scheduled_at_formatted' => $followUp->scheduled_at?->format('D M j, Y h:i A'),
+                    'note' => $followUp->note,
+                ];
+            })->values();
+
+            return ApiHelper::apiResponse($this->success, 'Due follow-ups loaded.', true, [
+                'follow_ups' => $items,
+            ]);
+        } catch (\Exception $e) {
+            return ApiHelper::apiException($e);
+        }
+    }
+
+    /**
+     * Dismiss a follow-up reminder so it will not show again.
+     */
+    public function dismissFollowUp(int $id): JsonResponse
+    {
+        if (!Gate::allows('leads_manage')) {
+            return ApiHelper::apiResponse($this->unauthorized, 'You are not authorized to access this resource.');
+        }
+
+        try {
+            $followUp = $this->leadService->dismissFollowUp($id);
+
+            return ApiHelper::apiResponse($this->success, 'Follow-up reminder dismissed.', true, [
+                'follow_up' => [
+                    'id' => $followUp->id,
+                    'dismissed_at' => $followUp->dismissed_at?->toDateTimeString(),
+                ],
+            ]);
+        } catch (LeadException $e) {
+            return ApiHelper::apiResponse($this->error, $e->getMessage());
+        } catch (\Exception $e) {
+            return ApiHelper::apiException($e);
+        }
+    }
+
+    /**
      * Get lead data for conversion
      */
     public function convert($id): JsonResponse

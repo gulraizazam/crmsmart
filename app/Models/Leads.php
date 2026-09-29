@@ -103,6 +103,14 @@ class Leads extends BaseModal
     }
 
     /**
+     * Scheduled follow-up reminders for this lead.
+     */
+    public function followUps()
+    {
+        return $this->hasMany(LeadFollowUp::class, 'lead_id')->orderBy('scheduled_at', 'desc');
+    }
+
+    /**
      * Get the lead appointments for lead.
      */
     public function appointments()

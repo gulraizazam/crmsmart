@@ -564,9 +564,12 @@ function setViewData(response) {
             },
         });
         $("#comment_lead_id").val(lead.id)
+        $("#followup_lead_id").val(lead.id)
         setLeadActivities(response.data.activities || []);
         setComments(lead);
+        setFollowUps(lead);
         setServicesHistory(lead);
+        resetFollowUpForm();
     } catch (error) {
         showException(error);
     }
@@ -772,6 +775,51 @@ function setComments(lead) {
     }
     $("#commentsection").html(comment_html);
     setLeadTabCount('lead_comments_count', lead_comments.length || 0);
+}
+
+function setFollowUps(lead) {
+    var followUps = lead.follow_ups || [];
+    var html = '';
+    if (followUps.length) {
+        Object.values(followUps).forEach(function (item) {
+            html += followUpData(item);
+        });
+    } else {
+        html = '<div class="sneat-lead-followup-empty">No follow-ups scheduled</div>';
+    }
+    $('#followupsection').html(html);
+    setLeadTabCount('lead_followups_count', followUps.length || 0);
+}
+
+function followUpData(item) {
+    var creator = (item.creator && item.creator.name) ? item.creator.name : 'N/A';
+    var when = item.scheduled_at
+        ? formatDate(item.scheduled_at, 'ddd MMM, DD YYYY hh:mm A')
+        : 'N/A';
+    var note = item.note ? escapeLeadActivity(item.note) : '';
+    var dismissed = !!item.dismissed_at;
+    var statusLabel = dismissed ? 'Dismissed' : 'Scheduled';
+    var statusClass = dismissed ? 'is-dismissed' : 'is-scheduled';
+
+    return '<article class="sneat-lead-followup ' + statusClass + '">' +
+        '<div class="sneat-lead-followup-body">' +
+            '<div class="sneat-lead-followup-meta">' +
+                '<strong class="sneat-lead-followup-when">' + escapeLeadActivity(when) + '</strong>' +
+                '<span class="sneat-lead-followup-status">' + statusLabel + '</span>' +
+            '</div>' +
+            (note ? '<p class="sneat-lead-followup-note">' + note + '</p>' : '') +
+            '<div class="sneat-lead-followup-by">By ' + escapeLeadActivity(creator) + '</div>' +
+        '</div>' +
+    '</article>';
+}
+
+function resetFollowUpForm() {
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    var local = now.toISOString().slice(0, 16);
+    $('#followup_date').val(local.slice(0, 10));
+    $('#followup_time').val(local.slice(11, 16));
+    $('#followup_note').val('');
 }
 
 function commentData(user_name, created_at, comment) {
@@ -1435,7 +1483,195 @@ $(function () {
             },
         });
     });
+
+    $("#Add_followup").click(function () {
+        var leadId = $('#followup_lead_id').val();
+        var date = $.trim($('#followup_date').val());
+        var time = $.trim($('#followup_time').val());
+        var note = $.trim($('#followup_note').val());
+
+        if (!leadId || !date || !time) {
+            toastr.error('Please select date and time for the follow-up.');
+            return;
+        }
+
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: route('admin.leads.follow_ups.store'),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                lead_id: leadId,
+                scheduled_date: date,
+                scheduled_time: time,
+                note: note || null,
+            },
+            success: function (response) {
+                if (!response.status) {
+                    toastr.error(response.message || 'Could not schedule follow-up.');
+                    return;
+                }
+                var item = response.data && response.data.follow_up ? response.data.follow_up : null;
+                if (item) {
+                    $('#followupsection .sneat-lead-followup-empty').remove();
+                    $('#followupsection').prepend(followUpData({
+                        scheduled_at: item.scheduled_at,
+                        note: item.note,
+                        dismissed_at: item.dismissed_at,
+                        creator: { name: item.creator_name || 'You' },
+                    }));
+                    setLeadTabCount('lead_followups_count', $('#followupsection .sneat-lead-followup').length);
+                }
+                refreshLeadActivities();
+                resetFollowUpForm();
+                toastr.success(response.message || 'Follow-up scheduled.');
+            },
+            error: function (xhr) {
+                var msg = (xhr.responseJSON && (xhr.responseJSON.message || (xhr.responseJSON.errors && Object.values(xhr.responseJSON.errors)[0][0]))) || 'Could not schedule follow-up.';
+                toastr.error(msg);
+            },
+            complete: function () {
+                $btn.prop('disabled', false);
+            }
+        });
+    });
+
+    initLeadFollowUpReminders();
 })
+
+var leadFollowUpReminderQueue = [];
+var leadFollowUpReminderShowingId = null;
+var leadFollowUpReminderPollTimer = null;
+var leadFollowUpReminderBusy = false;
+
+function initLeadFollowUpReminders() {
+    if (!$('#modal_lead_followup_reminder').length) {
+        return;
+    }
+
+    pollLeadFollowUpReminders();
+    if (leadFollowUpReminderPollTimer) {
+        clearInterval(leadFollowUpReminderPollTimer);
+    }
+    leadFollowUpReminderPollTimer = setInterval(pollLeadFollowUpReminders, 30000);
+
+    $('#reminder_close_btn').off('click.followup').on('click.followup', function () {
+        dismissCurrentLeadFollowUpReminder();
+    });
+
+    $('#reminder_view_lead').off('click.followup').on('click.followup', function () {
+        var leadId = $('#reminder_view_lead').data('lead-id');
+        if (!leadId) {
+            return;
+        }
+        dismissCurrentLeadFollowUpReminder(function () {
+            viewLead(route('admin.leads.detail', { id: leadId }));
+        });
+    });
+}
+
+function pollLeadFollowUpReminders() {
+    if (typeof route !== 'function') {
+        return;
+    }
+    $.ajax({
+        type: 'GET',
+        url: route('admin.leads.follow_ups.due'),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        cache: false,
+        success: function (response) {
+            if (!response.status || !response.data || !response.data.follow_ups) {
+                return;
+            }
+            leadFollowUpReminderQueue = response.data.follow_ups;
+            showNextLeadFollowUpReminder();
+        }
+    });
+}
+
+function showNextLeadFollowUpReminder() {
+    if (leadFollowUpReminderBusy || $('#modal_lead_followup_reminder').hasClass('show')) {
+        return;
+    }
+    if (!leadFollowUpReminderQueue.length) {
+        leadFollowUpReminderShowingId = null;
+        return;
+    }
+
+    var item = leadFollowUpReminderQueue[0];
+    if (!item || item.id === leadFollowUpReminderShowingId) {
+        return;
+    }
+
+    leadFollowUpReminderShowingId = item.id;
+    $('#reminder_followup_id').val(item.id);
+    $('#reminder_lead_name').text(item.lead_name || 'this lead');
+    $('#reminder_scheduled_at').text(item.scheduled_at_formatted || '—');
+    $('#reminder_view_lead').data('lead-id', item.lead_id || '');
+
+    if (item.lead_phone) {
+        $('#reminder_lead_phone').text(item.lead_phone);
+        $('#reminder_phone_wrap').prop('hidden', false);
+    } else {
+        $('#reminder_phone_wrap').prop('hidden', true);
+    }
+
+    if (item.note) {
+        $('#reminder_note').text(item.note);
+        $('#reminder_note_wrap').prop('hidden', false);
+    } else {
+        $('#reminder_note_wrap').prop('hidden', true);
+    }
+
+    $('#modal_lead_followup_reminder').modal('show');
+}
+
+function dismissCurrentLeadFollowUpReminder(afterDismiss) {
+    var id = $('#reminder_followup_id').val();
+    if (!id || leadFollowUpReminderBusy) {
+        return;
+    }
+
+    leadFollowUpReminderBusy = true;
+    var $btn = $('#reminder_close_btn');
+    $btn.prop('disabled', true);
+
+    $.ajax({
+        type: 'POST',
+        url: route('admin.leads.follow_ups.dismiss', { id: id }),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (!response.status) {
+                toastr.error(response.message || 'Could not dismiss reminder.');
+                return;
+            }
+            leadFollowUpReminderQueue = leadFollowUpReminderQueue.filter(function (row) {
+                return String(row.id) !== String(id);
+            });
+            leadFollowUpReminderShowingId = null;
+            $('#modal_lead_followup_reminder').modal('hide');
+            if (typeof afterDismiss === 'function') {
+                afterDismiss();
+            }
+            setTimeout(showNextLeadFollowUpReminder, 350);
+        },
+        error: function (xhr) {
+            toastr.error((xhr.responseJSON && xhr.responseJSON.message) || 'Could not dismiss reminder.');
+        },
+        complete: function () {
+            leadFollowUpReminderBusy = false;
+            $btn.prop('disabled', false);
+        }
+    });
+}
 
 
 let loadLocations = function (cityId, targetSelector = '#convert_location_id', resetDoctorsFlag = true) {

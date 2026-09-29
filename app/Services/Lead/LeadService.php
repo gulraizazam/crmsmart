@@ -12,6 +12,7 @@ use App\Models\Locations;
 use App\Models\LeadSources;
 use App\Models\LeadStatuses;
 use App\Models\LeadComments;
+use App\Models\LeadFollowUp;
 use App\Models\LeadsServices;
 use App\Models\User;
 use App\Models\Regions;
@@ -586,6 +587,7 @@ class LeadService
     {
         return Leads::with([
             'lead_comments.user:id,name',
+            'followUps.creator:id,name',
             'towns:id,name',
             'city:id,name',
             'lead_source:id,name',
@@ -1236,6 +1238,78 @@ class LeadService
         }
 
         return $row;
+    }
+
+    /**
+     * Schedule a follow-up reminder for a lead.
+     */
+    public function scheduleFollowUp(int $leadId, string $scheduledAt, ?string $note = null): LeadFollowUp
+    {
+        $lead = Leads::where([
+            'id' => $leadId,
+            'account_id' => Auth::user()->account_id,
+        ])->first();
+
+        if (!$lead) {
+            throw new LeadException('Lead not found.');
+        }
+
+        $scheduled = Carbon::parse($scheduledAt);
+
+        if ($scheduled->lte(now()->subMinute())) {
+            throw new LeadException('Follow-up time must be in the future.');
+        }
+
+        $followUp = LeadFollowUp::create([
+            'lead_id' => $leadId,
+            'created_by' => Auth::id(),
+            'account_id' => $lead->account_id ?? Auth::user()->account_id,
+            'scheduled_at' => $scheduled,
+            'note' => $note ? trim($note) : null,
+        ]);
+
+        ActivityLogger::logLeadChange(
+            $lead,
+            'Follow-up scheduled',
+            'lead_follow_up_scheduled',
+            '—',
+            $scheduled->format('D M j, Y h:i A') . ($note ? ' — ' . $note : '')
+        );
+
+        return $followUp->load('creator:id,name');
+    }
+
+    /**
+     * Due (and overdue) undismissed follow-ups for the current user.
+     */
+    public function getDueFollowUpsForUser(?int $userId = null)
+    {
+        $userId = $userId ?? Auth::id();
+
+        return LeadFollowUp::with(['lead:id,name,phone'])
+            ->dueForUser((int) $userId)
+            ->where('account_id', Auth::user()->account_id)
+            ->get();
+    }
+
+    /**
+     * Dismiss a follow-up reminder so it never shows again.
+     */
+    public function dismissFollowUp(int $followUpId): LeadFollowUp
+    {
+        $followUp = LeadFollowUp::where([
+            'id' => $followUpId,
+            'created_by' => Auth::id(),
+            'account_id' => Auth::user()->account_id,
+        ])->first();
+
+        if (!$followUp) {
+            throw new LeadException('Follow-up reminder not found.');
+        }
+
+        $followUp->dismiss();
+
+        return $followUp->fresh();
     }
 
     protected function logTrackedLeadChanges(Leads $before, Leads $after): void
