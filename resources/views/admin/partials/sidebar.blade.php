@@ -1327,7 +1327,6 @@
                     </div>
                 </li>
                 @endcan
-                @endif
 
             </ul>
 </aside>

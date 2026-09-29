@@ -125,6 +125,7 @@
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('assets/sneat/js/sneat-ktdatatable-adapter.js') }}?v=2"></script>
     <script src="{{ asset('assets/sneat/js/sneat-layout.js') }}?v=3"></script>
+    <script src="{{ asset('assets/sneat/js/sneat-layout.js') }}?v=3"></script>
     <!--end::Global Theme Bundle-->
     <!--begin::ApexCharts Latest (overrides bundled v3.25.0)-->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>

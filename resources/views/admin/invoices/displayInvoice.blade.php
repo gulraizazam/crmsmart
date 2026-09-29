@@ -77,12 +77,6 @@
                         <li>
                             <strong>Address:</strong> <span id="clinic_address"></span>
                         </li>
-                        <li>
-                            <strong>NTN:</strong> <span id="clinic_ntn"></span>
-                        </li>
-                        <li>
-                            <strong>STN:</strong> <span id="clinic_stn"></span>
-                        </li>
                     </ul>
                 </div>
             </div>

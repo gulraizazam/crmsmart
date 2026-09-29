@@ -48,10 +48,6 @@
                         <strong>Clinic Contact:</strong> {{$location_info->fdo_phone}} </li>
                     <li>
                         <strong>Address:</strong> {{$location_info->address}} </li>
-                    <li>
-                        <strong>NTN:</strong> {{$location_info->ntn}} </li>
-                    <li>
-                        <strong>STN:</strong> {{ $location_info->stn }}</li>
                 </ul>
             </div>
         </div>
@@ -160,11 +156,7 @@
             </a>
         </div>
     </div>
-    {{--<table class="table table-striped table-hover">
-        <tr>
-            <td style="text-align: center; color: #856404; background-color: #fff3cd; border-color: #ffeeba;">NOTE:
-                Invoice is not Refundable
-            </td>
-        </tr>
-    </table>--}}
+    <p style="text-align: center; font-size: 12px; color: #4b5563; font-weight: 600; margin-top: 12px;">
+        This invoice can not be used for any legal purpose and paid amount is not refundable
+    </p>
 </div>

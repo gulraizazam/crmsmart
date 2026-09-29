@@ -41,14 +41,14 @@
     </div>
     <!--end::Modal header-->
     <!--begin::Modal body-->
-    <div class="scroll-y" style="max-height: 75vh;">
+    <div class="ci-modal-body scroll-y">
         
         @if($invoice_status != true)
         <div class="ci-invoice-brand">
             <div class="ci-brand-left">
                 <div class="ci-brand-logo"><img src="{{ asset('logoClarity.jpg') }}?v=4" alt="Smart Aesthetics" style="height: 56px; width: auto; max-width: 240px; display: inline-block; vertical-align: middle; background: #161310; padding: 4px 8px; border-radius: 4px;"></div>
                 <div class="ci-brand-address">{{$location_info->address ?? ''}}</div>
-                <div class="ci-brand-contact">Phone. {{$location_info->fdo_phone ?? ''}} &nbsp;|&nbsp; Email. {{$account->email ?? ''}} &nbsp;|&nbsp; https://aestheticlinics.net &nbsp;|&nbsp; NTN. {{$location_info->ntn ?? ''}} &nbsp;|&nbsp; STN. {{$location_info->stn ?? ''}}</div>
+                <div class="ci-brand-contact">Phone. {{$location_info->fdo_phone ?? ''}} &nbsp;|&nbsp; Email. {{$account->email ?? ''}} &nbsp;|&nbsp; https://smartaesthetics.pk</div>
             </div>
             <div class="ci-badge-invoice">Invoice</div>
         </div>
@@ -59,7 +59,7 @@
 
         <!--begin::Form-->
         <div class="ci-body">
-            <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_appointment_type_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+            <div class="d-flex flex-column" id="kt_modal_appointment_type_scroll">
 
                 <div class="form-group">
                     @include('admin.appointments.consultancyinvoice.fields')

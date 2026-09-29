@@ -163,6 +163,7 @@
         <script src="{{ asset('assets/js/pages/appointment/common.js') }}"></script>
         {{-- Form validation for edit modal --}}
         <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
+        <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
     @endif
     
     @if($section == 'treatments')
@@ -182,9 +183,11 @@
         {{-- Use the SAME JS files as main treatments module --}}
         <script src="{{ asset('assets/js/pages/appointment/treatment-columns.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/appointment/treatmentDatatable.js') }}?v=7"></script>
+        <script src="{{ asset('assets/js/pages/appointment/treatmentDatatable.js') }}?v=7"></script>
         <script src="{{ asset('assets/js/pages/appointment/invoice.js') }}"></script>
         <script src="{{ asset('assets/js/pages/appointment/common.js') }}"></script>
         {{-- Form validation for edit modal --}}
+        <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/crud/forms/validation/appointment/validation.js') }}?v=3"></script>
     @endif
     

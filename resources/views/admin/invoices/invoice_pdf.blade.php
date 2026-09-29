@@ -137,11 +137,10 @@
     <div class="cinv-footer">
         <strong>Smart Aesthetics</strong>
         &nbsp;&middot;&nbsp;
-        https://aestheticlinics.net
+        https://smartaesthetics.pk
         &nbsp;&middot;&nbsp;
-        @if(!empty($location_info->ntn)) NTN {{ $location_info->ntn }} &nbsp;&middot;&nbsp; @endif
-        @if(!empty($location_info->stn)) STN {{ $location_info->stn }} &nbsp;&middot;&nbsp; @endif
         {{ $account->email ?? '' }}
+        <div class="cinv-legal">This invoice can not be used for any legal purpose and paid amount is not refundable</div>
     </div>
 </div>
 
