@@ -351,13 +351,14 @@ var ConsultancyCalendar = function() {
                         monday: true, tuesday: true, wednesday: true,
                         thursday: true, friday: true, saturday: true, sunday: false
                     };
+                    var workingDayExceptions = response.working_day_exceptions || [];
                     var dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
                     
                     $.each(response.rotas[0].doctor_rotas, function(id, rota) {
                         if (rota.active == '1') {
                             var rotaDate = rota.date;
-                            var rotaDateObj = new Date(rotaDate);
-                            var dayOfWeek = rotaDateObj.getDay();
+                            var rotaDateObj = moment(rotaDate, 'YYYY-MM-DD');
+                            var dayOfWeek = rotaDateObj.day();
                             var dayName = dayNames[dayOfWeek];
                             
                             // Skip if business is closed on this day
@@ -365,8 +366,12 @@ var ConsultancyCalendar = function() {
                                 return; // Skip this rota day
                             }
                             
-                            // Skip if not a working day
-                            if (!workingDays[dayName]) {
+                            // Skip if not a working day (day exceptions override weekly config)
+                            var dayException = workingDayExceptions.find(function(e) { return e.date === rotaDate; });
+                            var isWorkingDay = dayException
+                                ? !!dayException.is_working
+                                : !!workingDays[dayName];
+                            if (!isWorkingDay) {
                                 return; // Skip this rota day
                             }
                             
@@ -931,12 +936,8 @@ var CustomResourceCalendar = function() {
                         return;
                     }
 
-                    // Skip if not a working day
-                    var dayOfWeek = rotaDate.day();
-                    var dayName = dayNames[dayOfWeek];
-                    if (!workingDaysConfig[dayName]) {
-                        return;
-                    }
+                    // Current day already passed working-day / exception checks above.
+                    // Do not re-filter by weekly workingDays alone (would hide exception open days).
 
                     hasRotaForToday = true;
                     doctorsWithRotas[doctorId] = true;
