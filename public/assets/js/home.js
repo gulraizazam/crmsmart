@@ -882,14 +882,9 @@ function DoctorWiseConversion(bar) {
     const info = '#03c3ec';
     const warning = '#ffab00';
     const danger = '#ff3e1d';
-    let labels = bar.data.labels;
-    
-    // Calculate dynamic width based on number of doctors (min 800px, 60px per doctor)
-    let dynamicWidth = Math.max(800, labels.length * 60);
-    
-    // Calculate bar width and dynamic font size based on number of doctors
-    let barWidthPx = (dynamicWidth * 0.55) / (labels.length * 2); // 55% columnWidth divided by number of bar groups (2 series)
-    let dynamicFontSize = Math.min(14, Math.max(9, Math.floor(barWidthPx * 0.4))); // Scale font: min 9px, max 14px
+    let labels = bar.data.labels || [];
+    let labelCount = Math.max(labels.length, 1);
+    let dynamicFontSize = Math.min(14, Math.max(9, Math.floor(28 / Math.sqrt(labelCount))));
 
     var options = {
         series: [{
@@ -901,25 +896,17 @@ function DoctorWiseConversion(bar) {
         }],
         chart: {
             type: 'bar',
-            height: 400,
-            width: dynamicWidth,
+            height: 360,
+            width: '100%',
+            parentHeightOffset: 0,
             toolbar: {
-                show: true,
-                tools: {
-                    download: true,
-                    selection: false,
-                    zoom: false,
-                    zoomin: false,
-                    zoomout: false,
-                    pan: false,
-                    reset: false
-                }
+                show: false
             }
         },
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '70%',
+                columnWidth: labelCount <= 4 ? '45%' : '60%',
                 endingShape: 'rounded',
                 dataLabels: {
                     position: 'center',
@@ -954,8 +941,7 @@ function DoctorWiseConversion(bar) {
                 style: {
                     fontSize: '10px'
                 },
-                trim: true,
-                maxHeight: 100
+                maxHeight: 60
             }
         },
         legend: {
@@ -1104,7 +1090,7 @@ function AllDoctorWiseConversion(bar) {
     const info = '#03c3ec';
     const warning = '#ffab00';
     const danger = '#ff3e1d';
-    let labels = bar.data.labels;
+    let labels = bar.data.labels || [];
     let modifiedData = labels;
     
     if (labels.some(str => str.includes('All Centres'))) {
@@ -1114,12 +1100,8 @@ function AllDoctorWiseConversion(bar) {
         modifiedData = labels.map(location => location.replace('Skin & Co. ', ''));
     }
 
-    // Calculate dynamic width based on number of items (min 800px, 60px per item)
-    let dynamicWidth = Math.max(800, modifiedData.length * 60);
-    
-    // Calculate bar width and dynamic font size
-    let barWidthPx = (dynamicWidth * 0.55) / (modifiedData.length * 2);
-    let dynamicFontSize = Math.min(14, Math.max(9, Math.floor(barWidthPx * 0.4)));
+    let labelCount = Math.max(modifiedData.length, 1);
+    let dynamicFontSize = Math.min(14, Math.max(9, Math.floor(28 / Math.sqrt(labelCount))));
 
     var options = {
         series: [{
@@ -1131,25 +1113,17 @@ function AllDoctorWiseConversion(bar) {
         }],
         chart: {
             type: 'bar',
-            height: 400,
-            width: dynamicWidth,
+            height: 360,
+            width: '100%',
+            parentHeightOffset: 0,
             toolbar: {
-                show: true,
-                tools: {
-                    download: true,
-                    selection: false,
-                    zoom: false,
-                    zoomin: false,
-                    zoomout: false,
-                    pan: false,
-                    reset: false
-                }
+                show: false
             }
         },
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '70%',
+                columnWidth: labelCount <= 4 ? '45%' : '60%',
                 endingShape: 'rounded',
                 dataLabels: {
                     position: 'center',
@@ -1184,8 +1158,7 @@ function AllDoctorWiseConversion(bar) {
                 style: {
                     fontSize: '10px'
                 },
-                trim: true,
-                maxHeight: 100
+                maxHeight: 60
             }
         },
         legend: {
