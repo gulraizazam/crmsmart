@@ -455,12 +455,11 @@
                 </li>
                 @endif
 
-                {{-- Admin Settings menu hidden --}}
-                @if(false)
                 <li class="menu-header">
                     <span class="menu-header-text">Settings</span>
                 </li>
-                @if (Gate::allows('cities_manage') ||
+                @if (Gate::allows('settings_manage') ||
+                Gate::allows('cities_manage') ||
                 Gate::allows('payment_modes_manage') ||
                 Gate::allows('custom_forms_manage') ||
                 Gate::allows('custom_form_feedbacks_manage') ||
@@ -479,6 +478,7 @@
                 Gate::allows('machineType_manage'))
 
                 <li class="menu-item menu-item-submenu {{ openMenu([
+                        'admin.settings.index',
                         'admin.payment_modes.index',
                         'admin.payment_modes.sort',
                         'admin.cities.index',
@@ -516,7 +516,7 @@
                         <i class="menu-arrow"></i>
                     </a>
 
-                    {{-- @can('settings_manage')
+                    @can('settings_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
@@ -531,7 +531,7 @@
 
                         </ul>
                     </div>
-                    @endcan --}}
+                    @endcan
                     {{-- @can('user_operator_settings_manage')
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
@@ -778,7 +778,6 @@
 
                     
                 </li>
-                @endif
                 @endif
                 {{-- Inventory menu hidden --}}
                 {{--
