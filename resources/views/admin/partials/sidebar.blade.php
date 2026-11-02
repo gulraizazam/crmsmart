@@ -779,9 +779,7 @@
                     
                 </li>
                 @endif
-                {{-- Inventory menu hidden --}}
-                {{--
-                <!-- Inventory menu -->
+                
                 @if (Gate::allows('inventory_manage'))
                 @can('inventory_manage')
                 <li class="menu-item menu-item-submenu {{ openMenu(['admin.warehouse.index']) }} {{ openMenu(['admin.brands.index']) }} {{ openMenu(['admin.products.index']) }} {{ openMenu(['admin.products.logs']) }} {{ openMenu(['admin.products.stock']) }} {{ openMenu(['admin.transfer_product.index']) }} {{ openMenu(['admin.orders.index']) }} {{ openMenu(['admin.order.refunds.index']) }}" aria-haspopup="true" data-menu-toggle="hover">
@@ -888,12 +886,12 @@
 
                         </ul>
                     </div>
-                    @endcan
+                    @endcan-->
                 </li>
-                @endcan -->
+                @endcan
                 @endif
-                --}}
-                <!-- End Inventory menu -->
+                
+                
                 <li class="menu-header">
                     <span class="menu-header-text">Reports</span>
                 </li>
