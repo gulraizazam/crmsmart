@@ -68,11 +68,7 @@
             <tr class="row">
                 <td class="label">Consultation fee</td>
                 <td class="amount">
-                    @if(isset($service_price_display))
-                        {{ number_format($service_price_display) }}
-                    @else
-                        {{ number_format($Invoiceinfo->service_price) }}
-                    @endif
+                    {{ number_format($Invoiceinfo->service_price) }}
                 </td>
             </tr>
             @if($discount != null)

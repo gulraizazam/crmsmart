@@ -20,6 +20,7 @@
     @endphp
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             color: #2A2E24;
@@ -40,9 +41,9 @@
 
         /* Frame */
         .cf-frame-inner {
-            padding: 14mm 14mm 10mm;
+            padding: 8mm 10mm 6mm;
             border: 2px solid #D6DECC;
-            margin: 6mm;
+            margin: 3mm;
             position: relative;
         }
         .cf-frame-inner::before,
@@ -58,16 +59,18 @@
         /* Header */
         .cf-brand-wrap {
             text-align: center;
-            padding-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #D6DECC;
-            margin-bottom: 14px;
+            margin-bottom: 8px;
         }
         .cf-brand-logo {
+            height: 80px;
             max-height: 80px;
             width: auto;
-            max-width: 320px;
+            max-width: 240px;
             display: block;
-            margin: 0 auto 6px;
+            margin: 0 auto 4px;
+            object-fit: contain;
         }
         .cf-brand-tag {
             font-family: Georgia, 'Times New Roman', serif;
@@ -75,13 +78,13 @@
             color: #6B7A55;
             font-size: 11px;
             letter-spacing: 3px;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .cf-title-bar {
             background: #3D4A35;
             color: #F5F7F1;
-            padding: 10px 20px;
-            margin: 14px 0 16px;
+            padding: 8px 18px;
+            margin: 8px 0 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -109,7 +112,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 14px 0 10px;
+            margin: 8px 0 6px;
         }
         .cf-section::before {
             content: '';
@@ -129,7 +132,7 @@
         .cf-client-box {
             background: #FBFAF3;
             border: 1px solid #E4DCCB;
-            padding: 14px 16px;
+            padding: 10px 14px;
             border-radius: 3px;
         }
         .cf-client-grid {
@@ -137,7 +140,7 @@
             border-collapse: collapse;
         }
         .cf-client-grid td {
-            padding: 6px 12px;
+            padding: 4px 10px;
             vertical-align: baseline;
             font-size: 10.5px;
         }
@@ -163,7 +166,7 @@
             font-size: 11px;
         }
         .cf-field-long { min-width: 220px; }
-        .cf-gender { margin: 8px 4px 4px; font-size: 10.5px; }
+        .cf-gender { margin: 4px 4px 2px; font-size: 10.5px; }
         .cf-gender span { margin-right: 22px; }
         .cf-box {
             display: inline-block;
@@ -244,21 +247,20 @@
             font-style: italic;
             font-size: 10.5px;
             color: #6B7A55;
-            margin: 2px 0 10px;
+            margin: 2px 0 6px;
         }
-        table.cf-med { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        table.cf-med { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
         table.cf-med td {
             width: 33.33%;
             vertical-align: top;
-            padding: 2px 12px 4px 0;
+            padding: 1px 10px 2px 0;
             font-size: 10px;
             color: #3F4737;
         }
         .cf-med-item {
-            margin-bottom: 5px;
-            page-break-inside: avoid;
+            margin-bottom: 3px;
             line-height: 1.4;
-            padding: 3px 6px;
+            padding: 2px 4px;
             border-left: 2px solid transparent;
         }
         .cf-med-item .cf-box {
@@ -269,11 +271,11 @@
         }
 
         /* Remarks */
-        .cf-remarks-lines { margin-top: 6px; }
+        .cf-remarks-lines { margin-top: 4px; }
         .cf-remarks-lines div {
             border-bottom: 1px dotted #7A8B6A;
             height: 22px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         /* Footer + signatures */
@@ -281,10 +283,10 @@
             text-align: center;
             font-size: 9.5px;
             letter-spacing: 1.5px;
-            margin: 18px 0 10px;
-            line-height: 1.6;
+            margin: 10px 0 0;
+            line-height: 1.5;
             color: #6B7A55;
-            padding-top: 10px;
+            padding-top: 8px;
             border-top: 1px solid #D6DECC;
         }
         .cf-footer-contact .brand {
@@ -296,7 +298,7 @@
         }
 
         .cf-sig-wrap {
-            margin-top: 14px;
+            margin-top: 12px;
             display: table;
             width: 100%;
         }
@@ -325,10 +327,21 @@
         }
         @endif
 
-        @page { size: A4 portrait; margin: 6mm 6mm; }
+        @page { size: A4 portrait; margin: 5mm; }
         @media print {
-            body { background: #FFFFFF; }
+            html, body {
+                background: #FFFFFF;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: auto;
+            }
             .cf-shell { max-width: 100%; box-shadow: none; margin: 0; }
+            .cf-brand-logo {
+                height: 80px !important;
+                max-height: 80px !important;
+                width: auto !important;
+            }
         }
     </style>
 </head>
