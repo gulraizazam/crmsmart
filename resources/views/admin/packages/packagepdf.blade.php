@@ -176,10 +176,10 @@
     @endif
 
     <div class="cinv-note">
-        <strong>Note.</strong> All treatment prices are inclusive of applicable taxes.
+        <strong>Note.</strong> All treatment prices are inclusive of applicable taxes.This invoice can not be used for any legal purpose and paid amount is not refundable.
         Thank you for choosing Smart Aesthetics.
     </div>
-    <p>This invoice can not be used for any legal purpose and paid amount is not refundable.</p>
+    
     <div class="cinv-signatures">
         <div class="cinv-sig-block">
             <div class="cinv-sig-line">Client signature</div>
