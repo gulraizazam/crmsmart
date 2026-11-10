@@ -47,8 +47,8 @@
                 <th>Discount Name</th>
                 <th>Discount Price</th>
                 <th>Subtotal</th>
-                <th>Tax %</th>
-                <th>Tax</th>
+                <!-- <th>Tax %</th>
+                <th>Tax</th> -->
                 <th>Total</th>
             </tr>
             </thead>
@@ -60,8 +60,8 @@
                 <td>-</td>
                 <td>0</td>
                 <td>{{number_format($price_tax)}}</td>
-                <td>{{$location_info->tax_percentage ?? 0}}</td>
-                <td>{{number_format($tax ?? 0)}}</td>
+                <!-- <td>{{$location_info->tax_percentage ?? 0}}</td>
+                <td>{{number_format($tax ?? 0)}}</td> -->
                 <td>{{number_format($tax_amt ?? 0)}}</td>
             </tr>
             </tbody>

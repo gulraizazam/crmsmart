@@ -63,8 +63,8 @@
                     <th class="right" style="width: 11%;">Price</th>
                     <th style="width: 17%;">Discount</th>
                     <th class="right" style="width: 12%;">Subtotal</th>
-                    <th class="right" style="width: 8%;">Tax %</th>
-                    <th class="right" style="width: 8%;">Tax</th>
+                    <!-- <th class="right" style="width: 8%;">Tax %</th>
+                    <th class="right" style="width: 8%;">Tax</th> -->
                     <th class="right" style="width: 10%;">Total</th>
                 </tr>
             </thead>
@@ -113,8 +113,8 @@
                                 @endif
                             </td>
                             <td class="right">{{ number_format($packagebundles->tax_exclusive_net_amount ?? 0) }}</td>
-                            <td class="right">{{ $packagebundles->tax_percenatage }}%</td>
-                            <td class="right">{{ number_format($packagebundles->tax_price ?? 0) }}</td>
+                            <!-- <td class="right">{{ $packagebundles->tax_percenatage }}%</td>
+                            <td class="right">{{ number_format($packagebundles->tax_price ?? 0) }}</td> -->
                             <td class="right"><strong>{{ number_format($packagebundles->tax_including_price ?? 0) }}</strong></td>
                         </tr>
                     @endforeach

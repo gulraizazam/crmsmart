@@ -104,8 +104,8 @@
             <th>Service</th>
             <th>Service Price</th>
             <th>Subtotal</th>
-            <th>Tax %</th>
-            <th>Tax</th>
+            <!-- <th>Tax %</th>
+            <th>Tax</th> -->
             <th>Total</th>
         </tr>
         <tr>
@@ -113,8 +113,8 @@
             <td>{{ $service_name }}</td>
             <td>{{ number_format($service_price) }}</td>
             <td>{{ number_format($service_price) }}</td>
-            <td>{{ $tax_percent }}%</td>
-            <td>{{ number_format($tax_amount) }}</td>
+            <!-- <td>{{ $tax_percent }}%</td>
+            <td>{{ number_format($tax_amount) }}</td> -->
             <td>{{ number_format($total_amount) }}</td>
         </tr>
     </table>
