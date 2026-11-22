@@ -51,6 +51,9 @@
     $canRevenue = \Illuminate\Support\Facades\Gate::allows('dashboard_revenue_by_centre');
     $canStates = \Illuminate\Support\Facades\Gate::allows('dashboard_states');
     $canServiceRevenue = \Illuminate\Support\Facades\Gate::allows('dashboard_revenue_by_service');
+    $canCashflow = \Illuminate\Support\Facades\Gate::allows('cashflow_dashboard');
+    // Performance shows consultancy status in place of the payment mix when collection is hidden.
+    $statusInPerformance = !$canCollection && $canStates;
 @endphp
 
 <section class="dash-hero">
@@ -127,7 +130,7 @@
                 'cols' => 'col-xl-4',
                 'height' => '300',
             ])
-        @elseif ($canStates)
+        @elseif ($statusInPerformance)
             @include('admin.partials.dashboard-chart-card', [
                 'title' => 'Consultancies by status',
                 'subtitle' => 'Current period',
@@ -222,6 +225,153 @@
                 </div>
             </div>
         @endif
+    </div>
+</section>
+@endif
+
+@if ($canRevenue || $canServiceRevenue)
+<section class="dash-section">
+    <div class="dash-section__head">
+        <div>
+            <h3 class="dash-section__title">Revenue breakdown</h3>
+            <p class="dash-section__sub">Revenue split by centre and service</p>
+        </div>
+    </div>
+    <div class="row dash-chart-row">
+        @if ($canRevenue)
+            @include('admin.partials.dashboard-chart-card', [
+                'title' => 'Revenue by centre',
+                'subtitle' => 'Revenue earned per centre',
+                'id' => 'chartRevenueCentre',
+                'cols' => $canServiceRevenue ? 'col-xl-6' : 'col-12',
+                'height' => '340',
+            ])
+        @endif
+        @if ($canServiceRevenue)
+            @include('admin.partials.dashboard-chart-card', [
+                'title' => 'Revenue by service category',
+                'subtitle' => 'Share of revenue per category',
+                'id' => 'chartRevenueCategory',
+                'cols' => 'col-xl-6',
+                'height' => '340',
+            ])
+            @include('admin.partials.dashboard-chart-card', [
+                'title' => 'Top services by revenue',
+                'subtitle' => 'Highest earning services',
+                'id' => 'chartRevenueService',
+                'cols' => $canRevenue ? 'col-12' : 'col-xl-6',
+                'height' => '340',
+            ])
+        @endif
+    </div>
+</section>
+@endif
+
+@if ($canStates)
+<section class="dash-section">
+    <div class="dash-section__head">
+        <div>
+            <h3 class="dash-section__title">Appointments</h3>
+            <p class="dash-section__sub">Appointment mix by type, status, centre and doctor</p>
+        </div>
+    </div>
+    <div class="row dash-chart-row">
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Appointments by type',
+            'subtitle' => 'Split by appointment type',
+            'id' => 'chartAppointmentType',
+            'cols' => $statusInPerformance ? 'col-xl-6' : 'col-xl-4',
+            'height' => '320',
+        ])
+        @unless ($statusInPerformance)
+            @include('admin.partials.dashboard-chart-card', [
+                'title' => 'Consultancies by status',
+                'subtitle' => 'Current period',
+                'id' => 'chartAppointmentStatus',
+                'cols' => 'col-xl-4',
+                'height' => '320',
+            ])
+        @endunless
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Appointments by centre',
+            'subtitle' => 'Volume per centre',
+            'id' => 'chartAppointmentCentre',
+            'cols' => $statusInPerformance ? 'col-xl-6' : 'col-xl-4',
+            'height' => '320',
+        ])
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Appointments by doctor',
+            'subtitle' => 'Top doctors by appointments',
+            'id' => 'chartDoctors',
+            'cols' => 'col-12',
+            'height' => '360',
+        ])
+    </div>
+</section>
+
+<section class="dash-section">
+    <div class="dash-section__head">
+        <div>
+            <h3 class="dash-section__title">Leads &amp; patients</h3>
+            <p class="dash-section__sub">Where leads come from and how new patients are growing</p>
+        </div>
+    </div>
+    <div class="row dash-chart-row">
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Leads by source',
+            'subtitle' => 'New leads per source',
+            'id' => 'chartLeadSource',
+            'cols' => 'col-xl-6',
+            'height' => '320',
+        ])
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Leads by status',
+            'subtitle' => 'New leads by status',
+            'id' => 'chartLeadStatus',
+            'cols' => 'col-xl-6',
+            'height' => '320',
+        ])
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'New patients by gender',
+            'subtitle' => 'Current period',
+            'id' => 'chartPatientGender',
+            'cols' => 'col-xl-4',
+            'height' => '300',
+        ])
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'New patients',
+            'subtitle' => 'Daily registrations',
+            'id' => 'chartPatientTrend',
+            'cols' => 'col-xl-8',
+            'height' => '300',
+        ])
+    </div>
+</section>
+@endif
+
+@if ($canCashflow)
+<section class="dash-section">
+    <div class="dash-section__head">
+        <div>
+            <h3 class="dash-section__title">Cash flow</h3>
+            <p class="dash-section__sub">Spending and cash pool positions</p>
+        </div>
+    </div>
+    <div class="row dash-chart-row">
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Expenses by category',
+            'subtitle' => 'Spend this period, excluding rejected',
+            'id' => 'chartExpenses',
+            'cols' => 'col-xl-6',
+            'height' => '340',
+        ])
+        @include('admin.partials.dashboard-chart-card', [
+            'title' => 'Cash pool balances',
+            'subtitle' => 'Current balance per pool',
+            'id' => 'chartPools',
+            'cols' => 'col-xl-6',
+            'height' => '340',
+        ])
     </div>
 </section>
 @endif

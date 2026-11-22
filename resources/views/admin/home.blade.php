@@ -21,6 +21,138 @@
                 </div>
             </div>
 
+            <section class="dash-section">
+                <div class="row">
+                    <div class="col-12" id="activitydiv">
+                        <div class="card card-custom dash-widget dash-ops-card" id="activities-container">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title mb-0">Today's activities</h3>
+                                    <p class="dash-chart-subtitle" id="totalactivities">0 activities</p>
+                                </div>
+                            </div>
+                            <div class="card-body pt-2" id="activities-body">
+                                <div class="text-center" id="activities-loader">
+                                    <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" style="width: 50px;">
+                                </div>
+                                <div class="timeline timeline-6 mt-3" id="activities-timeline" style="display: none;"></div>
+                                <div class="text-center py-5" id="activities-empty" style="display: none;">
+                                    <span class="dash-empty-copy">No activity found</span>
+                                </div>
+                                <div class="text-center py-5" id="activities-unauthorized" style="display: none;">
+                                    <span class="dash-empty-copy">You are not authorized</span>
+                                </div>
+                                <div class="text-center py-3" id="load-more-container" style="display: none;">
+                                    <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading more" id="load-more-spinner" style="width: 30px; display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            @if (\Illuminate\Support\Facades\Gate::allows('dashboard_staff_wise_arrival'))
+            <section class="dash-section">
+                <div class="row">
+                    <div class="col-12 custom_tabs_style" id="staff_wise_arrival">
+                        <div class="card card-custom dash-widget dash-ops-card dash-ops-card--full">
+                            <div class="card-body p-0">
+                                <div class="d-flex align-items-center justify-content-between card-spacer2 flex-grow-1">
+                                    <span class="dashboard-counter">Centre-wise arrival</span>
+                                    <ul class="nav nav-tabs d-flex align-items-center wise_arrival_ul">
+                                        <li style="border-bottom: none;">
+                                            <div class="actions action-style p-3 mr-3">
+                                                @if ($isAdmin)
+                                                <div class="btn-group">
+                                                    <select class="dropdown-menu dropdown-menu-right centre_name_ul" id="centervise_center">
+                                                        <option data-period="thismonth" value="All">All Centres</option>
+                                                        @foreach ($centres as $centre)
+                                                        <option data-period="thismonth" value="{{ $centre->id }}">{{ $centre->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                @elseif ($isCSRRole)
+                                                <div class="btn-group">
+                                                    <select class="dropdown-menu dropdown-menu-right" id="userwise_arrival">
+                                                        <option value="">All</option>
+                                                        @foreach ($csrUsers as $user)
+                                                        <option value="{{ $user->id }}" data-period="thismonth">{{ $user->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                @else
+                                                <div class="btn-group">
+                                                    <select id="centervise_center">
+                                                        <option value="" class="btn form-control btndropdown btn_Report centre_name arrivalbtn">
+                                                            {{ $firstCentre ? $firstCentre->name : 'No Centre Assigned' }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </li>
+                                        <li style="border-bottom: none;">
+                                            <div class="actions date_action_dropdown action-style py-3 mr-0">
+                                                @if ($isCSRRole)
+                                                <select id="center_wise_arrival" class="form-control" name="type">
+                                                    <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
+                                                    <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
+                                                    <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This Week</option>
+                                                    <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This Month</option>
+                                                    <option value="lastmonth" {{ request('type')=='lastmonth' ? 'selected' : '' }}>Last Month</option>
+                                                </select>
+                                                @else
+                                                <select id="initCentreWiseArrival" class="form-control" name="type">
+                                                    <option value="today" {{ request('type')=='today' ? 'selected' : '' }}>Today</option>
+                                                    <option value="yesterday" {{ request('type')=='yesterday' ? 'selected' : '' }}>Yesterday</option>
+                                                    <option value="last7days" {{ request('type')=='last7days' ? 'selected' : '' }}>Last 7 Days</option>
+                                                    <option value="week" {{ request('type')=='week' ? 'selected' : '' }}>This Week</option>
+                                                    <option value="thismonth" {{ request('type')=='thismonth' ? 'selected' : '' }}>This Month</option>
+                                                    <option value="lastmonth" {{ request('type')=='lastmonth' ? 'selected' : '' }}>Last Month</option>
+                                                </select>
+                                                @endif
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="row pt-3 px-3 pb-3">
+                                    <div class="col-7">
+                                        <div id="centre_wise_arrival"></div>
+                                    </div>
+                                    <div class="col-5 centre_wise_arrival_wrap">
+                                        <div id="centre_wise_arrival_02">
+                                            <div class="table-responsive dash-ops-table">
+                                                <table class="table">
+                                                    <thead>
+                                                        @if ($isCSRRole)
+                                                        <tr>
+                                                            <th class="table-cols">CSR Name</th>
+                                                            <th class="table-cols">Arrived</th>
+                                                            <th class="table-cols">Percentage</th>
+                                                        </tr>
+                                                        @else
+                                                        <tr>
+                                                            <th class="table-cols"></th>
+                                                            <th class="table-cols">Arrived</th>
+                                                            <th class="table-cols">WalkIn</th>
+                                                            <th class="table-cols">Percentage</th>
+                                                        </tr>
+                                                        @endif
+                                                    </thead>
+                                                    <tbody id="table-body"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src="{{ asset('assets/media/loader.gif') }}" alt="Loading" class="custom_loader loader-img-attended">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @endif
+
             @if (\Illuminate\Support\Facades\Gate::allows('dashboard_doctor_wise_conversion'))
             <section class="dash-section">
                 <div class="row">
