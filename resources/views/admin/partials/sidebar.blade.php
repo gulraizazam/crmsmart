@@ -110,6 +110,108 @@
                 </li>
                 @endif
 
+                <!--HRM menu-->
+                <li class="menu-item menu-item-submenu {{ openMenu(['admin.hr.dashboard', 'admin.hr.employees.index', 'admin.hr.departments.index', 'admin.hr.designations.index', 'admin.hr.leave-applications.index', 'admin.hr.leave-types.index', 'admin.hr.leave-balances.index', 'admin.hr.recruitment.index', 'admin.hr.reports.celebrations', 'admin.hr.my.profile', 'admin.hr.my.leaves']) }}" aria-haspopup="true" data-menu-toggle="hover">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <span class="svg-icon menu-icon">
+                            <i class="font-icon la la-id-badge"></i>
+                        </span>
+                        <span class="menu-text">HRM</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                            @can('hr_dashboard_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.dashboard') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.dashboard') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Dashboard</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_employees_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.employees.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.employees.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Employees</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_departments_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.departments.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.departments.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Departments</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_designations_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.designations.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.designations.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Designations</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_leave_view')
+                            <li class="menu-item {{ request()->routeIs('admin.hr.leave-applications.calendar') ? '' : activeMenu('admin.hr.leave-applications.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.leave-applications.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Leave Applications</span>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ activeMenu('admin.hr.leave-applications.calendar') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.leave-applications.calendar') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Leave Calendar</span>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ activeMenu('admin.hr.leave-types.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.leave-types.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Leave Types</span>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ activeMenu('admin.hr.leave-balances.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.leave-balances.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Leave Balances</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_recruitment_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.recruitment.index') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.recruitment.index') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Recruitment</span>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('hr_employees_view')
+                            <li class="menu-item {{ activeMenu('admin.hr.reports.celebrations') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.reports.celebrations') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">Birthdays &amp; Anniversaries</span>
+                                </a>
+                            </li>
+                            @endcan
+                            <li class="menu-item {{ activeMenu('admin.hr.my.profile') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.my.profile') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">My HR Profile</span>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ activeMenu('admin.hr.my.leaves') }}" aria-haspopup="true">
+                                <a href="{{ route('admin.hr.my.leaves') }}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot"><span></span></i>
+                                    <span class="menu-text">My Leaves</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 <li class="menu-header">
                     <span class="menu-header-text">Clinic</span>

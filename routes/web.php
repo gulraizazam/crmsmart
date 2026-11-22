@@ -832,5 +832,8 @@ Route::group(['middleware' => ['auth.common', 'checkAccount'], 'prefix' => 'admi
             Route::get('settings', [\App\Http\Controllers\Admin\CashFlowController::class, 'settings'])->name('settings');
             Route::get('fdm', [\App\Http\Controllers\Admin\CashFlowController::class, 'fdmView'])->name('fdm');
         });
+
+        // HRM Module
+        require __DIR__.'/hr.php';
     });
 });

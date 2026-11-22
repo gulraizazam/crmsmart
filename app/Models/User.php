@@ -30,7 +30,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $fillable = ['name', 'email', 'password', 'phone', 'main_account', 'gender', 'dob', 'address', 'commission', 'can_perform_consultation', 'user_type_id', 'resource_type_id', 'referred_by', 'account_id', 'active', 'select_all', 'is_advance_eligible'];
+    protected $fillable = ['name', 'email', 'password', 'phone', 'main_account', 'gender', 'cnic', 'dob', 'address', 'commission', 'can_perform_consultation', 'user_type_id', 'resource_type_id', 'referred_by', 'account_id', 'active', 'hr_managed', 'select_all', 'is_advance_eligible'];
 
     protected static $_fillable = ['name', 'email', 'password', 'phone', 'main_account', 'gender', 'dob', 'address', 'commission', 'can_perform_consultation', 'user_type_id', 'resource_type_id', 'referred_by', 'active', 'select_all'];
 
@@ -175,6 +175,16 @@ class User extends Authenticatable
     public function user_has_locations()
     {
         return $this->hasMany('App\Models\UserHasLocations', 'user_id')->withoutGlobalScope(SoftDeletingScope::class);
+    }
+
+    public function employeeDetail()
+    {
+        return $this->hasOne(EmployeeDetail::class);
+    }
+
+    public function employeeDocuments()
+    {
+        return $this->hasMany(EmployeeDocument::class);
     }
 
     /**
