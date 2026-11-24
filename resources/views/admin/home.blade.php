@@ -1,9 +1,9 @@
 ﻿@extends('admin.layouts.master')
 @section('title', 'Dashboard')
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v=8">
+<link rel="stylesheet" href="{{ asset('assets/css/sneat-dashboard.css') }}?v={{ @filemtime(public_path('assets/css/sneat-dashboard.css')) }}">
 
-<div class="content d-flex flex-column flex-column-fluid sneat-dashboard" id="kt_content">
+<div class="content d-flex flex-column flex-column-fluid sneat-dashboard" id="kt_content" data-chart-pref-scope="{{ auth()->id() }}">
     <div class="d-flex flex-column-fluid">
         <div class="container-fluid dash-container">
             @include('admin.partials.dashboard-overview')
@@ -113,6 +113,9 @@
                                                 @endif
                                             </div>
                                         </li>
+                                        <li class="dash-chart-menu-item">
+                                            <div class="dash-chart-menu" data-chart-menu-for="centre_wise_arrival" hidden></div>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="row pt-3 px-3 pb-3">
@@ -195,6 +198,9 @@
                                                 </select>
                                             </div>
                                         </li>
+                                        <li class="dash-chart-menu-item">
+                                            <div class="dash-chart-menu" data-chart-menu-for="doc_wise_conversion" hidden></div>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="row pt-3 px-3 pb-3">
@@ -233,6 +239,7 @@
 <script src="{{ asset('assets/js/pages/dashboard/datatable.js') }}"></script>
 <script src="{{ asset('assets/js/jsapi.js') }}"></script>
 <script src="{{ asset('assets/js/pie.js') }}"></script>
+<script src="{{ asset('assets/js/dashboard-chart-kit.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-chart-kit.js')) }}"></script>
 <script src="{{ asset('assets/js/home.js') }}?v={{ @filemtime(public_path('assets/js/home.js')) }}"></script>
 <script>
 window.dashboardOverviewCharts = @json($charts ?? []);
@@ -249,7 +256,7 @@ window.dashboardConfig = {
     }
 };
 </script>
-<script src="{{ asset('assets/js/overview-dashboard.js') }}?v=10"></script>
+<script src="{{ asset('assets/js/overview-dashboard.js') }}?v={{ @filemtime(public_path('assets/js/overview-dashboard.js')) }}"></script>
 <script src="{{ asset('assets/js/dashboard.js') }}?v={{ @filemtime(public_path('assets/js/dashboard.js')) }}"></script>
 <script src="{{ asset('assets/js/dashboard-charts.js') }}?v={{ @filemtime(public_path('assets/js/dashboard-charts.js')) }}"></script>
 @endpush

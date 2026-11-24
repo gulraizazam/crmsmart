@@ -640,7 +640,7 @@ function ConsultanciesByStatus(bar) {
     if (central_wise_arrival_chart) {
         central_wise_arrival_chart.destroy();
     }
-    central_wise_arrival_chart = new ApexCharts(document.querySelector("#centre_wise_arrival"), options);
+    central_wise_arrival_chart = DashChartKit.create(document.querySelector("#centre_wise_arrival"), options);
     central_wise_arrival_chart.render();
 }
 
@@ -955,7 +955,7 @@ function DoctorWiseConversion(bar) {
         colors: [primary, success]
     };
     $("#doc_wise_conversion").html("");
-    doc_wise_conversion_chart = new ApexCharts(document.querySelector("#doc_wise_conversion"), options);
+    doc_wise_conversion_chart = DashChartKit.create(document.querySelector("#doc_wise_conversion"), options);
     doc_wise_conversion_chart.render();
 }
 function DoctorWiseFeedback(bar) {
@@ -1172,7 +1172,7 @@ function AllDoctorWiseConversion(bar) {
         colors: [primary, success]
     };
     $("#doc_wise_conversion").html("");
-    doc_wise_conversion_chart = new ApexCharts(document.querySelector("#doc_wise_conversion"), options);
+    doc_wise_conversion_chart = DashChartKit.create(document.querySelector("#doc_wise_conversion"), options);
     doc_wise_conversion_chart.render();
 }
 

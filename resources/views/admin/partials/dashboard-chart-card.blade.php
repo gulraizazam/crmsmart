@@ -7,6 +7,7 @@
                     <p class="dash-chart-subtitle">{{ $subtitle }}</p>
                 @endif
             </div>
+            <div class="dash-chart-menu" data-chart-menu-for="{{ $id }}" hidden></div>
         </div>
         <div class="card-body">
             <div id="{{ $id }}" class="dash-chart" style="min-height: {{ $height }}px;"></div>

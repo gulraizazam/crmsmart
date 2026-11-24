@@ -521,7 +521,7 @@
         };
         
         // Create new chart instance
-        centre_wise_arrival = new ApexCharts(document.querySelector("#centre_wise_arrival"), options);
+        centre_wise_arrival = DashChartKit.create(document.querySelector("#centre_wise_arrival"), options);
         centre_wise_arrival.render();
     };
 
