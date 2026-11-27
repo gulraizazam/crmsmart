@@ -87,6 +87,9 @@
                                                             <option value="gender_wise_revenue">Gender Wise Revenue Report
                                                             </option>
                                                         @endif
+                                                    @if(Gate::allows('finance_general_revenue_reports_profit_loss_report'))
+                                                        <option value="profit_loss">Profit &amp; Loss Report</option>
+                                                    @endif
                                                 </select>
 
                                                 <span id="report_type_handler"></span>
@@ -445,6 +448,17 @@
                     $("#appointment_type_id_E").hide();
                     $("#machine").hide();
                     $('#discount').hide();
+                } else if (type_p == 'profit_loss') {
+                    $("#location_id_E").show();
+                    $("#location_id_D").hide();
+                    $("#patient_id_E").hide();
+                    $("#appointment_type_id_E").hide();
+                    $("#user_id_E").hide();
+                    $("#service_id_E").hide();
+                    $("#doctors_id").hide();
+                    $("#machine").hide();
+                    $('#discount').hide();
+                    $('#gender_id').hide();
                 } else if (type_p == 'daily_employee_stats') {
                     $("#patient_id_E").show();
                     $("#appointment_type_id_E").show();

@@ -25,6 +25,7 @@ use App\Models\Services;
 use App\Models\Settings;
 use App\Models\User;
 use App\Reports\Finanaces;
+use App\Reports\ProfitLoss;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -182,10 +183,118 @@ class FinanceReportController extends Controller
              case 'gender_wise_revenue':
                 return self::revenueByGenderAndService($request);
                 break;
+            case 'profit_loss':
+                return $this->profitLossReport($request);
             default:
                 return self::collectionbyservice($request);
                 break;
         }
+    }
+
+    public function profitLossReport(Request $request)
+    {
+        if (!Gate::allows('finance_general_revenue_reports_profit_loss_report')) {
+            return abort(401);
+        }
+
+        $date_range = array_filter(explode(' - ', (string) $request->get('date_range')));
+        if (count($date_range) !== 2) {
+            return response('<div class="alert alert-danger">Please select a date range.</div>');
+        }
+
+        $start = Carbon::parse($date_range[0])->startOfDay();
+        $end = Carbon::parse($date_range[1])->endOfDay();
+        if (ProfitLoss::monthCount($start, $end) > ProfitLoss::MAX_MONTHS) {
+            return response('<div class="alert alert-danger">Please select a range of ' . ProfitLoss::MAX_MONTHS . ' months or less.</div>');
+        }
+
+        $locationIds = array_filter((array) $request->get('location_id'));
+        $report = ProfitLoss::build($start, $end, $locationIds, Auth::User()->account_id);
+        $start_date = $start->toDateString();
+        $end_date = $end->toDateString();
+
+        switch ($request->get('medium_type')) {
+            case 'print':
+                return view('admin.reports.profitloss.reportprint', compact('report', 'start_date', 'end_date'));
+            case 'pdf':
+                $pdf = App::make('dompdf.wrapper');
+                $pdf->loadHTML(view('admin.reports.profitloss.reportpdf', compact('report', 'start_date', 'end_date'))->render());
+                $valueColumns = count($report['months']) + ($report['show_total'] ? 1 : 0);
+                $pdf->setPaper('A4', $valueColumns > 3 ? 'landscape' : 'portrait');
+
+                return $pdf->stream('Profit and Loss Report.pdf');
+            case 'excel':
+                return self::profitLossExcel($report, $start_date, $end_date);
+            default:
+                return view('admin.reports.profitloss.report', compact('report', 'start_date', 'end_date'));
+        }
+    }
+
+    private static function profitLossExcel(array $report, $start_date, $end_date)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Profit & Loss');
+
+        $columns = array_column($report['months'], 'label', 'key');
+        if ($report['show_total']) {
+            $columns['total'] = 'Total';
+        }
+        $lastCol = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(count($columns) + 1);
+        $numberFormat = '#,##0;(#,##0);"-"';
+
+        $sheet->setCellValue('A1', 'Profit & Loss Report')->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->setCellValue('A2', 'Duration')->getStyle('A2')->getFont()->setBold(true);
+        $sheet->setCellValue('B2', 'From ' . $start_date . ' to ' . $end_date);
+        $sheet->setCellValue('A3', 'Centres')->getStyle('A3')->getFont()->setBold(true);
+        $sheet->setCellValue('B3', $report['centres']);
+
+        $r = 5;
+        $sheet->setCellValue('A' . $r, 'PARTICULARS');
+        $c = 2;
+        foreach ($columns as $label) {
+            $sheet->setCellValueByColumnAndRow($c++, $r, strtoupper($label) . ' (PKR)');
+        }
+        $sheet->getStyle("A{$r}:{$lastCol}{$r}")->getFont()->setBold(true);
+
+        $writeRow = function ($label, $values, $bold = false) use ($sheet, &$r, $columns, $lastCol, $numberFormat) {
+            $r++;
+            $sheet->setCellValue('A' . $r, $label);
+            $c = 2;
+            foreach (array_keys($columns) as $key) {
+                $sheet->setCellValueByColumnAndRow($c++, $r, round($values[$key]));
+            }
+            $sheet->getStyle("B{$r}:{$lastCol}{$r}")->getNumberFormat()->setFormatCode($numberFormat);
+            if ($bold) {
+                $sheet->getStyle("A{$r}:{$lastCol}{$r}")->getFont()->setBold(true);
+            }
+        };
+        $writeHeading = function ($label) use ($sheet, &$r) {
+            $r++;
+            $sheet->setCellValue('A' . $r, $label)->getStyle('A' . $r)->getFont()->setBold(true);
+        };
+
+        $writeHeading('Revenue');
+        foreach ($report['revenue'] as $row) {
+            $writeRow($row['label'], $row['values']);
+        }
+        $writeRow('TOTAL REVENUE', $report['total_revenue'], true);
+        $writeHeading('Expenses');
+        foreach ($report['expenses'] as $row) {
+            $writeRow($row['label'], $row['values']);
+        }
+        $writeRow('TOTAL EXPENSES', $report['total_expenses'], true);
+        $writeRow('NET PROFIT / (LOSS)', $report['net'], true);
+
+        foreach (range(1, count($columns) + 1) as $i) {
+            $sheet->getColumnDimensionByColumn($i)->setAutoSize(true);
+        }
+
+        return response()->streamDownload(function () use ($spreadsheet) {
+            (new Xlsx($spreadsheet))->save('php://output');
+        }, 'Profit and Loss Report.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
     }
 
     /**
