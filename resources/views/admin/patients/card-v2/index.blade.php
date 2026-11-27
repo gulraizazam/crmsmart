@@ -217,7 +217,7 @@
         <script src="{{ asset('assets/js/pages/patients/plan-form.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/create-plan.js') }}?v=3"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/create-bundle.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/admin_settings/edit-bundle.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/admin_settings/edit-bundle.js') }}?v=2"></script>
         <script src="{{ asset('assets/js/pages/admin_settings/create-membership.js') }}"></script>
         <script src="{{ asset('assets/js/pages/crud/forms/validation/admin_settings/refunds.js') }}"></script>
     @endif

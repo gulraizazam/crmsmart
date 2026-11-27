@@ -109,12 +109,12 @@ function setEditBundleData(response) {
                 }).length;
 
                 // Only add toggle link if bundle has more than 1 child service
-                let bundleName = packagebundle.bundle.name;
+                let bundleName = packagebundle.bundle?.name ?? 'N/A';
                 if (childServiceCount > 1) {
-                    bundleName = '<a href="javascript:void(0);" onclick="toggle(' + packagebundle.id + ')">' + packagebundle.bundle.name + '</a>';
+                    bundleName = '<a href="javascript:void(0);" onclick="toggle(' + packagebundle.id + ')">' + bundleName + '</a>';
                 }
                 service_options += '<td>' + bundleName + '</td>';
-                service_options += '<td>' + packagebundle.service_price.toFixed(2) + '</td>';
+                service_options += '<td>' + parseFloat(packagebundle.service_price || 0).toFixed(2) + '</td>';
                 service_options += '<td>' + packagebundle.tax_exclusive_net_amount + '</td>';
                 service_options += '<td>' + packagebundle.tax_price + '</td>';
                 service_options += '<td>' + packagebundle.tax_including_price + '</td>';
@@ -212,7 +212,7 @@ function setEditBundleData(response) {
         $("#edit_bundle_parent_id").val(package?.patient_id);
         $("#edit_bundle_location_id").val(package?.location?.id);
         $("#edit_bundle_random_id_1").val(package?.random_id);
-        $("#edit_bundle_package_total_1").val(total_price.toFixed(2));
+        $("#edit_bundle_package_total_1").val(parseFloat(total_price || 0).toFixed(2));
         $("#edit_bundle_grand_total_1").val(grand_total);
         $('#edit_bundle_cash_amount_1').prop('disabled', true);
 
@@ -332,7 +332,7 @@ $(document).on('click', '#EditBundlePackage', function() {
 
                     let service_row = '<tr class="HR_' + bundlesData.id + '">';
                     service_row += '<td><a href="javascript:void(0);" onclick="toggle(' + bundlesData.id + ')">' + servicesData.service_name + '</a></td>';
-                    service_row += '<td>' + servicesData.service_price.toFixed(2) + '</td>';
+                    service_row += '<td>' + parseFloat(servicesData.service_price || 0).toFixed(2) + '</td>';
                     service_row += '<td>' + bundlesData.tax_exclusive_net_amount + '</td>';
                     service_row += '<td>' + bundlesData.tax_price + '</td>';
                     service_row += '<td>' + bundlesData.tax_including_price + '</td>';
@@ -577,15 +577,8 @@ function getBundleServiceInfo(bundleId, locationId, patientId) {
             patient_id: patientId
         },
         success: function(response) {
-            if (response.status) {
-                // Set the price from net_amount
-                $('#edit_bundle_net_amount_1').val((response.data.net_amount).toFixed(2));
-                $('#edit_bundle_net_amount_1').prop('disabled', true);
-            } else {
-                // Set the price even if no discounts
-                $('#edit_bundle_net_amount_1').val((response.data.net_amount).toFixed(2));
-                $('#edit_bundle_net_amount_1').prop('disabled', true);
-            }
+            $('#edit_bundle_net_amount_1').val(parseFloat(response.data?.net_amount || 0).toFixed(2));
+            $('#edit_bundle_net_amount_1').prop('disabled', true);
         },
         error: function(xhr) {
             console.error('Error loading bundle info:', xhr);
